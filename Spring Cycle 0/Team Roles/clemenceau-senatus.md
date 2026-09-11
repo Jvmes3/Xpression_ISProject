@@ -5,7 +5,7 @@
 | Name | Clemenceau Senatus |
 | Email | clemenceau1.senatus@famu.edu |
 | GitHub username | Clemenceau1 |
-| Cycle 0 contribution | README, technology selection, requirements review, meeting notes |
+| Cycle 0 contribution | README, meeting notes |
 
 ### 1. **Full-Stack**
 
