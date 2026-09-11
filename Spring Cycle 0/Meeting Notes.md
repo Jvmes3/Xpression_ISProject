@@ -37,7 +37,7 @@ Open questions for the instructor are listed in sprint-cycle-0-presentation.md f
 ## Action items
 
 | Owner | Action |
-| --- | --- | --- |
+| --- | --- |
 | James H | Created repo, invited team member |
 | Clemenceau Senatus | README |
 
