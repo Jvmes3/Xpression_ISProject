@@ -34,7 +34,7 @@ Sprint Cycle 0 is **team setup only**. No product features.
 
 Scrum Master: **James Henson**. coordinates meetings, tracks progress, records decisions, and communicates with the instructor.
 
-Full Stack: **Clemenceau Senatus**. Schedules meetings, keeps everyone on track with deadlines, and makes sure tasks are assigned and followed up on.
+Full Stack: **Clemenceau Senatus**. keeps everyone on track with deadlines, and makes sure tasks are assigned and followed up on.
 
 Back-End Developer: **Leeyand Blot Jr**. Establishes the database, functions, and connects the APIs to the Front-End.
 
