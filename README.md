@@ -7,6 +7,7 @@ This repository is the official team project for the remainder of the course. **
 ## Team
 
 | Name | Role |
+| --- | --- | 
 | Leeyand Blot Jr | Coorinator |
 | Clemenceau Senatus | Full Stack |
 | Jacob Fitchett | Front-End |
