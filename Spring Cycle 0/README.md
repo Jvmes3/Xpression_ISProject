@@ -17,4 +17,3 @@ This repository is the official team project for the remainder of the course. **
 | **Runtime** | **Node.js 20+** | Runs the Next.js application locally |
 | **Version Control** | **Git** | Tracks code changes and allows team members to work on different versions of the project |
 | **Repository / Collaboration** | **GitHub** | Stores the project repository and allows team members to collaborate and share code |
-| Testing (available; not required in Cycle 0) | Vitest (unit) and Playwright (end-to-end), to be added when testing begins |
