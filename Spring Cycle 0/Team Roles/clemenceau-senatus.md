@@ -7,7 +7,7 @@
 | GitHub username | Clemenceau1 |
 | Cycle 0 contribution | README, meeting notes |
 
-### 1. **Full-Stack**
+### 1. **Full-Stack/Coordinator**
 
 - Schedules meetings
 - Keeps everyone on track with deadlines
