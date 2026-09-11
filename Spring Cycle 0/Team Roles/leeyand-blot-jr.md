@@ -7,7 +7,7 @@
 | GitHub username | Leeyand |
 | Cycle 0 contribution | README, meeting notes |
 
-### 1. **Backend Developer**
+### **Backend Developer**
 
 - Creates functions
 - Connects APIs to frontend
