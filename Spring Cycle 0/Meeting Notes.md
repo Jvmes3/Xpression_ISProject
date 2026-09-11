@@ -4,7 +4,7 @@
 | --- | --- |
 | Date | 9/11/2026 |
 | Sprint | Cycle 0 — Team setup and project preparation |
-| Attendees | Clemenceau Senatus; Leeyand Blot; Jacob Fitchet |
+| Attendees | Clemenceau Senatus; Leeyand Blot Jr; Jacob Fitchet |
 | Location / format | Classroom/in person |
 
 ## Purpose
@@ -41,10 +41,7 @@ Open questions for the instructor are listed in sprint-cycle-0-presentation.md f
 | James H | Created repo, invited team member |
 | Clemenceau Senatus | README |
 | Jacob Fitchett | Team Roles |
-| Leeyand Bolt | Selected Technology |
-
-
-## Next meeting
+| Leeyand Blot Jr | Selected Technology |
 
 
 
