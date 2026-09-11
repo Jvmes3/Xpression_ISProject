@@ -1,6 +1,6 @@
 # Sprint Cycle 0 submission checklist
 
-Course submission items and where they live. Official repository: https://github.com/Jvmes3/Xpression_ISProject.git.
+Official repository: https://github.com/Jvmes3/Xpression_ISProject.git.
 
 ## Team submissions
 
