@@ -40,6 +40,8 @@ Open questions for the instructor are listed in sprint-cycle-0-presentation.md f
 | --- | --- |
 | James H | Created repo, invited team member |
 | Clemenceau Senatus | README |
+| Jacob Fitchett | Team Roles |
+| Leeyand Bolt | Selected Technology |
 
 
 ## Next meeting
