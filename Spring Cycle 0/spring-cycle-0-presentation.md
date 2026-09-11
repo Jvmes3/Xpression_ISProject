@@ -38,6 +38,8 @@ Full Stack: **Clemenceau Senatus**. Schedules meetings, keeps everyone on track 
 
 Back-End Developer: **Leeyand Blot Jr**. Establishes the database, functions, and connects the APIs to the Front-End.
 
+Front-End Developer: **Jacob Fitchett**. Designs the user interface, handles page layout, and makes sure users can interact with the application easily.
+
 ...:
 
 ## 5. Requirement 
