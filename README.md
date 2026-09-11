@@ -4,6 +4,15 @@ Community-oriented social media for creative work. Creators publish writing, vis
 
 This repository is the official team project for the remainder of the course. **Sprint Cycle 0 contains setup and documentation only.** No authentication, no project database tables, and no product user interface have been implemented.
 
+## Team
+
+| Name | Role |
+| Leeyand Blot Jr | Coorinator |
+| Clemenceau Senatus | Full Stack |
+| Jacob Fitchett | Front-End |
+| James Henson | Back-End |
+
+
 ## Selected technology
 
 | Category | Technology | Purpose |
