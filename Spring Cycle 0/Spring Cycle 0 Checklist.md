@@ -11,12 +11,12 @@ Official repository: https://github.com/Jvmes3/Xpression_ISProject.git.
 
 ## Demonstration checklist
 
-- [ ] Selected technology and development environment
-- [ ] GitHub repository and folder structure
-- [ ] README and setup instructions
-- [ ] GitHub activity showing a contribution from every team member
-- [ ] Evidence that every member cloned/pulled
-- [ ] Requirement questions for Sprint Cycle I
+- [x] Selected technology and development environment
+- [x] GitHub repository and folder structure
+- [x] README and setup instructions
+- [x] GitHub activity showing a contribution from every team member
+- [x] Evidence that every member cloned/pulled
+- [x] Requirement questions for Sprint Cycle I
 
 ## Restrictions (must remain true for Cycle 0)
 
