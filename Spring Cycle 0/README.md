@@ -20,7 +20,7 @@ This repository is the official team project for the remainder of the course. **
 
 ## Structure
 
-Spring Cycle 0/
+Spring Cycle 0
 ├── README.md                     # Overview of the project and selected technology stack
 ├── Meeting Notes.md              # Team meeting notes and discussion records
 ├── Spring Cycle 0 Checklist.md   # Sprint checklist and project planning tasks
