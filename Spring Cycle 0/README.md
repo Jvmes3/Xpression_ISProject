@@ -20,6 +20,7 @@ This repository is the official team project for the remainder of the course. **
 
 ## Structure
 
+```text
 Spring Cycle 0
 ├── README.md                     # Overview of the project and selected technology stack
 ├── Meeting Notes.md              # Team meeting notes and discussion records
@@ -31,7 +32,5 @@ Spring Cycle 0
     ├── jacob-fitchett.md        # Team role profile for Jacob Fitchett
     ├── james-henson.md          # Team role profile for James Henson
     └── leeyand-blot-jr.md       # Team role profile for Leeyand Blot Jr.
-
-
 
 
