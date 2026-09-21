@@ -17,3 +17,21 @@ This repository is the official team project for the remainder of the course. **
 | **Runtime** | **Node.js 20+** | Runs the Next.js application locally |
 | **Version Control** | **Git** | Tracks code changes and allows team members to work on different versions of the project |
 | **Repository / Collaboration** | **GitHub** | Stores the project repository and allows team members to collaborate and share code |
+
+## Structure
+
+Spring Cycle 0/
+├── README.md                     # Overview of the project and selected technology stack
+├── Meeting Notes.md              # Team meeting notes and discussion records
+├── Spring Cycle 0 Checklist.md   # Sprint checklist and project planning tasks
+├── spring-cycle-0-presentation.md # Presentation material for Sprint Cycle 0
+├── Screenshots & Meeting Notes/                  # Pulls/Commits/Pushes & In-Person Screenshots
+└── Team Roles/
+    ├── clemenceau-senatus.md    # Team role profile for Clemenceau Senatus
+    ├── jacob-fitchett.md        # Team role profile for Jacob Fitchett
+    ├── james-henson.md          # Team role profile for James Henson
+    └── leeyand-blot-jr.md       # Team role profile for Leeyand Blot Jr.
+
+
+
+
