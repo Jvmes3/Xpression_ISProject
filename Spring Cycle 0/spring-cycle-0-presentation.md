@@ -70,7 +70,7 @@ Every member should have cloned, pulled, committed, and pushed. Be ready to show
 | Leeyand Blot Jr | Leeyand | Checklist, technology docs, meeting notes/roles |
 | Jacob Fitchett | jacobfitch | Meeting notes, presentation, role files |
 
-**Still unresolved:** labeled clone/pull screenshots for each person are not in the repo yet. Commits on GitHub already prove push. Meeting photographs are in `Meeting Pictures/`.
+Commits on GitHub shows push. Meeting photos are in `Meeting Pictures/`.
 
 ---
 
