@@ -1,6 +1,6 @@
 # Sprint Cycle 0 presentation — Xpression
 
-## Outline and timing
+## Outline
 
 1. Project overview — purpose and five user roles
 2. Development technology
