@@ -22,10 +22,10 @@ Official repository: https://github.com/Jvmes3/Xpression_ISProject.git
 
 | Member | GitHub | Clone / pull | Commit and push |
 | --- | --- | --- | --- |
-| James Henson | [Jvmes3](https://github.com/Jvmes3) | Not documented with a labeled screenshot | Yes — initial commit, README structure, meeting pictures |
-| Clemenceau Senatus | [Clemenceau1](https://github.com/Clemenceau1) | Not documented with a labeled screenshot | Yes — README, presentation, checklist, roles, folder work |
-| Leeyand Blot Jr | [Leeyand](https://github.com/Leeyand) | Not documented with a labeled screenshot | Yes — checklist, technology notes, meeting attendees, role files |
-| Jacob Fitchett | [jacobfitch](https://github.com/jacobfitch) | Not documented with a labeled screenshot | Yes — meeting notes, presentation, team role files |
+| James Henson | [Jvmes3](https://github.com/Jvmes3) | Shown under Commits | Yes — initial commit, README structure, meeting pictures |
+| Clemenceau Senatus | [Clemenceau1](https://github.com/Clemenceau1) | Shown under Commits | Yes — README, presentation, checklist, roles, folder work |
+| Leeyand Blot Jr | [Leeyand](https://github.com/Leeyand) | Shown under Commits | Yes — checklist, technology notes, meeting attendees, role files |
+| Jacob Fitchett | [jacobfitch](https://github.com/jacobfitch) | Shown under Commits | Yes — meeting notes, presentation, team role files |
 
 The team **still needs to resolve** labeled clone/pull (and, if required, push) screenshots for each member if the instructor wants that evidence on screen during the demonstration. Commit/push evidence already exists in GitHub history.
 
