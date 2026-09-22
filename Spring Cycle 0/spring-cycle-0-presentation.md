@@ -48,8 +48,6 @@ How we will run it later: Next.js on Node.js locally in VS Code; Prisma talks to
 
 ## 3. GitHub repository, README, and structure 
 
-Show live:
-
 - [Team repository](https://github.com/Jvmes3/Xpression_ISProject)
 - [README](README.md) — purpose, stack table, clone/setup notes, and folder tree
 - [Cycle 0 checklist](Spring%20Cycle%200%20Checklist.md)
@@ -58,7 +56,6 @@ Show live:
 - [Team roles](Team%20Roles/)
 - [Screenshots and meeting pictures](Screenshots%20%26%20Meeting%20Pictures/)
 - Basic structure: meeting notes, checklist, presentation, team roles, and screenshots folder
-- Insights → contributors / commit history as evidence that **every** member has pushed
 
 ---
 
