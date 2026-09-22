@@ -4,12 +4,13 @@
 | --- | --- |
 | Name | James Henson |
 | Email | james1.henson@famu.edu |
-| GitHub username | jvmes3 |
-| Cycle 0 contribution | README |
+| GitHub username | Jvmes3 |
+| Cycle 0 contribution | Created the GitHub repository; README structure; meeting pictures |
 
-###  **Scrum Master**
+### **Scrum Master**
 
-- coordinates meetings
-- tracks progress
-- communicates with the professor
+- Coordinates meetings
+- Tracks progress
+- Records decisions
+- Communicates with the instructor
 

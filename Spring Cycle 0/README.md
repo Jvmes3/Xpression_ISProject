@@ -4,33 +4,45 @@ Community-oriented social media for creative work. Creators publish writing, vis
 
 This repository is the official team project for the remainder of the course. **Sprint Cycle 0 contains setup and documentation only.** No authentication, no project database tables, and no product user interface have been implemented.
 
+Official repository: https://github.com/Jvmes3/Xpression_ISProject.git
+
 ## Selected technology
 
 | Category | Technology | Purpose |
 | --- | --- | --- |
-| **Programming Language** | **C++ or Python** | Programming language being considered for developing the application |
-| **Frontend Framework** | **Next.js** | Framework used to build the web application |
-| **UI Library** | **React** | Used to create the application's interactive user interface and components |
-| **Database** | **PostgreSQL** | Stores application data such as users, posts, and other persistent information |
-| **Database ORM** | **Prisma** | Connects the Next.js application to PostgreSQL and simplifies database operations |
-| **Development Environment** | **VS Code** | Code editor used by team members to develop and modify the application |
+| **Programming language** | **TypeScript** | Typed language for the Next.js application (frontend and Node.js backend) |
+| **Frontend framework** | **Next.js** | Web application framework (App Router, API routes, server rendering) |
+| **UI library** | **React** | Interactive user interface and components |
 | **Runtime** | **Node.js 20+** | Runs the Next.js application locally |
-| **Version Control** | **Git** | Tracks code changes and allows team members to work on different versions of the project |
-| **Repository / Collaboration** | **GitHub** | Stores the project repository and allows team members to collaborate and share code |
+| **Database** | **PostgreSQL** | Persistent data (users, posts, reviews, and related records) |
+| **Database ORM** | **Prisma** | Type-safe access from Node.js/Next.js to PostgreSQL |
+| **Development environment / IDE** | **VS Code** | Team editor |
+| **Version control** | **Git** | Tracks code changes |
+| **Collaboration** | **GitHub** | Shared repository, history, and evidence of contributions |
+
+Cycle 0 does not install or run the application. The Next.js project, PostgreSQL instance, and Prisma schema will be added when implementation starts in Sprint Cycle I.
+
+## Cycle 0 local setup (documentation only)
+
+1. Install Git and clone the repository: `git clone https://github.com/Jvmes3/Xpression_ISProject.git`
+2. Open the project in VS Code.
+3. Confirm you can `git pull`, commit, and `git push` to `main` (or an agreed branch).
+4. Do **not** add product features, authentication, database tables, or a final UI in this sprint.
+
+Before Sprint Cycle I coding, each member still needs a working **Node.js 20+** install. The team has not yet provisioned a shared **PostgreSQL** database or initialized Prisma.
 
 ## Structure
 
 ```text
 Spring Cycle 0
-├── README.md                     # Overview of the project and selected technology stack
-├── Meeting Notes.md              # Team meeting notes and discussion records
-├── Spring Cycle 0 Checklist.md   # Sprint checklist and project planning tasks
-├── spring-cycle-0-presentation.md # Presentation material for Sprint Cycle 0
-├── Screenshots & Meeting Notes/                  # Pulls/Commits/Pushes & In-Person Screenshots
+├── README.md                      # Overview, selected stack, and Cycle 0 setup
+├── Meeting Notes.md               # Kickoff notes, decisions, and open items
+├── Spring Cycle 0 Checklist.md    # Submission table and demonstration checklist
+├── spring-cycle-0-presentation.md # 8–10 minute presentation outline
+├── Meeting Pictures/  # Meeting photos 
 └── Team Roles/
-    ├── clemenceau-senatus.md    # Team role profile for Clemenceau Senatus
-    ├── jacob-fitchett.md        # Team role profile for Jacob Fitchett
-    ├── james-henson.md          # Team role profile for James Henson
-    └── leeyand-blot-jr.md       # Team role profile for Leeyand Blot Jr.
-
-
+    ├── clemenceau-senatus.md
+    ├── jacob-fitchett.md
+    ├── james-henson.md
+    └── leeyand-blot-jr.md
+```
