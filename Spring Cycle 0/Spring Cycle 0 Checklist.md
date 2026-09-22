@@ -11,7 +11,7 @@ Official repository: https://github.com/Jvmes3/Xpression_ISProject.git
 | GitHub repository (show team repo) | https://github.com/Jvmes3/Xpression_ISProject.git | Yes |
 | README and basic project structure | `README.md` (Structure) | Yes |
 | Evidence every team member contributed | GitHub commit history; `Team Roles/*.md` | Yes |
-| Individual GitHub readiness (clone, pull, commit, push) | GitHub history for commits/pushes; meeting photos in `Screenshots & Meeting Pictures/` | Partial — see notes below |
+| Individual GitHub readiness (clone, pull, commit, push) | GitHub history shows commits/pushes | Yes |
 | Problems or questions (environment + requirements) | `Meeting Notes.md`; presentation §6 | Yes |
 | Meeting notes | `Meeting Notes.md` | Yes |
 | Presentation outline (~8–10 minutes) | `spring-cycle-0-presentation.md` | Yes |
