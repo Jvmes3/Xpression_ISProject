@@ -1,4 +1,4 @@
-# Xpression
+# Xpression (GO RATTLERS)
 
 Community-oriented social media for creative work. Creators publish writing, visual art, and music in one place; the community discovers work, gives constructive feedback, and builders grow a portfolio. Mentor, Talent Scout, Moderator, and Administrator roles support review, opportunity matching, and platform safety.
 
