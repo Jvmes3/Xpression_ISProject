@@ -94,7 +94,6 @@ Every member should have cloned, pulled, committed, and pushed. Be ready to show
 3. Decide **PostgreSQL** hosting (local vs. shared hosted) and create one team database.
 4. Set up **Next.js + TypeScript + Prisma** (intentionally not done in Cycle 0).
 
-None of these block this presentation. They must be closed before feature work.
 
 ### Functional-requirement questions to clarify during development
 
