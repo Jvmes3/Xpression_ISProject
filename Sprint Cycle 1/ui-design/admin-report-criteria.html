@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Report criteria — Xpression</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="mock-bar"><a href="index.html">All Sprint Cycle I screens</a><span>Design mockup only. Not implemented in the Next.js app.</span></div>
+  <div class="shell">
+    <aside class="sidebar">
+      <a class="brand" href="landing-admin.html"><svg width="32" height="32" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#1c1712"/><path d="M15 17h7l13 15h-7zM15 47h7L35 32h-7z" fill="#f4efe6"/><path fill="#c4491d" fill-rule="evenodd" d="M33 17h9v30h-9zM42 17h6a10 10 0 0 1 0 20h-6zM45 22h3a5 5 0 0 1 0 10h-3z"/></svg><span>Xpression</span></a>
+      <div class="role-chip">Administrator</div>
+      <nav class="side-nav">
+        <a href="landing-admin.html">Home</a>
+        <a href="admin-users.html">Users</a>
+        <a class="active" href="admin-report-criteria.html">Analytics</a>
+      </nav>
+      <div class="who"><strong>Jordan Ellis</strong><small>System administrator</small></div>
+    </aside>
+    <div class="main">
+      <header class="topbar"><span>New report</span></header>
+      <main class="content">
+        <p class="kicker">Use case · Generate Analytics and Reports</p>
+        <div class="page-head"><div><h1>Report criteria</h1><p>Choose what the report should cover. Generating it opens a results screen. No numbers are calculated in this sprint.</p></div></div>
+        <form class="form panel" style="max-width:36rem">
+          <label>Report
+            <select>
+              <option>Users</option>
+              <option selected>Creative posts by media type</option>
+              <option>Comments</option>
+              <option>Opportunities</option>
+              <option>Moderation cases</option>
+            </select>
+          </label>
+          <div class="grid-2">
+            <label>From
+              <input type="date" value="2026-09-01" />
+            </label>
+            <label>Through
+              <input type="date" value="2026-09-30" />
+            </label>
+          </div>
+          <a class="btn" href="admin-report-results.html">Generate report</a>
+        </form>
+      </main>
+    </div>
+  </div>
+</body>
+</html>
