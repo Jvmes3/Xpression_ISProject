@@ -28,13 +28,13 @@ If `node` is not recognized, install Node.js 20 or newer from https://nodejs.org
 
 Stay in `Sprint Cycle I`.
 
-1. Type `npm run create-administrator` and press Enter.
+1. Type `npm.cmd run create-administrator` and press Enter.
 2. Type the administrator's name, such as `Ada Lowe`, and press Enter.
 3. Type an email with @ and a domain, such as `admin@xpression.com` or `name@school.edu`, and press Enter.
 4. Type a password of at least 8 characters, with 1 capital letter, 1 number, and 1 special character, and press Enter.
 5. Type the same password again, and press Enter.
 6. Type a background, such as school, training, or the work they do, and press Enter.
-7. Type `npm run create-moderator` and press Enter.
+7. Type `npm.cmd run create-moderator` and press Enter.
 8. Type a different name, email, password, and background the same way.
 
 Run either command again to add another administrator or another moderator. Each person needs their own email.
@@ -43,8 +43,8 @@ Write the emails and passwords down. The terminal does not show the password aga
 
 ## 3. Install and start the site
 
-1. Type `npm install` and press Enter. Wait until it finishes.
-2. Type `npm run dev` and press Enter.
+1. Type `npm.cmd install` and press Enter. Wait until it finishes.
+2. Type `npm.cmd run dev` and press Enter.
 3. Leave this window open.
 4. Find the line that starts with `Local:`.
 5. Open that address in the browser. It is often `http://localhost:3000`. If the terminal prints another port, open that address instead.
