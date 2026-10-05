@@ -24,7 +24,7 @@ Prepare the team to begin development: review functional requirements, select te
 
 1. **Official repository:** https://github.com/Jvmes3/Xpression_ISProject.git
 2. **Technology (final):** TypeScript, Next.js, React, Node.js 20+, PostgreSQL, Prisma, VS Code, Git/GitHub. C++ and Python are **not** part of the stack.
-3. **Scrum Master (Cycle 0):** James Henson
+3. **Scrum Master (Cycle 0):** Leeyand Blot
 4. **No implementation this sprint:** no use cases, auth, product tables, or final UI.
 5. **Individual contributions:** each member adds their role and at least one commit to the team repository.
 
