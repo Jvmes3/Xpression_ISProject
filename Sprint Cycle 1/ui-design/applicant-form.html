@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Community feed — Xpression</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="mock-bar"><a href="index.html">All Sprint Cycle I screens</a><span>Design mockup only. Not implemented in the Next.js app.</span></div>
+  <div class="shell">
+    <aside class="sidebar">
+      <a class="brand" href="landing-creator.html"><svg width="32" height="32" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#1c1712"/><path d="M15 17h7l13 15h-7zM15 47h7L35 32h-7z" fill="#f4efe6"/><path fill="#c4491d" fill-rule="evenodd" d="M33 17h9v30h-9zM42 17h6a10 10 0 0 1 0 20h-6zM45 22h3a5 5 0 0 1 0 10h-3z"/></svg><span>Xpression</span></a>
+      <div class="role-chip">Creator</div>
+      <nav class="side-nav">
+        <a href="landing-creator.html">Home</a>
+        <a class="active" href="creator-feed.html">Explore</a>
+        <a href="creator-publish.html">Publish</a>
+        <span>Portfolio · later sprint</span>
+      </nav>
+      <div class="who"><strong>Amara Cole</strong><small>Writer</small></div>
+    </aside>
+    <div class="main">
+      <header class="topbar"><input class="search" type="search" value="night" aria-label="Search creative work" /><div class="top-actions"><a class="btn" href="creator-publish.html">Publish</a></div></header>
+      <main class="content">
+        <p class="kicker">Use case · Explore Creative Work</p>
+        <div class="page-head"><div><h1>Community feed</h1><p>Recent work from people you do not already follow. Filter by the three primary media types.</p></div></div>
+        <div class="filters" aria-label="Media type">
+          <span class="pill on">All</span>
+          <span class="pill">Writing</span>
+          <span class="pill">Visual art</span>
+          <span class="pill">Music</span>
+        </div>
+        <div class="feed">
+          <a class="work" href="creator-work-detail.html">
+            <div class="work-visual music"><div class="bars" aria-hidden="true"><i style="height:30%"></i><i style="height:70%"></i><i style="height:45%"></i><i style="height:90%"></i><i style="height:50%"></i><i style="height:75%"></i><i style="height:35%"></i></div></div>
+            <div class="work-body">
+              <span class="badge music">Music</span>
+              <h2>Night Bus Demo</h2>
+              <p class="meta">Nia Okonkwo · SoundCloud permalink · 2 hours ago</p>
+              <p>A late sketch with the vocal left dry. Open the work to hear the embed and read feedback.</p>
+            </div>
+          </a>
+          <article class="work">
+            <div class="work-visual writing"><p class="excerpt">The harbor kept the words we meant to say until the tide edited them.</p></div>
+            <div class="work-body">
+              <span class="badge writing">Writing</span>
+              <h2>Low Tide Glossary</h2>
+              <p class="meta">Jonah Hale · Poem · yesterday</p>
+              <p>Twelve short entries about a city that only appears at low tide.</p>
+            </div>
+          </article>
+          <article class="work">
+            <div class="work-visual art"><div class="shapes" aria-hidden="true"><i></i><i style="width:70%"></i><i style="width:40%"></i></div></div>
+            <div class="work-body">
+              <span class="badge art">Visual art</span>
+              <h2>Market Study No. 4</h2>
+              <p class="meta">Luis Ortega · Ink and gouache · 3 days ago</p>
+              <p>A color study of the Saturday market, cropped tight on the awnings.</p>
+            </div>
+          </article>
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>
