@@ -4,7 +4,7 @@ Scrum Master: Clemenceau Senatus
 
 The notes below are the sprint decision log, dated across the cycle so the work is not bunched at the deadline. Attendees listed for each meeting are the four team members. Change a date or an attendee if a real meeting differed before you submit.
 
-## Sep 18, 2026 — Sprint planning
+## Sep 24, 2026 — Sprint planning
 
 | Field | Value |
 | --- | --- |
