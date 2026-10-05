@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Xpression</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="masthead">
+    <input class="menu-toggle" id="menu-toggle" type="checkbox" />
+    <div class="utility">
+      <a href="index.html">
+        <svg width="32" height="32" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#f4efe6"/><path d="M15 17h7l13 15h-7zM15 47h7L35 32h-7z" fill="#1c1712"/><path fill="#c4491d" fill-rule="evenodd" d="M33 17h9v30h-9zM42 17h6a10 10 0 0 1 0 20h-6zM45 22h3a5 5 0 0 1 0 10h-3z"/></svg>
+        <span>Xpression</span>
+      </a>
+      <label class="hamburger" for="menu-toggle">
+        <span></span><span></span><span></span>
+        <span class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Open menu</span>
+      </label>
+    </div>
+    <nav class="drawer" aria-label="Other features">
+      <a href="sign-in.html">Sign in</a>
+      <a href="#about">About</a>
+      <a href="#help">Help</a>
+      <a href="#contact">Contact</a>
+      <a href="scout-portfolio.html">Profile</a>
+      <a href="landing-creator.html">Notifications</a>
+      <a href="scout-message.html">Messages</a>
+    </nav>
+    <p class="site-title"><a href="index.html">Xpression</a></p>
+    <nav class="role-row" aria-label="Roles">
+      <a href="landing-creator.html">Creator</a>
+      <a href="landing-mentor.html">Mentor</a>
+      <a href="landing-scout.html">Talent Scout</a>
+      <a href="landing-moderator.html">Moderator</a>
+      <a href="landing-admin.html">Administrator</a>
+      <a class="apply" href="register.html">Apply</a>
+    </nav>
+  </header>
+
+  <div class="home-wrap">
+    <p class="kicker">Writing · Visual art · Music</p>
+    <h1>A home for creative work.</h1>
+    <p class="lede">Publish writing, visual art, and music in one place. Discover what other people are making, give constructive feedback, and keep a portfolio of your own work.</p>
+    <p class="lede">The links above open each role. Apply starts an account screen. The menu at the top right lists sign-in and the other shared features. Nothing on these pages saves data.</p>
+
+    <section id="about" class="panel" style="margin-top:1.2rem">
+      <h2>About</h2>
+      <p>Xpression is a community for creative work. After sign-in, the account role chooses the home. These files are the Sprint Cycle I designs.</p>
+    </section>
+    <section id="help" class="panel">
+      <h2>Help</h2>
+      <p>To run the application, follow the README in the project folder. The address to open is the one printed next to Local: in the terminal, usually http://localhost:3000.</p>
+    </section>
+    <section id="contact" class="panel">
+      <h2>Contact</h2>
+      <p>Course project for the Xpression team. Questions about sprint scope go to the Scrum Master, James Henson.</p>
+    </section>
+
+    <h2 style="margin-top:2rem">All designed screens</h2>
+    <p class="lede">Use this list in the presentation when you need a screen that is not linked from the role homes.</p>
+
+    <h2>Sign-in</h2>
+    <div class="screen-list">
+      <a href="sign-in.html"><span>Sign in<small>Credentials, role is resolved after sign-in</small></span><span class="badge">Entry</span></a>
+      <a href="register.html"><span>Create account<small>Creator, Mentor, and Talent Scout registration</small></span><span class="badge">Form</span></a>
+      <a href="forgot-password.html"><span>Forgot password<small>Reset request</small></span><span class="badge">Form</span></a>
+      <a href="account-created.html"><span>Account ready<small>Creator confirmation</small></span><span class="badge">Confirmation</span></a>
+      <a href="account-pending.html"><span>Approval pending<small>Mentor and Talent Scout applications</small></span><span class="badge">Status</span></a>
+      <a href="applicant-start.html"><span>Begin application<small>Signed in, no application yet</small></span><span class="badge">Status</span></a>
+      <a href="applicant-draft.html"><span>Application in progress<small>Role and status, still editable</small></span><span class="badge">Status</span></a>
+      <a href="applicant-pending.html"><span>Application pending<small>Wait until the team reviews it</small></span><span class="badge">Status</span></a>
+      <a href="applicant-approved.html"><span>Application approved<small>Role access and Xpression login</small></span><span class="badge">Status</span></a>
+      <a href="application-form.html"><span>Application questions<small>Shared questions plus role-specific questions</small></span><span class="badge">Form</span></a>
+      <a href="application-answers.html"><span>Submitted answers<small>Read-only after submit</small></span><span class="badge">Detail</span></a>
+    </div>
+
+    <h2>Role landing pages</h2>
+    <div class="screen-list">
+      <a href="landing-creator.html"><span>Creator home<small>Feed, publish, portfolio, feedback, saved work</small></span><span class="badge">Dashboard</span></a>
+      <a href="landing-mentor.html"><span>Mentor home<small>Requests, structured feedback, nominations, history</small></span><span class="badge">Dashboard</span></a>
+      <a href="landing-scout.html"><span>Talent Scout home<small>Search, portfolios, messages, opportunities</small></span><span class="badge">Dashboard</span></a>
+      <a href="landing-moderator.html"><span>Moderator home<small>Reports, cases, featured nominations</small></span><span class="badge">Dashboard</span></a>
+      <a href="landing-admin.html"><span>Administrator home<small>Accounts, roles, categories, analytics, settings</small></span><span class="badge">Dashboard</span></a>
+    </div>
+
+    <h2>Creator use cases</h2>
+    <div class="screen-list">
+      <a href="creator-feed.html"><span>Community feed<small>Explore Creative Work · browse and filter</small></span><span class="badge">Browse</span></a>
+      <a href="creator-work-detail.html"><span>Work detail<small>Explore Creative Work · detail and existing feedback</small></span><span class="badge">Detail</span></a>
+      <a href="creator-publish.html"><span>Publish work<small>Publish Creative Work · create form</small></span><span class="badge">Create</span></a>
+      <a href="creator-publish-confirm.html"><span>Published<small>Publish Creative Work · confirmation</small></span><span class="badge">Confirmation</span></a>
+    </div>
+
+    <h2>Creative Mentor use cases</h2>
+    <div class="screen-list">
+      <a href="mentor-requests.html"><span>Review requests<small>Manage Review Requests · queue</small></span><span class="badge">Approval</span></a>
+      <a href="mentor-request-detail.html"><span>Request decision<small>Manage Review Requests · accept or decline</small></span><span class="badge">Approval</span></a>
+      <a href="mentor-feedback.html"><span>Structured feedback<small>Provide Structured Feedback · review form</small></span><span class="badge">Review</span></a>
+      <a href="mentor-feedback-sent.html"><span>Feedback recorded<small>Provide Structured Feedback · confirmation</small></span><span class="badge">Confirmation</span></a>
+    </div>
+
+    <h2>Talent Scout use cases</h2>
+    <div class="screen-list">
+      <a href="scout-search.html"><span>Find creators<small>Search for Creators · search</small></span><span class="badge">Search</span></a>
+      <a href="scout-portfolio.html"><span>Creator portfolio<small>Review Creator Portfolio · profile</small></span><span class="badge">Profile</span></a>
+      <a href="scout-message.html"><span>Message creator<small>Contact Creator · messaging</small></span><span class="badge">Messaging</span></a>
+      <a href="scout-invite.html"><span>Invite to opportunity<small>Invite Creator to Opportunity · form with dates</small></span><span class="badge">Scheduling</span></a>
+    </div>
+
+    <h2>Community Moderator use cases</h2>
+    <div class="screen-list">
+      <a href="mod-queue.html"><span>Reported work<small>Review Reported Creative Work · queue</small></span><span class="badge">Moderation</span></a>
+      <a href="mod-case.html"><span>Moderation case<small>Review Reported Creative Work · decision</small></span><span class="badge">Moderation</span></a>
+      <a href="mod-nominations.html"><span>Featured nominations<small>Review Featured-Work Nominations · queue</small></span><span class="badge">Approval</span></a>
+      <a href="mod-nomination.html"><span>Nomination review<small>Review Featured-Work Nominations · approve or decline</small></span><span class="badge">Approval</span></a>
+    </div>
+
+    <h2>Administrator use cases</h2>
+    <div class="screen-list">
+      <a href="admin-users.html"><span>User search<small>Manage User Accounts · search</small></span><span class="badge">Search</span></a>
+      <a href="admin-user-detail.html"><span>Account status<small>Manage User Accounts · update form</small></span><span class="badge">Update</span></a>
+      <a href="admin-report-criteria.html"><span>Report criteria<small>Generate Analytics and Reports · criteria</small></span><span class="badge">Report</span></a>
+      <a href="admin-report-results.html"><span>Report results<small>Generate Analytics and Reports · analytics</small></span><span class="badge">Analytics</span></a>
+    </div>
+  </div>
+</body>
+</html>

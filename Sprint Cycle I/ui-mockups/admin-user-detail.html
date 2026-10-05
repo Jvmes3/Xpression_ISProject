@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Helen Park — Xpression</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="mock-bar"><a href="index.html">All Sprint Cycle I screens</a><span>Design mockup only. Not implemented in the Next.js app.</span></div>
+  <div class="shell">
+    <aside class="sidebar">
+      <a class="brand" href="landing-admin.html"><svg width="32" height="32" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#1c1712"/><path d="M15 17h7l13 15h-7zM15 47h7L35 32h-7z" fill="#f4efe6"/><path fill="#c4491d" fill-rule="evenodd" d="M33 17h9v30h-9zM42 17h6a10 10 0 0 1 0 20h-6zM45 22h3a5 5 0 0 1 0 10h-3z"/></svg><span>Xpression</span></a>
+      <div class="role-chip">Administrator</div>
+      <nav class="side-nav">
+        <a href="landing-admin.html">Home</a>
+        <a class="active" href="admin-users.html">Users</a>
+        <a href="admin-report-criteria.html">Analytics</a>
+      </nav>
+      <div class="who"><strong>Jordan Ellis</strong><small>System administrator</small></div>
+    </aside>
+    <div class="main">
+      <header class="topbar"><a class="btn-quiet" href="admin-users.html">All users</a></header>
+      <main class="content">
+        <p class="kicker">Use case · Manage User Accounts · update</p>
+        <div class="page-head"><div><h1>Helen Park</h1><p>Applied as a Creative Mentor. Approval is an administrator action. This form is the account update, not a working control.</p></div></div>
+        <form class="form panel" style="max-width:36rem">
+          <p class="meta">helen.park@gmail.com · joined Sep 18, 2026</p>
+          <label>Role
+            <select>
+              <option>Creator</option>
+              <option selected>Creative Mentor</option>
+              <option>Talent Scout</option>
+              <option>Community Moderator</option>
+            </select>
+          </label>
+          <label>Account status
+            <select>
+              <option selected>Pending approval</option>
+              <option>Active</option>
+              <option>Deactivated</option>
+              <option>Suspended</option>
+              <option>Banned</option>
+            </select>
+          </label>
+          <label>Admin note
+            <textarea>Portfolio of published criticism looks complete. Approve if the writing samples are hers.</textarea>
+          </label>
+          <div class="btn-row">
+            <span class="btn-ok">Approve and activate</span>
+            <span class="btn-quiet">Reject application</span>
+            <span class="btn-danger">Suspend</span>
+          </div>
+        </form>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

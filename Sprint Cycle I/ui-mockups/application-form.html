@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Application questions — Xpression</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="mock-bar"><a href="index.html">All Sprint Cycle I screens</a><span>Design mockup only.</span></div>
+  <main class="sheet">
+    <p class="kicker">Application</p>
+    <h1>Your application</h1>
+    <p class="lede">Shared questions, then the questions for the role you select. This example is a Creative Mentor who reviews more than one kind of work. Leaving this page does not submit the application.</p>
+    <form class="form panel">
+      <p class="meta">Application email · youremail@gmail.com</p>
+      <label>Full name<input type="text" value="Amara Cole" /></label>
+      <label>Age<input type="number" value="21" /></label>
+      <fieldset style="border:0;padding:0;margin:0">
+        <legend>Role you are applying for</legend>
+        <div class="choices">
+          <label><input type="radio" name="role" /> Creator</label>
+          <label><input type="radio" name="role" checked /> Creative Mentor</label>
+          <label><input type="radio" name="role" /> Talent Scout</label>
+        </div>
+      </fieldset>
+      <label>Reason for applying<textarea>I want to give structured feedback on poems and essays.</textarea></label>
+      <label>Credentials<textarea>Florida A&amp;M University, English. Education is recorded here, not as the login email.</textarea></label>
+      <fieldset style="border:0;padding:0;margin:0">
+        <legend>Creative Mentor questions</legend>
+        <label>Experience giving feedback<textarea>Workshop leader for two semesters.</textarea></label>
+        <p>What do you review?</p>
+        <div class="choices">
+          <label><input type="checkbox" checked /> Writing</label>
+          <label><input type="checkbox" /> Visual art</label>
+          <label><input type="checkbox" checked /> Music</label>
+        </div>
+        <p class="meta">You chose more than one. List what you are applying for. The questions follow each line.</p>
+        <label>Writing<input type="text" value="Poetry" /></label>
+        <label>What writing will you review?<textarea>Poems and short essays.</textarea></label>
+        <label>Example of feedback on a piece of writing<textarea>I would name the image that is working, then point to one place the draft explains instead of showing.</textarea></label>
+        <label>Music<input type="text" value="Recorded songs" /></label>
+        <label>What music will you review?<textarea>Songs sent as SoundCloud links.</textarea></label>
+        <label>Example of feedback on a track<textarea>I would talk about the verse and the place the chorus arrives late.</textarea></label>
+      </fieldset>
+      <p class="meta">Creator questions ask what they make, what they want to publish, and a sample link. Talent Scout questions ask for an organization, the opportunities they will offer, and how creators can confirm who they are.</p>
+      <div class="btn-row">
+        <a class="btn" href="applicant-pending.html">Submit application</a>
+        <a class="btn-quiet" href="applicant-draft.html">Save and finish later</a>
+      </div>
+    </form>
+  </main>
+</body>
+</html>

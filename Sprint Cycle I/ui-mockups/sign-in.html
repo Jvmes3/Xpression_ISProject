@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sign in — Xpression</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="mock-bar">
+    <a href="index.html">All Sprint Cycle I screens</a>
+    <span>Design mockup only. Not implemented in the Next.js app.</span>
+  </div>
+  <div class="auth">
+    <section class="auth-brand">
+      <div>
+        <svg width="52" height="52" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#f4efe6"/><path d="M15 17h7l13 15h-7zM15 47h7L35 32h-7z" fill="#1c1712"/><path fill="#c4491d" fill-rule="evenodd" d="M33 17h9v30h-9zM42 17h6a10 10 0 0 1 0 20h-6zM45 22h3a5 5 0 0 1 0 10h-3z"/></svg>
+        <h1>Xpression</h1>
+        <p>Sign in with the email and password you created for your application. A pending application stays on the status screen. An approved application shows your Xpression login.</p>
+      </div>
+      <p>Writing · Visual art · Music</p>
+    </section>
+    <section class="auth-panel">
+      <p class="kicker">Welcome back</p>
+      <h2>Sign in</h2>
+      <form class="form">
+        <label>Email
+          <input type="email" name="email" autocomplete="username" placeholder="youremail@gmail.com" />
+        </label>
+        <label>Password
+          <input type="password" name="password" autocomplete="current-password" placeholder="Password" />
+        </label>
+        <p class="meta">Email needs @ and a domain, such as gmail.com or school.edu. Password needs 8 characters, 1 capital letter, 1 number, and 1 special character.</p>
+        <label class="choices" style="border:0;background:transparent;padding:0">
+          <input type="checkbox" name="remember" /> Keep me signed in on this device
+        </label>
+        <a class="btn" href="applicant-pending.html">Sign in</a>
+      </form>
+      <p class="meta" style="margin-top:1rem">This opens the application status for youremail@gmail.com. It does not check a password.</p>
+      <p><a href="forgot-password.html">Forgot password</a> · <a href="register.html">Create an account</a></p>
+    </section>
+  </div>
+</body>
+</html>

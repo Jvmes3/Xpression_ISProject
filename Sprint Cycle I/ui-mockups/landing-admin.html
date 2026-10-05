@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Administrator home — Xpression</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="mock-bar"><a href="index.html">All Sprint Cycle I screens</a><span>Design mockup only. Not implemented in the Next.js app.</span></div>
+  <div class="shell">
+    <aside class="sidebar">
+      <a class="brand" href="landing-admin.html"><svg width="32" height="32" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#1c1712"/><path d="M15 17h7l13 15h-7zM15 47h7L35 32h-7z" fill="#f4efe6"/><path fill="#c4491d" fill-rule="evenodd" d="M33 17h9v30h-9zM42 17h6a10 10 0 0 1 0 20h-6zM45 22h3a5 5 0 0 1 0 10h-3z"/></svg><span>Xpression</span></a>
+      <div class="role-chip">Administrator</div>
+      <nav class="side-nav">
+        <a class="active" href="landing-admin.html">Home</a>
+        <a href="admin-users.html">Users</a>
+        <a href="admin-report-criteria.html">Analytics</a>
+        <span>Categories · later sprint</span>
+        <span>Settings · later sprint</span>
+      </nav>
+      <div class="who"><strong>Jordan Ellis</strong><small>System administrator</small></div>
+    </aside>
+    <div class="main">
+      <header class="topbar"><input class="search" type="search" placeholder="Search users, posts, or cases" aria-label="Search" /><div class="top-actions"><span class="badge warn">2 approvals</span><a class="btn-quiet" href="sign-in.html">Sign out</a></div></header>
+      <main class="content">
+        <p class="kicker">Administrator</p>
+        <div class="page-head"><div><h1>Platform overview</h1><p>Accounts, categories, escalated reports, and usage reports. Administrators are created by the system, not by public registration.</p></div></div>
+        <div class="stats">
+          <article class="stat"><span>Active accounts</span><strong>186</strong></article>
+          <article class="stat"><span>Posts this month</span><strong>240</strong></article>
+          <article class="stat"><span>Escalated cases</span><strong>2</strong></article>
+        </div>
+        <div class="grid-funcs">
+          <a class="func" href="admin-users.html"><span class="tag">Designed this sprint</span><h2>Manage users</h2><p>Search accounts and activate, suspend, or ban when needed.</p></a>
+          <a class="func" href="admin-report-criteria.html"><span class="tag">Designed this sprint</span><h2>Analytics and reports</h2><p>Choose a date range and generate a platform usage report.</p></a>
+          <div class="func later"><span class="tag">Later sprint</span><h2>Approve specialized accounts</h2><p>Accept or reject Mentor and Talent Scout applications.</p></div>
+          <div class="func later"><span class="tag">Later sprint</span><h2>Roles and permissions</h2><p>Assign Moderator access and review role permissions.</p></div>
+          <div class="func later"><span class="tag">Later sprint</span><h2>Creative categories</h2><p>Maintain media types, disciplines, genres, and tags.</p></div>
+          <div class="func later"><span class="tag">Later sprint</span><h2>Reported activity and settings</h2><p>Close escalated cases and edit platform configuration.</p></div>
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

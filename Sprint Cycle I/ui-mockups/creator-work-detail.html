@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Night Bus Demo — Xpression</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="mock-bar"><a href="index.html">All Sprint Cycle I screens</a><span>Design mockup only. Not implemented in the Next.js app.</span></div>
+  <div class="shell">
+    <aside class="sidebar">
+      <a class="brand" href="landing-creator.html"><svg width="32" height="32" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#1c1712"/><path d="M15 17h7l13 15h-7zM15 47h7L35 32h-7z" fill="#f4efe6"/><path fill="#c4491d" fill-rule="evenodd" d="M33 17h9v30h-9zM42 17h6a10 10 0 0 1 0 20h-6zM45 22h3a5 5 0 0 1 0 10h-3z"/></svg><span>Xpression</span></a>
+      <div class="role-chip">Creator</div>
+      <nav class="side-nav">
+        <a href="landing-creator.html">Home</a>
+        <a class="active" href="creator-feed.html">Explore</a>
+        <a href="creator-publish.html">Publish</a>
+      </nav>
+      <div class="who"><strong>Amara Cole</strong><small>Viewing another creator’s work</small></div>
+    </aside>
+    <div class="main">
+      <header class="topbar"><a class="btn-quiet" href="creator-feed.html">Back to feed</a><div class="top-actions"><span class="badge">Report</span><span class="badge">Save</span></div></header>
+      <main class="content">
+        <p class="kicker">Use case · Explore Creative Work · detail</p>
+        <div class="detail">
+          <article class="panel">
+            <span class="badge music">Music</span>
+            <h1>Night Bus Demo</h1>
+            <p class="meta">Nia Okonkwo · also on her portfolio</p>
+            <div class="player">
+              <strong>SoundCloud embed</strong>
+              <p>The player would load from the permalink. This mockup shows the frame only.</p>
+              <small>https://soundcloud.com/nia-okonkwo/night-bus-demo</small>
+            </div>
+            <p>Recorded on the last bus home. The second chorus is still a placeholder lyric.</p>
+          </article>
+          <aside class="panel">
+            <h2>Feedback</h2>
+            <p class="meta">Existing comments on this work. A comment can include a GIF.</p>
+            <div class="comments">
+              <article class="comment">
+                <strong>Amara Cole</strong>
+                <p>The dry vocal makes the last line land. I would not add reverb there.</p>
+              </article>
+              <article class="comment">
+                <strong>Luis Ortega</strong>
+                <p>That chorus turn is the piece.</p>
+                <div class="gif">GIF attached · quiet-applause.gif</div>
+              </article>
+            </div>
+            <label style="margin-top:0.8rem">Add a comment
+              <textarea placeholder="Comment on the work. GIF optional."></textarea>
+            </label>
+          </aside>
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Moderation case — Xpression</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="mock-bar"><a href="index.html">All Sprint Cycle I screens</a><span>Design mockup only. Not implemented in the Next.js app.</span></div>
+  <div class="shell">
+    <aside class="sidebar">
+      <a class="brand" href="landing-moderator.html"><svg width="32" height="32" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#1c1712"/><path d="M15 17h7l13 15h-7zM15 47h7L35 32h-7z" fill="#f4efe6"/><path fill="#c4491d" fill-rule="evenodd" d="M33 17h9v30h-9zM42 17h6a10 10 0 0 1 0 20h-6zM45 22h3a5 5 0 0 1 0 10h-3z"/></svg><span>Xpression</span></a>
+      <div class="role-chip">Moderator</div>
+      <nav class="side-nav">
+        <a href="landing-moderator.html">Home</a>
+        <a class="active" href="mod-queue.html">Reports</a>
+        <a href="mod-nominations.html">Featured nominations</a>
+      </nav>
+      <div class="who"><strong>Priya Shah</strong><small>Case MOD-104</small></div>
+    </aside>
+    <div class="main">
+      <header class="topbar"><a class="btn-quiet" href="mod-queue.html">All reports</a><span class="badge warn">Open</span></header>
+      <main class="content">
+        <p class="kicker">Use case · Review Reported Creative Work · decision</p>
+        <div class="grid-2">
+          <article class="panel">
+            <span class="badge art">Visual art</span>
+            <h1>Copy of Market Study</h1>
+            <p class="meta">Posted by a new account · reported by Luis Ortega</p>
+            <div class="work-visual art" style="border-radius:12px;margin:0.8rem 0"><div class="shapes"><i></i><i style="width:60%"></i></div></div>
+            <p>Reason: the image matches Market Study No. 4 and the caption claims it as new work.</p>
+          </article>
+          <form class="panel form">
+            <h2>Case MOD-104</h2>
+            <label>Finding
+              <textarea>The image matches an existing portfolio piece. Treat as a copyright concern.</textarea>
+            </label>
+            <label>Case status
+              <select>
+                <option>Open</option>
+                <option selected>In review</option>
+                <option>Closed</option>
+              </select>
+            </label>
+            <p class="meta">A Moderator may hide or remove the post. A permanent ban is an Administrator action. Copyright issues can be escalated.</p>
+            <div class="btn-row">
+              <span class="btn-quiet">Keep available</span>
+              <span class="btn">Hide</span>
+              <span class="btn-danger">Remove</span>
+            </div>
+            <span class="btn-quiet">Escalate to Administrator</span>
+          </form>
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>
