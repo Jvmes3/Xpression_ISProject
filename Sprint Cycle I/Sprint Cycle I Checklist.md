@@ -13,7 +13,6 @@ Scrum Master: James Henson
 | Step-by-step presentation | `README.md` in this folder |
 | Screen designs | `ui-mockups/index.html` |
 | Why each screen exists | `UI Specification.md` |
-| Spoken presentation | `sprint-cycle-i-presentation.md` |
 | Decision log | `Meeting Notes.md` |
 
 ## Running site
