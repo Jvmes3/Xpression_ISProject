@@ -94,6 +94,4 @@ The notes below are the sprint decision log, dated across the cycle so the work 
 
 These do not block Cycle I. They should be settled before feature work.
 
-1. Confirm Node.js 20+ and VS Code on every teammate’s machine.
-2. Choose local or hosted PostgreSQL before the sprint that adds data.
-3. Instructor answers still open from Cycle 0: one role versus multiple roles, whether a structured review must be requested first, which roles may message each other, and which moderator actions require an Administrator. The mockups follow the assumptions in the Sep 18 notes.
+1. Instructor answers still open from Cycle 0: one role versus multiple roles, whether a structured review must be requested first, which roles may message each other, and which moderator actions require an Administrator. The mockups follow the assumptions in the Sep 18 notes.
