@@ -6,7 +6,7 @@ The terminal commands run in this folder, `Sprint Cycle I`, which contains `pack
 
 Repository: https://github.com/Jvmes3/Xpression_ISProject.git
 
-Scrum Master: James Henson
+Scrum Master: Clemenceau Senatus
 
 ## 1. Open the right folder
 
