@@ -9,7 +9,7 @@ The notes below are the sprint decision log, dated across the cycle so the work 
 | Field | Value |
 | --- | --- |
 | Sprint | Cycle I — user interface design and splash screen |
-| Purpose | Choose the interface approach and divide the Cycle I work |
+| Purpose | Prioritize Front-End of application |
 
 ### Agenda
 
@@ -40,19 +40,19 @@ The notes below are the sprint decision log, dated across the cycle so the work 
 | Jacob Fitchett | Draft the visual system and screen layouts | Done in `ui-mockups/` |
 | Clemenceau Senatus | Set up the Next.js splash at the repository root | Done |
 | Leeyand Blot Jr | Map each screen to a functional requirement and keep the database out of this cycle | Done in `UI Specification.md` |
-| James Henson | Notes, checklist, and presentation outline | Done |
+| James Henson | Notes and checklist | Done |
 
 ## Sep 23, 2026 — Sign-in and role homes
 
 ### Agenda
 
-1. Review sign-in, registration, forgot password, and the two account outcomes
+1. Review sign-in, registration, and the two account outcomes
 2. Review a landing page for each of the five roles
 3. Mark which landing actions are drawn this sprint and which wait
 
 ### Decisions
 
-1. Sign-in collects email and password and offers forgot-password and create-account paths.
+1. Sign-in collects email, password, and create-account paths.
 2. Registration shows only Creator, Mentor, and Talent Scout. The approval rule is visible on the form.
 3. Each landing page lists the major functions for that role. Only the selected use cases link to designed screens. Other functions are labeled for a later sprint.
 4. Sample people used on the mockups: Amara Cole (Creator), Helen Park (Mentor), Marcus Adeyemi (Talent Scout), Priya Shah (Moderator), Jordan Ellis (Administrator).
