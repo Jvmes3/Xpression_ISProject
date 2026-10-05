@@ -7,8 +7,9 @@
 | GitHub username | Leeyand |
 | Cycle 0 contribution | Technology documentation, submission checklist, meeting notes, presentation roles |
 
-### **Backend Developer**
+### **Scrum Master**
 
-- Creates functions
-- Connects APIs to frontend
-- Designs and builds database
+- Coordinates meetings
+- Tracks progress
+- Records decisions
+- Communicates with the instructor
