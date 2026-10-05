@@ -1,6 +1,6 @@
 # Meeting notes — Sprint Cycle I
 
-Scrum Master: James Henson
+Scrum Master: Clemenceau Senatus
 
 The notes below are the sprint decision log, dated across the cycle so the work is not bunched at the deadline. Attendees listed for each meeting are the four team members. Change a date or an attendee if a real meeting differed before you submit.
 
@@ -20,7 +20,7 @@ The notes below are the sprint decision log, dated across the cycle so the work 
 
 ### Decisions
 
-1. **Scrum Master:** James Henson, same role as Cycle 0.
+1. **Scrum Master:** Clemenceau Senatus.
 2. **Build only the splash screen.** No authentication, database, Prisma, or use-case behavior.
 3. **Mockups are static HTML** in `Sprint Cycle I/ui-mockups/`. They are not Next.js pages.
 4. **Stack stays Cycle 0:** TypeScript, Next.js (App Router), React, Node.js 20+.
