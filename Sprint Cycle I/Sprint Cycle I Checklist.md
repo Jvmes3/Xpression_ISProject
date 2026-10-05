@@ -65,14 +65,3 @@ These pages are in the `app` folder in this sprint. The presentation README in t
 - [x] Administrator can open every question and answer
 - [x] No PostgreSQL or Prisma
 
-## Still to do outside this sprint
-
-- [ ] Push to GitHub and have each member pull and run the site
-- [ ] Each member still needs at least one commit
-
-| Member | GitHub | Cycle I focus |
-| --- | --- | --- |
-| James Henson | Jvmes3 | Scrum Master notes, checklist, presentation |
-| Jacob Fitchett | jacobfitch | Frontend mockups and splash layout |
-| Clemenceau Senatus | Clemenceau1 | Next.js project setup and splash screen |
-| Leeyand Blot Jr | Leeyand | Requirements mapping |
