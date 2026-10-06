@@ -4,7 +4,8 @@ import { Answers } from "../../../components/Answers";
 import { decideApplication, undoApplication } from "../../../lib/actions";
 import { answerLines } from "../../../lib/application";
 import { currentAccount } from "../../../lib/session";
-import { readDatabase } from "../../../lib/store";
+import { LaterSprint } from "../../../components/LaterSprint";
+import { hasSprintData, readDatabase } from "../../../lib/store";
 
 export const dynamic = "force-dynamic";
 
@@ -19,6 +20,8 @@ export default async function ApplicationRecordPage({ params }: { params: Promis
       </main>
     );
   }
+
+  if (!hasSprintData()) return <LaterSprint title="Full application" />;
 
   const { id } = await params;
   const account = readDatabase().accounts.find((item) => item.id === id);

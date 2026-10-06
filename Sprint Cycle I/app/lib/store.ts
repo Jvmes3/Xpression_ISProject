@@ -167,7 +167,33 @@ function fallbackRequests(): ReviewRequest[] {
   ];
 }
 
+function emptyDatabase(): Database {
+  return {
+    accounts: [],
+    reports: [],
+    nominations: [],
+    cases: [],
+    categories: [],
+    posts: [],
+    reviewRequests: [],
+    scoutNotes: [],
+    tickets: [],
+    settings: {
+      commentsOpen: true,
+      gifsAllowed: true,
+      uploadNote: "",
+      moderationRule: "",
+    },
+    lastReport: null,
+  };
+}
+
+export function hasSprintData() {
+  return fs.existsSync(seedPath);
+}
+
 function seedDatabase(): Database {
+  if (!hasSprintData()) return emptyDatabase();
   const seed = JSON.parse(fs.readFileSync(seedPath, "utf8")) as Omit<Database, "accounts">;
   return { accounts: [], ...seed };
 }
@@ -175,6 +201,7 @@ function seedDatabase(): Database {
 function read(): Database {
   if (!fs.existsSync(filePath)) {
     const created = seedDatabase();
+    if (!hasSprintData()) return created;
     fs.mkdirSync(path.dirname(filePath), { recursive: true });
     fs.writeFileSync(filePath, JSON.stringify(created, null, 2));
     return created;

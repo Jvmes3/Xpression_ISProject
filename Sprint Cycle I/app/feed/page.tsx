@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { DiscoverBar, feedFilters } from "../components/DiscoverBar";
-import { readDatabase } from "../lib/store";
+import { LaterSprint } from "../components/LaterSprint";
+import { hasSprintData, readDatabase } from "../lib/store";
 
 export const dynamic = "force-dynamic";
 
@@ -11,6 +12,8 @@ export default async function FeedPage({
 }: {
   searchParams: Promise<{ media?: string; q?: string; filter?: string }>;
 }) {
+  if (!hasSprintData()) return <LaterSprint title="Explore creative work" />;
+
   const { media = "", q = "", filter = "" } = await searchParams;
   const selectedMedia = mediaNames.includes(media) ? media : "";
   const selectedFilter = feedFilters.some((item) => item.value === filter) ? filter : "recent";

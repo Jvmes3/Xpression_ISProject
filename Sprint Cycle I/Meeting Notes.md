@@ -88,7 +88,7 @@ The notes below are the sprint decision log, dated across the cycle so the work 
 2. Placeholder links scroll to short notes on the same page.
 3. PostgreSQL hosting and Prisma remain open from Cycle 0. They are not required to run this screen.
 4. Every teammate still needs to pull the repository and run `npm install` and `npm run dev` on their own machine.
-5. Presentation order follows `sprint-cycle-i-presentation.md`.
+5. Presentation order follows `README.md` in this folder.
 
 ## Still open
 

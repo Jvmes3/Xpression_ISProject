@@ -3,7 +3,8 @@ import { SprintNote } from "../../components/SprintNote";
 import { TicketQueue } from "../../components/TicketQueue";
 import { accountLabel, canUseRole } from "../../lib/access";
 import { currentAccount } from "../../lib/session";
-import { readDatabase } from "../../lib/store";
+import { LaterSprint } from "../../components/LaterSprint";
+import { hasSprintData, readDatabase } from "../../lib/store";
 
 export const dynamic = "force-dynamic";
 
@@ -23,6 +24,8 @@ export default async function ModeratorDeskPage({
       />
     );
   }
+  if (!hasSprintData()) return <LaterSprint title="Moderator desk" />;
+
   const moderator = account;
   const { ticket } = await searchParams;
   const tickets = readDatabase().tickets;

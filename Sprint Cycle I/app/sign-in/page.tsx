@@ -24,9 +24,8 @@ export default async function SignInPage({
       <p className="eyebrow">Sign in</p>
       <h1>Sign in</h1>
       <p className="lede">
-        Applicants sign in with the email and password they created for the
-        application. Moderators and administrators sign in with the email and
-        password created for them in the terminal.
+        The sign-in button does not open an account in this sprint. A moderator
+        or an administrator cannot be created from this folder.
       </p>
       <form className="form panel" action={signIn}>
         {next ? <input type="hidden" name="returnTo" value={next} /> : null}

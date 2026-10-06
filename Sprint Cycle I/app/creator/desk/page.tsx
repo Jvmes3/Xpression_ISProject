@@ -3,7 +3,8 @@ import { RoleSignIn } from "../../components/RoleSignIn";
 import { SprintNote } from "../../components/SprintNote";
 import { accountLabel, canUseRole } from "../../lib/access";
 import { currentAccount } from "../../lib/session";
-import { readDatabase } from "../../lib/store";
+import { hasSprintData, readDatabase } from "../../lib/store";
+import { LaterSprint } from "../../components/LaterSprint";
 
 export const dynamic = "force-dynamic";
 
@@ -25,6 +26,8 @@ export default async function CreatorDeskPage({
       />
     );
   }
+
+  if (!hasSprintData()) return <LaterSprint title="Explore creative work" />;
 
   const { media } = await searchParams;
   const selected = MEDIA.includes(media || "") ? media || "" : "";
