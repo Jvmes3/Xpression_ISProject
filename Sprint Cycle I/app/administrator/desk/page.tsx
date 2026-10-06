@@ -5,8 +5,7 @@ import { TicketQueue } from "../../components/TicketQueue";
 import { decideApplication, undoApplication } from "../../lib/actions";
 import { accountLabel, canUseRole } from "../../lib/access";
 import { currentAccount } from "../../lib/session";
-import { LaterSprint } from "../../components/LaterSprint";
-import { hasSprintData, readDatabase } from "../../lib/store";
+import { readDatabase } from "../../lib/store";
 
 export const dynamic = "force-dynamic";
 
@@ -26,8 +25,6 @@ export default async function AdministratorDeskPage({
       />
     );
   }
-  if (!hasSprintData()) return <LaterSprint title="Administrator desk" />;
-
   const admin = account;
   const { ticket } = await searchParams;
   const db = readDatabase();

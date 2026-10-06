@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Fraunces, Outfit } from "next/font/google";
-import { InertButtons } from "./components/InertButtons";
 import { SiteHeader, type HeaderSession } from "./components/SiteHeader";
 import { roleHome } from "./lib/application";
 import { roleLinks } from "./lib/nav";
@@ -74,7 +73,6 @@ export default async function RootLayout({
   return (
     <html lang="en" className={`${fraunces.variable} ${outfit.variable}`}>
       <body>
-        <InertButtons />
         <SiteHeader session={session} />
         {children}
         <footer className="site-footer">

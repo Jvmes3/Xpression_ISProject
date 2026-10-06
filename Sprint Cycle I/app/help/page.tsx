@@ -2,8 +2,7 @@ import Link from "next/link";
 import { fileTicket } from "../lib/actions";
 import { emailRule } from "../lib/credentials.mjs";
 import { currentAccount } from "../lib/session";
-import { LaterSprint } from "../components/LaterSprint";
-import { hasSprintData, readDatabase, type Ticket } from "../lib/store";
+import { readDatabase, type Ticket } from "../lib/store";
 
 export const dynamic = "force-dynamic";
 
@@ -20,8 +19,6 @@ export default async function HelpPage({
 }: {
   searchParams: Promise<{ email?: string; error?: string; sent?: string }>;
 }) {
-  if (!hasSprintData()) return <LaterSprint title="Help" />;
-
   const { email = "", error, sent } = await searchParams;
   const account = await currentAccount();
   const lookup = (email || account?.email || "").trim().toLowerCase();

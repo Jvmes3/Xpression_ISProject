@@ -1,6 +1,6 @@
 # Sprint Cycle I
 
-This folder is Sprint Cycle I. It holds the screen designs and the home screen.
+This folder is Sprint Cycle I. It holds the running site, including `package.json`, and the list for this sprint.
 
 Official repository: https://github.com/Jvmes3/Xpression_ISProject.git
 
@@ -11,20 +11,31 @@ Scrum Master: James Henson
 | Item | Location |
 | --- | --- |
 | Step-by-step presentation | `README.md` in this folder |
-| Home screen | `app/page.tsx` |
 | Screen designs | `ui-mockups/index.html` |
 | Why each screen exists | `UI Specification.md` |
 | Decision log | `Meeting Notes.md` |
 
-## Home screen
+## Running site
 
-The running screen shows the application name, logo, and a short description. Sign in, About, Help, and Contact are placeholders.
+These pages are in the `app` folder in this sprint. The presentation README in this folder walks through them.
 
 | Item | Location |
 | --- | --- |
 | Home | `app/page.tsx` |
-| Name, logo, and placeholder navigation | `app/layout.tsx` |
-| Logo file | `public/logo.svg` |
+| Signed-in name, role, and the role's own links | `app/components/SiteHeader.tsx` |
+| Apply, sign-in, and profile | `app/apply/page.tsx`, `app/sign-in/page.tsx`, `app/profile/page.tsx` |
+| Application form, saved draft, and submitted answers | `app/application/` |
+| Application status, including the wait message and the Xpression login | `app/account/page.tsx` |
+| Creator workspace: explore and publish | `app/creator/desk/` |
+| Mentor workspace: requests and structured feedback | `app/mentor/desk/` |
+| Talent Scout workspace: search, portfolio, message, and invite | `app/scout/desk/` |
+| Moderator desk, including Undo and help tickets | `app/moderator/desk/page.tsx` |
+| Moderator and administrator teams | `app/moderator/page.tsx`, `app/administrator/page.tsx` |
+| Help tickets for members | `app/help/page.tsx` |
+| Administrator desk, including the full application | `app/administrator/desk/page.tsx`, `app/administrator/applications/[id]/page.tsx` |
+| Email and password rules, including 1 number | `app/lib/credentials.mjs` |
+| Local accounts, applications, reports, and posts | `data/xpression.json`, seeded from `data/seed.json` |
+| Terminal commands for moderator and administrator accounts | `npm run create-moderator` and `npm run create-administrator` |
 
 ## Screen designs in this folder
 
@@ -39,11 +50,18 @@ The running screen shows the application name, logo, and a short description. Si
 | Moderator use cases | `ui-mockups/mod-queue.html`, `mod-case.html`, `mod-nominations.html`, `mod-nomination.html` |
 | Administrator use cases | `ui-mockups/admin-users.html`, `admin-user-detail.html`, `admin-report-criteria.html`, `admin-report-results.html` |
 
-## Required for this sprint
+## Included behavior
 
-- [x] Sign-in screen, plus registration, forgot password, and account outcomes
-- [x] Landing page for Creator, Mentor, Talent Scout, Moderator, and Administrator
-- [x] Two use cases for each role, with more than one screen type
-- [x] Home screen shows the application name, logo, tagline, and placeholder navigation
-- [x] The home screen does not authenticate anyone or run a use case
-- [x] Designs and home-screen source are in this folder
+- [x] Home, five role entrances, and Apply
+- [x] Sign-in for an applicant, a moderator, and an administrator
+- [x] Password rule: 8 characters, 1 capital letter, 1 number, and 1 special character
+- [x] Application stays in progress until Submit application
+- [x] A blank application cannot be submitted. A sample link may be left blank
+- [x] Pending, approved, and rejected status
+- [x] Approved role opens that role's workspace
+- [x] The signed-in name stays in the dark bar, and the role links stay after leaving the workspace
+- [x] Two use cases for Creator, Mentor, Talent Scout, Moderator, and Administrator
+- [x] Moderator and administrator actions can be undone
+- [x] Administrator can open every question and answer
+- [x] No PostgreSQL or Prisma
+

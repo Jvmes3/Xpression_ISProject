@@ -13,7 +13,7 @@ Functions that are real requirements but were not selected as this sprint’s tw
 Cycle 0 left several requirement questions open. The layouts use these assumptions until the instructor says otherwise:
 
 1. Each account has one role. Sign-in leads to that role’s home.
-2. Creators, mentors, and talent scouts apply with their own email and password. Mentor and Talent Scout applications wait for an Administrator. Moderators are assigned by an Administrator. Administrators are system-created. They are not created from Apply.
+2. Creators, mentors, and talent scouts apply with their own email and password. Mentor and Talent Scout applications wait for an Administrator. Moderator and administrator accounts are created in the terminal with `npm run create-moderator` and `npm run create-administrator`, then used on the sign-in page. They are not created from Apply.
 3. A structured mentor review includes strengths, areas for improvement, and recommendations, and it starts from an accepted review request.
 4. A Talent Scout may message a Creator about an opportunity. Other messaging rules are not designed yet.
 5. A Moderator may hide or remove reported work and may approve featured nominations. Suspending or banning an account is an Administrator action. Copyright and safety issues can be escalated.

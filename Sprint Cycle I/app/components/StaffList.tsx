@@ -1,4 +1,4 @@
-import { hasSprintData, readDatabase, type AccountRole } from "../lib/store";
+import { readDatabase, type AccountRole } from "../lib/store";
 
 export function StaffList({
   id,
@@ -9,15 +9,6 @@ export function StaffList({
   title: string;
   role: Extract<AccountRole, "moderator" | "administrator">;
 }) {
-  if (!hasSprintData()) {
-    return (
-      <section id={id} className="panel">
-        <h2>{title}</h2>
-        <p className="note">This will be added in a future sprint cycle.</p>
-      </section>
-    );
-  }
-
   const people = readDatabase().accounts.filter(
     (account) => account.role === role && account.status !== "banned" && account.status !== "deactivated",
   );

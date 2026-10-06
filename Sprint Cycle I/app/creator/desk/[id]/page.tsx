@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { LaterSprint } from "../../../components/LaterSprint";
-import { hasSprintData, readDatabase } from "../../../lib/store";
+import { readDatabase } from "../../../lib/store";
 
 export const dynamic = "force-dynamic";
 
@@ -12,8 +11,6 @@ export default async function WorkDetailPage({
   params: Promise<{ id: string }>;
   searchParams: Promise<{ notice?: string }>;
 }) {
-  if (!hasSprintData()) return <LaterSprint title="Work detail" />;
-
   const { id } = await params;
   const { notice } = await searchParams;
   const post = readDatabase().posts.find((item) => item.id === id && item.status !== "removed");

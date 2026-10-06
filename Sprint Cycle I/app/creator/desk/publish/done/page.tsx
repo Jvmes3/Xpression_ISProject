@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { LaterSprint } from "../../../../components/LaterSprint";
-import { hasSprintData, readDatabase } from "../../../../lib/store";
+import { readDatabase } from "../../../../lib/store";
 
 export const dynamic = "force-dynamic";
 
@@ -9,8 +8,6 @@ export default async function PublishedPage({
 }: {
   searchParams: Promise<{ id?: string }>;
 }) {
-  if (!hasSprintData()) return <LaterSprint title="Published" />;
-
   const { id } = await searchParams;
   const post = readDatabase().posts.find((item) => item.id === id);
 

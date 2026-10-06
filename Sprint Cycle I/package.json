@@ -2,11 +2,13 @@
   "name": "xpression",
   "version": "0.1.0",
   "private": true,
-  "description": "Xpression Sprint Cycle I screens. Buttons do not sign anyone in or create a moderator or administrator.",
+  "description": "Xpression Sprint Cycle I site. Applicants, moderators, and administrators sign in through a local account file.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "create-moderator": "node scripts/create-account.mjs moderator",
+    "create-administrator": "node scripts/create-account.mjs administrator"
   },
   "dependencies": {
     "next": "^15.5.4",
