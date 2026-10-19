@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { signOut } from "../lib/actions";
 import { menuItems, roles } from "../lib/nav";
+import { NotReady } from "./NotReady";
 
 export type HeaderSession = {
   email: string;
@@ -75,16 +76,20 @@ export function SiteHeader({ session }: { session: HeaderSession | null }) {
         hidden={!open}
       >
         {session ? <p className="drawer-who">Signed in as {session.name}</p> : null}
-        <Link href="/account">Your application</Link>
+        <NotReady className="menu-button">Your application</NotReady>
         {session && session.workspaceHref !== "/account" ? (
           <Link href={session.workspaceHref}>{session.workspaceLabel}</Link>
         ) : null}
         {menuItems
           .filter((item) => !(session && item.href === "/sign-in"))
           .map((item) => (
-            <Link key={item.href} href={item.href}>
-              {item.label}
-            </Link>
+            item.later ? (
+              <NotReady key={item.label} className="menu-button">{item.label}</NotReady>
+            ) : (
+              <Link key={item.href} href={item.href}>
+                {item.label}
+              </Link>
+            )
           ))}
         {session ? (
           <form action={signOut}>

@@ -1,16 +1,19 @@
 import Link from "next/link";
+import { NotReady } from "./NotReady";
 
 export function RoleHome({
   kicker,
   title,
   lede,
   cards,
+  rolePage,
   children,
 }: {
   kicker: string;
   title: string;
   lede: string;
   cards: { title: string; text: string; action: string; href: string }[];
+  rolePage: { label: string; href: string };
   children?: React.ReactNode;
 }) {
   return (
@@ -24,12 +27,15 @@ export function RoleHome({
             <h2>{card.title}</h2>
             <p>{card.text}</p>
             <p className="card-action">
-              <Link className="button" href={card.href}>{card.action}</Link>
+              <NotReady className="button">{card.action}</NotReady>
             </p>
           </article>
         ))}
       </div>
       {children}
+      <p className="role-page-link">
+        <Link href={rolePage.href}>{rolePage.label} page &gt;&gt;</Link>
+      </p>
     </main>
   );
 }

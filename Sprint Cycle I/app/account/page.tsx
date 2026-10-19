@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { beginApplication, signIn } from "../lib/actions";
+import { NotReady, NotReadyForm } from "../components/NotReady";
 import { roleHome } from "../lib/application";
 import { emailRule, passwordRule } from "../lib/credentials.mjs";
 import { currentAccount } from "../lib/session";
@@ -31,7 +31,7 @@ export default async function AccountPage({
           this page shows whether your application is in progress, still being
           reviewed, or approved.
         </p>
-        <form className="form panel" action={signIn}>
+        <NotReadyForm className="form panel">
           <input type="hidden" name="returnTo" value="account" />
           {error && signInErrors[error] ? <p className="note">{signInErrors[error]}</p> : null}
           <label>
@@ -43,8 +43,8 @@ export default async function AccountPage({
             <input type="password" name="password" placeholder="Password" required />
           </label>
           <p className="note">{emailRule} {passwordRule}</p>
-          <button className="button" type="submit">Sign in</button>
-        </form>
+          <NotReady className="button">Sign in</NotReady>
+        </NotReadyForm>
         <p className="more">
           New applicant? <Link href="/apply">Create an application login</Link>
         </p>
@@ -86,9 +86,9 @@ export default async function AccountPage({
       ) : null}
 
       {status === "new" ? (
-        <form action={beginApplication}>
-          <button className="button" type="submit">Begin application</button>
-        </form>
+        <p>
+          <NotReady className="button">Begin application</NotReady>
+        </p>
       ) : (
         <Link className="status-card" href={status === "draft" ? "/application" : "/application/answers"}>
           <span>{status === "draft" ? "In progress" : status === "pending" ? "Pending" : status === "approved" ? "Approved" : "Not approved"}</span>

@@ -1,25 +1,13 @@
+import { NotReady } from "../../../components/NotReady";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Answers } from "../../../components/Answers";
-import { decideApplication, undoApplication } from "../../../lib/actions";
 import { answerLines } from "../../../lib/application";
-import { currentAccount } from "../../../lib/session";
 import { readDatabase } from "../../../lib/store";
 
 export const dynamic = "force-dynamic";
 
 export default async function ApplicationRecordPage({ params }: { params: Promise<{ id: string }> }) {
-  const viewer = await currentAccount();
-  if (!viewer || viewer.role !== "administrator" || viewer.status !== "active") {
-    return (
-      <main className="page">
-        <h1>Full application</h1>
-        <p className="lede">Sign in as an administrator to read this application.</p>
-        <p><Link className="button" href="/sign-in">Sign in</Link></p>
-      </main>
-    );
-  }
-
   const { id } = await params;
   const account = readDatabase().accounts.find((item) => item.id === id);
   const application = account?.application;
@@ -38,13 +26,13 @@ export default async function ApplicationRecordPage({ params }: { params: Promis
       ) : null}
       <form className="task-actions">
         {application.status === "pending" || application.status === "rejected" ? (
-          <button className="button" type="submit" formAction={decideApplication.bind(null, account.id, "approved")}>Approve</button>
+          <NotReady className="button">Approve</NotReady>
         ) : null}
         {application.status === "pending" ? (
-          <button className="button button-quiet" type="submit" formAction={decideApplication.bind(null, account.id, "rejected")}>Reject</button>
+          <NotReady className="button button-quiet">Reject</NotReady>
         ) : null}
         {application.status === "approved" || application.status === "rejected" ? (
-          <button className="button button-quiet" type="submit" formAction={undoApplication.bind(null, account.id)}>Undo decision</button>
+          <NotReady className="button button-quiet">Undo decision</NotReady>
         ) : null}
       </form>
       <p className="more">

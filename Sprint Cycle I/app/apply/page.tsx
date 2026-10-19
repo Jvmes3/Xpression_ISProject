@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { createLogin } from "../lib/actions";
+import { NotReady, NotReadyForm } from "../components/NotReady";
 import { emailRule, passwordRule } from "../lib/credentials.mjs";
 import { currentAccount } from "../lib/session";
 
@@ -44,7 +44,7 @@ export default async function ApplyPage({
         whether your application is still being reviewed. This is the record of
         your application. It is not your Xpression role login.
       </p>
-      <form className="form panel" action={createLogin}>
+      <NotReadyForm className="form panel">
         {error && errors[error] ? <p className="note">{errors[error]}</p> : null}
         <label>
           Email
@@ -62,8 +62,8 @@ export default async function ApplyPage({
           {emailRule} {passwordRule} Moderator and administrator accounts use
           the same rules in the terminal.
         </p>
-        <button className="button" type="submit">Continue</button>
-      </form>
+        <NotReady className="button">Continue</NotReady>
+      </NotReadyForm>
       <p className="more">
         Already started an application? <Link href="/sign-in">Sign in</Link>
       </p>

@@ -46,11 +46,11 @@ export function roleLinks(role: string) {
 }
 
 export const menuItems = [
-  { href: "/sign-in", label: "Sign in" },
-  { href: "/#about", label: "About" },
-  { href: "/help", label: "Help" },
-  { href: "/#contact", label: "Contact" },
-  { href: "/profile", label: "Profile" },
-  { href: "/notifications", label: "Notifications" },
-  { href: "/messages", label: "Messages" },
+  { href: "/sign-in", label: "Sign in", later: false },
+  { href: "/#about", label: "About", later: false },
+  { href: "/help", label: "Help", later: true },
+  { href: "/#contact", label: "Contact", later: false },
+  { href: "/profile", label: "Profile", later: true },
+  { href: "/notifications", label: "Notifications", later: true },
+  { href: "/messages", label: "Messages", later: true },
 ] as const;

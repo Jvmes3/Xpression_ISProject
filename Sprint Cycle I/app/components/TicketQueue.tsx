@@ -1,10 +1,5 @@
-import {
-  escalateTicket,
-  ignoreTicket,
-  replyToTicket,
-  resolveTicket,
-} from "../lib/actions";
 import type { Ticket } from "../lib/store";
+import { NotReady, NotReadyForm } from "./NotReady";
 
 const reasons = [
   "Not enough detail to look into this",
@@ -35,21 +30,21 @@ export function TicketQueue({
           <p>{ticket.description}</p>
           {ticket.answer ? <p><strong>Reply.</strong> {ticket.answer}</p> : null}
           {ticket.ignoreReason ? <p><strong>Set aside because.</strong> {ticket.ignoreReason}</p> : null}
-          <form className="form" action={replyToTicket}>
+          <NotReadyForm className="form">
             <input type="hidden" name="id" value={ticket.id} />
             <label>
               Answer
               <textarea name="answer" defaultValue={ticket.answer} placeholder="A reply for the person who sent this ticket." />
             </label>
-            <button className="button" type="submit">Answer</button>
-          </form>
+            <NotReady className="button">Answer</NotReady>
+          </NotReadyForm>
           <form className="task-actions">
-            <button className="button" type="submit" formAction={resolveTicket.bind(null, ticket.id)}>Resolved</button>
+            <NotReady className="button">Resolved</NotReady>
             {canEscalate ? (
-              <button className="button button-quiet" type="submit" formAction={escalateTicket.bind(null, ticket.id)}>Escalate to administrator</button>
+              <NotReady className="button button-quiet">Escalate to administrator</NotReady>
             ) : null}
           </form>
-          <form className="form" action={ignoreTicket}>
+          <NotReadyForm className="form">
             <input type="hidden" name="id" value={ticket.id} />
             <label>
               If this ticket is set aside
@@ -65,8 +60,8 @@ export function TicketQueue({
               Other reason
               <input name="otherReason" placeholder="Type a reason when you choose Other reason" />
             </label>
-            <button className="button button-quiet" type="submit">Ignore</button>
-          </form>
+            <NotReady className="button button-quiet">Ignore</NotReady>
+          </NotReadyForm>
         </article>
       ))}
     </div>

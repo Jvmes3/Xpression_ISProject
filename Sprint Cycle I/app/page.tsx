@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { DiscoverBar } from "./components/DiscoverBar";
+import { NotReady } from "./components/NotReady";
 import { currentAccount } from "./lib/session";
 
 export const dynamic = "force-dynamic";
@@ -21,8 +21,8 @@ export default async function HomePage() {
         </p>
       ) : (
         <p className="lede">
-          Choose a role above to open that role&apos;s home. Apply is for a new
-          Creator, Mentor, or Talent Scout account. Sign in is in the dark bar.
+          Choose a role above to read that role. At the bottom of the role page,
+          open that role&apos;s own page. Sign-in is in the dark bar as a screen only.
         </p>
       )}
 
@@ -57,7 +57,7 @@ export default async function HomePage() {
           whether a moderator replied, resolved it, or set it aside.
         </p>
         <p>
-          <Link className="button" href="/help">Open a help ticket</Link>
+          <NotReady className="button">Open a help ticket</NotReady>
         </p>
       </section>
 
@@ -65,8 +65,8 @@ export default async function HomePage() {
         <h2>Contact</h2>
         <p>Contact our moderator and administrator team.</p>
         <p className="hero-actions">
-          <Link className="button" href="/moderator#team">Our Moderator Team</Link>
-          <Link className="button button-quiet" href="/administrator#team">Our Admin Team</Link>
+          <NotReady className="button">Our Moderator Team</NotReady>
+          <NotReady className="button button-quiet">Our Admin Team</NotReady>
         </p>
       </section>
     </main>

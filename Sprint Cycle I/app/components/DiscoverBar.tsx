@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { NotReady, NotReadyForm } from "./NotReady";
 
 const media = [
   { label: "Writing", value: "Writing" },
@@ -16,7 +16,6 @@ export const feedFilters = [
 
 export function DiscoverBar({
   q = "",
-  media: selectedMedia = "",
   filter = "",
 }: {
   q?: string;
@@ -24,17 +23,10 @@ export function DiscoverBar({
   filter?: string;
 }) {
   return (
-    <form className="discover" action="/feed" method="get">
-      {selectedMedia ? <input type="hidden" name="media" value={selectedMedia} /> : null}
+    <NotReadyForm className="discover">
       <nav className="media-links" aria-label="Feeds">
         {media.map((item) => (
-          <Link
-            key={item.value}
-            href={`/feed?media=${encodeURIComponent(item.value)}`}
-            aria-current={selectedMedia === item.value ? "page" : undefined}
-          >
-            {item.label}
-          </Link>
+          <NotReady key={item.value}>{item.label}</NotReady>
         ))}
       </nav>
       <input
@@ -44,17 +36,15 @@ export function DiscoverBar({
         placeholder="Search posts by name"
         aria-label="Search posts by name"
       />
-      <button className="button" type="submit">Search</button>
+      <NotReady className="button">Search</NotReady>
       <details className="filter-menu">
         <summary>Filter{filter ? `: ${feedFilters.find((item) => item.value === filter)?.label || filter}` : ""}</summary>
         <div className="filter-panel">
           {feedFilters.map((item) => (
-            <button key={item.value} type="submit" name="filter" value={item.value}>
-              {item.label}
-            </button>
+            <NotReady key={item.value}>{item.label}</NotReady>
           ))}
         </div>
       </details>
-    </form>
+    </NotReadyForm>
   );
 }

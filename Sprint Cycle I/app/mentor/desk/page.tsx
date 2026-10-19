@@ -1,35 +1,18 @@
-import { RoleSignIn } from "../../components/RoleSignIn";
+import { NotReady } from "../../components/NotReady";
 import { SprintNote } from "../../components/SprintNote";
-import { accountLabel, canUseRole } from "../../lib/access";
-import { currentAccount } from "../../lib/session";
 
 export const dynamic = "force-dynamic";
 
 export default async function MentorDeskPage() {
-  const account = await currentAccount();
-  if (!canUseRole(account, "mentor")) {
-    return (
-      <RoleSignIn
-        role="mentor"
-        title="Mentor desk"
-        next="/mentor/desk"
-        signedInAs={account ? accountLabel(account) : undefined}
-      />
-    );
-  }
-
   return (
     <main className="page">
       <p className="eyebrow">Creative Mentor workspace</p>
       <h1>Mentor desk</h1>
-      <p className="lede">Accept or decline a request, then record structured feedback. The lists below are ready for the next sprint.</p>
+      <p className="lede">Accept or decline a request, record structured feedback, and nominate work for the featured feed.</p>
       <nav className="desk-nav" aria-label="Mentor tasks">
         <a href="#requests">Review requests</a>
         <a href="#feedback">Structured feedback</a>
-        <a href="#discover">Discover work</a>
-        <a href="#nominate">Nominate</a>
-        <a href="#history">Review history</a>
-        <a href="#messages">Messages</a>
+        <a href="#nominate">Nominate featured work</a>
       </nav>
 
       <section id="requests" className="panel">
@@ -37,9 +20,9 @@ export default async function MentorDeskPage() {
         <p>Accept or decline a request. Undo returns it to the waiting list. Accepted work can take structured feedback.</p>
         <SprintNote label="review requests" />
         <form className="task-actions">
-          <button className="button" type="button" disabled>Accept</button>
-          <button className="button button-quiet" type="button" disabled>Decline</button>
-          <button className="button button-quiet" type="button" disabled>Undo</button>
+          <NotReady className="button">Accept</NotReady>
+          <NotReady className="button button-quiet">Decline</NotReady>
+          <NotReady className="button button-quiet">Undo</NotReady>
         </form>
       </section>
 
@@ -60,33 +43,20 @@ export default async function MentorDeskPage() {
             Recommendation
             <textarea name="recommendation" disabled placeholder="A next step for the creator." />
           </label>
-          <button className="button" type="button" disabled>Save feedback</button>
+          <NotReady className="button">Save feedback</NotReady>
         </form>
-      </section>
-
-      <section id="discover" className="panel">
-        <h2>Discover work</h2>
-        <p>Search by creator, media type, or genre before offering a review.</p>
-        <SprintNote label="discovery tools" />
       </section>
 
       <section id="nominate" className="panel">
         <h2>Nominate featured work</h2>
-        <p>Send strong pieces to a Moderator for the featured feed.</p>
-        <SprintNote label="nominations" />
-        <button className="button" type="button" disabled>Nominate</button>
-      </section>
-
-      <section id="history" className="panel">
-        <h2>Review history</h2>
-        <p>See past reviews and requests still in progress.</p>
-        <SprintNote label="review history" />
-      </section>
-
-      <section id="messages" className="panel">
-        <h2>Messages</h2>
-        <p>Clarify a review with the creator in private.</p>
-        <SprintNote label="messages" />
+        <p>Send a strong piece to a Moderator, with a short reason it belongs on the featured feed.</p>
+        <form className="form">
+          <label>
+            Why it should be featured
+            <textarea name="reason" disabled placeholder="What stands out in this piece." />
+          </label>
+          <NotReady className="button">Nominate</NotReady>
+        </form>
       </section>
     </main>
   );

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { signIn } from "../lib/actions";
+import { notReadyMessage } from "../lib/not-ready";
 import { emailRule, passwordRule } from "../lib/credentials.mjs";
 
 export const dynamic = "force-dynamic";
@@ -9,6 +10,7 @@ const errors: Record<string, string> = {
   password: passwordRule,
   credentials: "That email and password do not match an account.",
   blocked: "This account cannot sign in. An administrator can change the account status.",
+  unavailable: notReadyMessage,
 };
 
 export default async function SignInPage({
@@ -24,9 +26,8 @@ export default async function SignInPage({
       <p className="eyebrow">Sign in</p>
       <h1>Sign in</h1>
       <p className="lede">
-        Applicants sign in with the email and password they created for the
-        application. Moderators and administrators sign in with the email and
-        password created for them in the terminal.
+        This is the sign-in screen for Sprint Cycle I. Each role page is opened
+        from that role&apos;s home.
       </p>
       <form className="form panel" action={signIn}>
         {next ? <input type="hidden" name="returnTo" value={next} /> : null}

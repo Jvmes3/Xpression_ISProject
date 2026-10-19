@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { notReadyMessage } from "../components/NotReady";
 import {
   APPLICANT_ROLES,
   MEDIA,
@@ -355,10 +356,10 @@ export function ApplicationForm({
       <p className="note">Fill in every field before submitting. Sample page or link, and the other sample links, can be left blank.</p>
       {message ? <p className="note">{message}</p> : null}
       <div className="hero-actions">
-        <button className="button" type="button" disabled={busy} onClick={() => submit("submit")}>
+        <button className="button" type="button" onClick={() => setMessage(notReadyMessage)}>
           Submit application
         </button>
-        <button className="button button-quiet" type="button" disabled={busy} onClick={() => submit("draft")}>
+        <button className="button button-quiet" type="button" onClick={() => setMessage(notReadyMessage)}>
           Save and finish later
         </button>
       </div>

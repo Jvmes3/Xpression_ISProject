@@ -1,12 +1,9 @@
 import { cookies } from "next/headers";
-import { findBySession } from "./store";
 
 const cookieName = "xpression_session";
 
 export async function currentAccount() {
-  const jar = await cookies();
-  const token = jar.get(cookieName)?.value || "";
-  return findBySession(token);
+  return null;
 }
 
 export async function currentToken() {

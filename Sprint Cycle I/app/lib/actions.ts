@@ -2,14 +2,11 @@
 
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { roleHome, type ApplicantRole } from "./application";
-import { credentialError, emailError } from "./credentials.mjs";
-import { clearSessionCookie, currentAccount, currentToken, writeSessionCookie } from "./session";
+import { emailError } from "./credentials.mjs";
+import { clearSessionCookie, currentAccount, currentToken } from "./session";
 import {
   addCategory,
-  authenticate,
   clearSession,
-  createApplicant,
   generateReport,
   addPost,
   addScoutNote,
@@ -27,7 +24,6 @@ import {
   setNominationStatus,
   setPostStatus,
   setReportStatus,
-  setSessionToken,
   setTicketStatus,
   type AccountStatus,
   type ModCase,
@@ -38,33 +34,8 @@ import {
   type ScoutNote,
 } from "./store";
 
-function safeNext(value: string) {
-  if (!value.startsWith("/") || value.startsWith("//") || value.includes("://") || value.includes("\\")) return "";
-  return value;
-}
-
-function destination(role: "applicant" | "moderator" | "administrator", via: "record" | "xpression", applied: ApplicantRole | "") {
-  if (role === "moderator") return "/moderator/desk";
-  if (role === "administrator") return "/administrator/desk";
-  if (via === "xpression") return roleHome(applied);
-  return "/account";
-}
-
-export async function signIn(formData: FormData) {
-  const email = String(formData.get("email") || "");
-  const password = String(formData.get("password") || "");
-  const rawReturn = String(formData.get("returnTo") || "");
-  const requested = safeNext(rawReturn);
-  const fail = rawReturn === "account" ? "/account" : requested ? `/sign-in?returnTo=${encodeURIComponent(requested)}` : "/sign-in";
-  const problem = credentialError(email, password);
-  if (problem) redirect(`${fail}${fail.includes("?") ? "&" : "?"}error=${problem}`);
-  const match = authenticate(email, password);
-  if (!match) redirect(`${fail}${fail.includes("?") ? "&" : "?"}error=credentials`);
-  if (match.account.status !== "active") redirect(`${fail}${fail.includes("?") ? "&" : "?"}error=blocked`);
-  const kind = match.account.role !== "applicant" || match.via === "xpression" ? "role" : "record";
-  const token = await setSessionToken(match.account.id, kind);
-  await writeSessionCookie(token);
-  redirect(requested || destination(match.account.role, match.via, match.account.application?.role || ""));
+export async function signIn() {
+  redirect("/sign-in?error=unavailable");
 }
 
 export async function signOut() {
@@ -96,17 +67,8 @@ export async function beginApplication() {
   redirect("/application");
 }
 
-export async function createLogin(formData: FormData) {
-  const email = String(formData.get("email") || "").trim();
-  const password = String(formData.get("password") || "");
-  const confirm = String(formData.get("confirm") || "");
-  const problem = credentialError(email, password);
-  if (problem) redirect(`/apply?error=${problem}`);
-  if (password !== confirm) redirect("/apply?error=match");
-  const result = await createApplicant(email, password);
-  if ("error" in result) redirect("/apply?error=taken");
-  await writeSessionCookie(result.account.sessionToken);
-  redirect("/account");
+export async function createLogin() {
+  redirect("/sign-in?error=unavailable");
 }
 
 async function requireRole(role: "moderator" | "administrator") {

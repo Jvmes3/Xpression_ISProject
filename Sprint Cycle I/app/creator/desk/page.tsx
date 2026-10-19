@@ -1,85 +1,71 @@
-import Link from "next/link";
-import { RoleSignIn } from "../../components/RoleSignIn";
+import { NotReady } from "../../components/NotReady";
 import { SprintNote } from "../../components/SprintNote";
-import { accountLabel, canUseRole } from "../../lib/access";
-import { currentAccount } from "../../lib/session";
-import { readDatabase } from "../../lib/store";
 
 export const dynamic = "force-dynamic";
 
-const MEDIA = ["Writing", "Visual art", "Music"];
-
-export default async function CreatorDeskPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ media?: string }>;
-}) {
-  const account = await currentAccount();
-  if (!canUseRole(account, "creator")) {
-    return (
-      <RoleSignIn
-        role="creator"
-        title="Creator workspace"
-        next="/creator/desk"
-        signedInAs={account ? accountLabel(account) : undefined}
-      />
-    );
-  }
-
-  const { media } = await searchParams;
-  const selected = MEDIA.includes(media || "") ? media || "" : "";
-  const posts = readDatabase().posts.filter(
-    (post) => post.status === "visible" && (!selected || post.media === selected),
-  );
-
+export default function CreatorDeskPage() {
   return (
     <main className="page">
       <p className="eyebrow">Creator workspace</p>
-      <h1>Explore creative work</h1>
-      <p className="lede">Browse writing, visual art, and music, then open a piece.</p>
+      <h1>Creator desk</h1>
+      <p className="lede">Publish a piece, manage it on your portfolio, and read feedback written on your work.</p>
       <nav className="desk-nav" aria-label="Creator tasks">
-        <a href="/creator/desk">All</a>
-        {MEDIA.map((item) => (
-          <a key={item} href={`/creator/desk?media=${encodeURIComponent(item)}`}>{item}</a>
-        ))}
-        <a href="/creator/desk/publish">Publish work</a>
-        <a href="#portfolio">Portfolio</a>
-        <a href="#feedback">Feedback</a>
-        <a href="#saved">Saved</a>
-        <a href="#messages">Messages</a>
+        <a href="#publish">Publish work</a>
+        <a href="#portfolio">My portfolio</a>
+        <a href="#feedback">Feedback on my work</a>
       </nav>
-      <div className="task-list">
-        {posts.length === 0 ? <p>No work in this filter yet.</p> : null}
-        {posts.map((post) => (
-          <article key={post.id} className="panel">
-            <p className="flag">{post.media}</p>
-            <h2>{post.title}</h2>
-            <p className="meta-line">{post.creator}</p>
-            <p>{post.description || "Open the piece to read the work and the comments."}</p>
-            <p><Link href={`/creator/desk/${post.id}`}>Open work</Link></p>
-          </article>
-        ))}
-      </div>
+
+      <section id="publish" className="panel">
+        <h2>Publish work</h2>
+        <p>Post writing, an image, or a music piece. Music includes a SoundCloud link.</p>
+        <form className="form">
+          <label>
+            Title
+            <input name="title" disabled placeholder="Name of the piece" />
+          </label>
+          <label>
+            Media
+            <select name="media" disabled defaultValue="Writing">
+              <option>Writing</option>
+              <option>Visual art</option>
+              <option>Music</option>
+            </select>
+          </label>
+          <label>
+            Description
+            <textarea name="description" disabled placeholder="What this piece is." />
+          </label>
+          <label>
+            SoundCloud link
+            <input name="soundcloud" disabled placeholder="Only for music" />
+          </label>
+          <NotReady className="button">Publish</NotReady>
+        </form>
+      </section>
 
       <section id="portfolio" className="panel">
         <h2>My portfolio</h2>
-        <p>Feature, archive, edit, or remove work on your profile.</p>
-        <SprintNote label="portfolio tools" />
+        <p>Feature a piece on your profile, archive it, edit it, or remove it.</p>
+        <SprintNote label="portfolio pieces" />
+        <form className="task-actions">
+          <NotReady className="button">Feature</NotReady>
+          <NotReady className="button button-quiet">Archive</NotReady>
+          <NotReady className="button button-quiet">Edit</NotReady>
+          <NotReady className="button button-quiet">Remove</NotReady>
+        </form>
       </section>
+
       <section id="feedback" className="panel">
         <h2>Feedback on my work</h2>
-        <p>Read comments and mentor reviews, then respond.</p>
-        <SprintNote label="feedback" />
-      </section>
-      <section id="saved" className="panel">
-        <h2>Following and saved</h2>
-        <p>Return to creators you follow and works you bookmarked.</p>
-        <SprintNote label="saved work" />
-      </section>
-      <section id="messages" className="panel">
-        <h2>Messages and reports</h2>
-        <p>Read messages and report content that should be reviewed.</p>
-        <SprintNote label="messages" />
+        <p>Read the strengths, improvements, and recommendation a mentor wrote, then reply.</p>
+        <SprintNote label="mentor reviews" />
+        <form className="form">
+          <label>
+            Reply
+            <textarea name="reply" disabled placeholder="Your response to the review." />
+          </label>
+          <NotReady className="button">Send reply</NotReady>
+        </form>
       </section>
     </main>
   );
