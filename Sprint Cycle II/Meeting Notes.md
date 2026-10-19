@@ -48,7 +48,7 @@ The notes below are the sprint decision log. Attendees listed for each meeting a
 | --- | --- |
 | Sprint | Cycle II — database design |
 | Attendees | Clemenceau Senatus; Leeyand Blot Jr; Jacob Fitchett; James Henson |
-| Location / format | Online |
+| Location / format | Library / in person |
 | Purpose | Check the Creator, Mentor, and Administrator diagrams against those role pages |
 
 ### Agenda
