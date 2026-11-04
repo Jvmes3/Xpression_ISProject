@@ -1,0 +1,321 @@
+erDiagram
+    account {
+        bigint account_id PK
+        text name
+        text email
+        text role
+        text status
+        text discipline
+        boolean open_to_commissions
+        text password_hash
+        text bio
+        timestamp_with_time_zone created_at
+    }
+    account_restriction {
+        bigint restriction_id PK
+        bigint user_report_id FK
+        bigint moderator_id FK
+        text moderator_role FK
+        text action_type
+        timestamp_with_time_zone recorded_at
+        timestamp_with_time_zone expires_at
+        text notes
+    }
+    analytics_report {
+        bigint report_id PK
+        bigint administrator_id FK
+        text administrator_role FK
+        text report_type
+        date date_from
+        date date_to
+        timestamp_with_time_zone generated_at
+        text result_summary
+    }
+    category {
+        bigint category_id PK
+        text name
+        text kind
+    }
+    comment {
+        bigint comment_id PK
+        bigint work_id FK
+        bigint author_id FK
+        text body
+        text gif_url
+        timestamp_with_time_zone created_at
+        text visibility
+    }
+    comment_report {
+        bigint comment_report_id PK
+        bigint comment_id FK
+        bigint reporter_id FK
+        text reason
+        timestamp_with_time_zone reported_at
+    }
+    conversation {
+        bigint conversation_id PK
+        text subject
+        bigint created_by FK
+        timestamp_with_time_zone created_at
+    }
+    conversation_member {
+        bigint conversation_id PK,FK
+        bigint account_id PK,FK
+        timestamp_with_time_zone joined_at
+        timestamp_with_time_zone last_read_at
+    }
+    creative_work {
+        bigint work_id PK
+        bigint creator_id FK
+        text creator_role FK
+        text title
+        text media_type
+        text description
+        text soundcloud_url
+        boolean featured
+        boolean archived
+        timestamp_with_time_zone published_at
+        text content_text
+        text visibility
+    }
+    feedback_reply {
+        bigint reply_id PK
+        bigint feedback_id FK
+        bigint creator_id FK
+        text reply_text
+        timestamp_with_time_zone replied_at
+    }
+    follow {
+        bigint follow_id PK
+        bigint follower_id FK
+        bigint creator_id FK
+        text creator_role FK
+        timestamp_with_time_zone followed_at
+    }
+    help_ticket {
+        bigint ticket_id PK
+        bigint account_id FK
+        text subject
+        text body
+        text status
+        timestamp_with_time_zone opened_at
+        bigint assigned_to FK
+        text response
+        timestamp_with_time_zone resolved_at
+    }
+    invitation {
+        bigint invitation_id PK
+        bigint opportunity_id FK
+        bigint creator_id FK
+        text creator_role FK
+        text status
+        timestamp_with_time_zone invited_at
+        timestamp_with_time_zone responded_at
+    }
+    mentor_feedback {
+        bigint feedback_id PK
+        bigint work_id FK
+        bigint mentor_id FK
+        bigint request_id FK
+        text request_status FK
+        text strengths
+        text improvements
+        text recommendation
+        timestamp_with_time_zone written_at
+    }
+    moderation_case {
+        bigint case_id PK
+        bigint report_id FK
+        bigint comment_report_id FK
+        bigint moderator_id FK
+        text moderator_role FK
+        text findings
+        text action_taken
+        text status
+        timestamp_with_time_zone recorded_at
+        text escalation_reason
+    }
+    nomination {
+        bigint nomination_id PK
+        bigint mentor_id FK
+        text mentor_role FK
+        bigint work_id FK
+        bigint moderator_id FK
+        text moderator_role FK
+        text reason
+        text status
+        timestamp_with_time_zone nominated_at
+        timestamp_with_time_zone decided_at
+    }
+    notification {
+        bigint notification_id PK
+        bigint account_id FK
+        text kind
+        text body
+        bigint work_id FK
+        timestamp_with_time_zone read_at
+        timestamp_with_time_zone created_at
+    }
+    opportunity {
+        bigint opportunity_id PK
+        bigint scout_id FK
+        text scout_role FK
+        text title
+        date starts_on
+        date ends_on
+        text description
+    }
+    platform_setting {
+        bigint setting_id PK
+        text name
+        text value
+        timestamp_with_time_zone updated_at
+        bigint updated_by FK
+        text administrator_role FK
+    }
+    private_message {
+        bigint message_id PK
+        bigint conversation_id FK
+        bigint sender_id FK
+        text body
+        timestamp_with_time_zone sent_at
+    }
+    review_request {
+        bigint request_id PK
+        bigint creator_id FK
+        bigint mentor_id FK
+        text mentor_role FK
+        bigint work_id FK
+        text note
+        text status
+        timestamp_with_time_zone requested_at
+    }
+    role_application {
+        bigint application_id PK
+        bigint administrator_id FK
+        text administrator_role FK
+        text applicant_name
+        text email
+        text requested_role FK
+        text statement
+        text status
+        timestamp_with_time_zone submitted_at
+        timestamp_with_time_zone decided_at
+        bigint approved_account_id FK
+    }
+    saved_work {
+        bigint save_id PK
+        bigint account_id FK
+        bigint work_id FK
+        timestamp_with_time_zone saved_at
+    }
+    scout_candidate {
+        bigint candidate_id PK
+        bigint scout_id FK
+        text scout_role FK
+        bigint creator_id FK
+        text creator_role FK
+        text notes
+        timestamp_with_time_zone saved_at
+    }
+    scout_message {
+        bigint message_id PK
+        bigint scout_id FK
+        text scout_role FK
+        bigint creator_id FK
+        text creator_role FK
+        text body
+        timestamp_with_time_zone sent_at
+        bigint conversation_id FK
+    }
+    status_change {
+        bigint change_id PK
+        bigint administrator_id FK
+        text administrator_role FK
+        bigint account_id FK
+        text old_status
+        text new_status
+        timestamp_with_time_zone changed_at
+        text reason
+    }
+    user_report {
+        bigint user_report_id PK
+        bigint account_id FK
+        text reason
+        timestamp_with_time_zone reported_at
+        bigint reporter_id FK
+    }
+    work_category {
+        bigint work_id PK,FK
+        bigint category_id PK,FK
+    }
+    work_media {
+        bigint media_id PK
+        bigint work_id FK
+        text asset_url
+        text alt_text
+        integer position
+    }
+    work_report {
+        bigint report_id PK
+        bigint work_id FK
+        text reason
+        text reporter_name
+        timestamp_with_time_zone reported_at
+        bigint reporter_id FK
+        text reason_type
+    }
+    user_report ||--o{ account_restriction : "user_report_id"
+    account ||--o{ account_restriction : "moderator_id"
+    account ||--o{ analytics_report : "administrator_id"
+    account ||--o{ comment : "author_id"
+    creative_work ||--o{ comment : "work_id"
+    comment ||--o{ comment_report : "comment_id"
+    account |o--o{ comment_report : "reporter_id"
+    account ||--o{ conversation : "created_by"
+    account ||--o{ conversation_member : "account_id"
+    conversation ||--o{ conversation_member : "conversation_id"
+    account ||--o{ creative_work : "creator_id"
+    account ||--o{ feedback_reply : "creator_id"
+    mentor_feedback ||--o| feedback_reply : "feedback_id"
+    account ||--o{ follow : "creator_id"
+    account ||--o{ follow : "follower_id"
+    account ||--o{ help_ticket : "account_id"
+    account |o--o{ help_ticket : "assigned_to"
+    account ||--o{ invitation : "creator_id"
+    opportunity ||--o{ invitation : "opportunity_id"
+    review_request ||--o| mentor_feedback : "request_id, work_id, mentor_id, request_status"
+    creative_work ||--o{ mentor_feedback : "work_id"
+    comment_report |o--|| moderation_case : "comment_report_id"
+    work_report |o--|| moderation_case : "report_id"
+    account |o--o{ moderation_case : "moderator_id"
+    account ||--o{ nomination : "mentor_id"
+    account |o--o{ nomination : "moderator_id"
+    creative_work ||--o{ nomination : "work_id"
+    account ||--o{ notification : "account_id"
+    creative_work |o--o{ notification : "work_id"
+    account ||--o{ opportunity : "scout_id"
+    account |o--o{ platform_setting : "updated_by"
+    conversation_member ||--o{ private_message : "conversation_id, sender_id"
+    account ||--o{ review_request : "mentor_id"
+    creative_work ||--o{ review_request : "work_id, creator_id"
+    account |o--o{ role_application : "administrator_id"
+    account |o--o| role_application : "approved_account_id"
+    account ||--o{ saved_work : "account_id"
+    creative_work ||--o{ saved_work : "work_id"
+    account ||--o{ scout_candidate : "creator_id"
+    account ||--o{ scout_candidate : "scout_id"
+    conversation |o--o{ scout_message : "conversation_id"
+    account ||--o{ scout_message : "creator_id"
+    conversation_member |o--o{ scout_message : "conversation_id, creator_id"
+    account ||--o{ scout_message : "scout_id"
+    conversation_member |o--o{ scout_message : "conversation_id, scout_id"
+    account ||--o{ status_change : "administrator_id"
+    account ||--o{ status_change : "account_id"
+    account ||--o{ user_report : "account_id"
+    account |o--o{ user_report : "reporter_id"
+    category ||--o{ work_category : "category_id"
+    creative_work ||--o{ work_category : "work_id"
+    creative_work ||--o{ work_media : "work_id"
+    account |o--o{ work_report : "reporter_id"
+    creative_work ||--o{ work_report : "work_id"

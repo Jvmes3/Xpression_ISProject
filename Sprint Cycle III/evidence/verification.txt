@@ -1,0 +1,377 @@
+PostgreSQL is running. pgAdmin connection details: /Users/jamesdagoat/Downloads/log-report/Xpression_ISProject/Sprint Cycle III/.local/connection.txt
+Pager usage is off.
+SET
+BEGIN
+SET CONSTRAINTS
+CREATE TABLE
+CREATE FUNCTION
+CREATE FUNCTION
+VERIFY | Every major table contains meaningful sample rows
+DO
+ assert_true 
+-------------
+ 
+(1 row)
+
+ assert_true 
+-------------
+ 
+(1 row)
+
+ assert_true 
+-------------
+ 
+(1 row)
+
+ assert_true 
+-------------
+ 
+(1 row)
+
+ assert_true 
+-------------
+ 
+(1 row)
+
+VERIFY | Reject invalid identities, ownership, role links, and missing fields
+ expect_error 
+--------------
+ 
+(1 row)
+
+ expect_error 
+--------------
+ 
+(1 row)
+
+ expect_error 
+--------------
+ 
+(1 row)
+
+ expect_error 
+--------------
+ 
+(1 row)
+
+ expect_error 
+--------------
+ 
+(1 row)
+
+ expect_error 
+--------------
+ 
+(1 row)
+
+ expect_error 
+--------------
+ 
+(1 row)
+
+ expect_error 
+--------------
+ 
+(1 row)
+
+ expect_error 
+--------------
+ 
+(1 row)
+
+ expect_error 
+--------------
+ 
+(1 row)
+
+ expect_error 
+--------------
+ 
+(1 row)
+
+VERIFY | Structured feedback and reply rules
+ expect_error 
+--------------
+ 
+(1 row)
+
+INSERT 0 1
+ expect_error 
+--------------
+ 
+(1 row)
+
+ expect_error 
+--------------
+ 
+(1 row)
+
+ expect_error 
+--------------
+ 
+(1 row)
+
+ expect_error 
+--------------
+ 
+(1 row)
+
+ expect_error 
+--------------
+ 
+(1 row)
+
+ expect_error 
+--------------
+ 
+(1 row)
+
+VERIFY | Invitations, related data, and one-link-per-pair rules
+ expect_error 
+--------------
+ 
+(1 row)
+
+ expect_error 
+--------------
+ 
+(1 row)
+
+ expect_error 
+--------------
+ 
+(1 row)
+
+ expect_error 
+--------------
+ 
+(1 row)
+
+ expect_error 
+--------------
+ 
+(1 row)
+
+ expect_error 
+--------------
+ 
+(1 row)
+
+ expect_error 
+--------------
+ 
+(1 row)
+
+ expect_error 
+--------------
+ 
+(1 row)
+
+ expect_error 
+--------------
+ 
+(1 row)
+
+ expect_error 
+--------------
+ 
+(1 row)
+
+ expect_error 
+--------------
+ 
+(1 row)
+
+VERIFY | Moderation, administrator-only role links, and audit rules
+ expect_error 
+--------------
+ 
+(1 row)
+
+ expect_error 
+--------------
+ 
+(1 row)
+
+ expect_error 
+--------------
+ 
+(1 row)
+
+ expect_error 
+--------------
+ 
+(1 row)
+
+ expect_error 
+--------------
+ 
+(1 row)
+
+ expect_error 
+--------------
+ 
+(1 row)
+
+ expect_error 
+--------------
+ 
+(1 row)
+
+ expect_error 
+--------------
+ 
+(1 row)
+
+ expect_error 
+--------------
+ 
+(1 row)
+
+ expect_error 
+--------------
+ 
+(1 row)
+
+ expect_error 
+--------------
+ 
+(1 row)
+
+ expect_error 
+--------------
+ 
+(1 row)
+
+VERIFY | Positive publish, invitation, moderation, and status-change workflows
+INSERT 0 1
+UPDATE 1
+ assert_true 
+-------------
+ 
+(1 row)
+
+UPDATE 1
+ assert_true 
+-------------
+ 
+(1 row)
+
+INSERT 0 1
+ assert_true 
+-------------
+ 
+(1 row)
+
+UPDATE 1
+ assert_true 
+-------------
+ 
+(1 row)
+
+ assert_true 
+-------------
+ 
+(1 row)
+
+INSERT 0 1
+ assert_true 
+-------------
+ 
+(1 row)
+
+SET CONSTRAINTS
+                               test_name                                | result |                                detail                                
+------------------------------------------------------------------------+--------+----------------------------------------------------------------------
+ A report cannot lose its moderation case                               | PASS   | Rejected with SQLSTATE 23514
+ Account name is required                                               | PASS   | Rejected with SQLSTATE 23502
+ Account status cannot bypass audit                                     | PASS   | Rejected with SQLSTATE 23514
+ Administrator status command changes account and captures prior status | PASS   | 
+ All database constraints validated                                     | PASS   | 
+ All five system roles represented                                      | PASS   | 
+ Analytics range must be ordered                                        | PASS   | Rejected with SQLSTATE 23514 (analytics_dates_check)
+ Answered request must remain accepted                                  | PASS   | Rejected with SQLSTATE 23514
+ Attachment position is unique within work                              | PASS   | Rejected with SQLSTATE 23505 (work_media_position_key)
+ Closed case must have a moderator                                      | PASS   | Rejected with SQLSTATE 23514 (moderation_assigned_check)
+ Closed moderation decision changes work visibility                     | PASS   | 
+ Complete application structures                                        | PASS   | 30 implemented tables
+ Creators cannot follow themselves                                      | PASS   | Rejected with SQLSTATE 23514 (follow_not_self_check)
+ Each comment report has exactly one case                               | PASS   | 
+ Each work report has exactly one case                                  | PASS   | 
+ Feedback mentor must match accepted request                            | PASS   | Rejected with SQLSTATE 23503 (feedback_request_identity_fk)
+ Feedback requires an accepted request                                  | PASS   | Rejected with SQLSTATE 23514
+ Feedback work must match accepted request                              | PASS   | Rejected with SQLSTATE 23503 (feedback_request_identity_fk)
+ Hidden work is absent from public feed                                 | PASS   | 
+ Invitation acceptance updates the existing link                        | PASS   | 
+ Invitation requires a real opportunity                                 | PASS   | Rejected with SQLSTATE 23503 (invitation_opportunity_id_fkey)
+ Invitation response requires timestamp                                 | PASS   | Rejected with SQLSTATE 23514 (invitation_response_check)
+ Media type is restricted                                               | PASS   | Rejected with SQLSTATE 23514 (creative_work_media_type_check)
+ Moderation case must identify one report                               | PASS   | Rejected with SQLSTATE 23514 (moderation_one_subject_check)
+ Moderators cannot record a ban restriction                             | PASS   | Rejected with SQLSTATE 23514 (account_restriction_action_type_check)
+ Music requires SoundCloud URL                                          | PASS   | Rejected with SQLSTATE 23514 (music_soundcloud_check)
+ New report automatically opens exactly one case                        | PASS   | 
+ One allowed role per account                                           | PASS   | Rejected with SQLSTATE 23514 (account_role_check)
+ One follow per account/creator pair                                    | PASS   | Rejected with SQLSTATE 23505 (follow_pair_key)
+ One invitation per creator/opportunity pair                            | PASS   | Rejected with SQLSTATE 23505 (invitation_pair_key)
+ One moderation case per work report                                    | PASS   | Rejected with SQLSTATE 23505 (moderation_case_report_id_key)
+ One save per account/work pair                                         | PASS   | Rejected with SQLSTATE 23505 (saved_pair_key)
+ One shortlist entry per scout/creator pair                             | PASS   | Rejected with SQLSTATE 23505 (candidate_pair_key)
+ Only one creator reply per feedback                                    | PASS   | Rejected with SQLSTATE 23505 (feedback_reply_feedback_id_key)
+ Only scouts create opportunities                                       | PASS   | Rejected with SQLSTATE 23503 (opportunity_scout_fk)
+ Opportunity end cannot precede start                                   | PASS   | Rejected with SQLSTATE 23514 (opportunity_dates_check)
+ Platform setting names are unique                                      | PASS   | Rejected with SQLSTATE 23505 (platform_setting_name_key)
+ Private message sender must be conversation member                     | PASS   | Rejected with SQLSTATE 23503 (message_member_fk)
+ Publish and modify preserve one owned work                             | PASS   | 
+ Reply author must own reviewed work                                    | PASS   | Rejected with SQLSTATE 23514
+ Requester must own requested work                                      | PASS   | Rejected with SQLSTATE 23503 (request_work_owner_fk)
+ Resolved help ticket requires resolution time                          | PASS   | Rejected with SQLSTATE 23514 (ticket_resolution_check)
+ Review mentor must have Mentor role                                    | PASS   | Rejected with SQLSTATE 23503 (request_mentor_fk)
+ Sample data: account                                                   | PASS   | 10 rows
+ Sample data: account_restriction                                       | PASS   | 1 rows
+ Sample data: analytics_report                                          | PASS   | 2 rows
+ Sample data: category                                                  | PASS   | 6 rows
+ Sample data: comment                                                   | PASS   | 4 rows
+ Sample data: comment_report                                            | PASS   | 1 rows
+ Sample data: conversation                                              | PASS   | 2 rows
+ Sample data: conversation_member                                       | PASS   | 4 rows
+ Sample data: creative_work                                             | PASS   | 7 rows
+ Sample data: feedback_reply                                            | PASS   | 1 rows
+ Sample data: follow                                                    | PASS   | 4 rows
+ Sample data: help_ticket                                               | PASS   | 2 rows
+ Sample data: invitation                                                | PASS   | 4 rows
+ Sample data: mentor_feedback                                           | PASS   | 2 rows
+ Sample data: moderation_case                                           | PASS   | 3 rows
+ Sample data: nomination                                                | PASS   | 2 rows
+ Sample data: notification                                              | PASS   | 3 rows
+ Sample data: opportunity                                               | PASS   | 3 rows
+ Sample data: platform_setting                                          | PASS   | 4 rows
+ Sample data: private_message                                           | PASS   | 4 rows
+ Sample data: review_request                                            | PASS   | 4 rows
+ Sample data: role_application                                          | PASS   | 6 rows
+ Sample data: saved_work                                                | PASS   | 3 rows
+ Sample data: scout_candidate                                           | PASS   | 2 rows
+ Sample data: scout_message                                             | PASS   | 2 rows
+ Sample data: status_change                                             | PASS   | 1 rows
+ Sample data: user_report                                               | PASS   | 1 rows
+ Sample data: work_category                                             | PASS   | 12 rows
+ Sample data: work_media                                                | PASS   | 3 rows
+ Sample data: work_report                                               | PASS   | 2 rows
+ Specialized account approval is required                               | PASS   | Rejected with SQLSTATE 23514 (specialized_account_approval)
+ Specialized accounts have matching accepted applications               | PASS   | 
+ Specialized approval email must still match                            | PASS   | Rejected with SQLSTATE 23514 (specialized_account_approval)
+ Status command requires Administrator role                             | PASS   | Rejected with SQLSTATE 23503 (status_admin_fk)
+ Status history is append-only                                          | PASS   | Rejected with SQLSTATE 23514
+ Structured feedback fields cannot be blank                             | PASS   | Rejected with SQLSTATE 23514 (mentor_feedback_strengths_check)
+ Temporary restriction requires expiry                                  | PASS   | Rejected with SQLSTATE 23514 (restriction_expiry_check)
+ Unique account email                                                   | PASS   | Rejected with SQLSTATE 23505 (account_email_key)
+ Work creator must exist                                                | PASS   | Rejected with SQLSTATE 23503 (work_creator_fk)
+ Work owner must have Creator role                                      | PASS   | Rejected with SQLSTATE 23503 (work_creator_fk)
+(83 rows)
+
+ checks_passed | all_passed 
+---------------+------------
+            83 | t
+(1 row)
+
+ROLLBACK
+Verification complete. Test writes rolled back; sample data is preserved.

@@ -1,0 +1,65 @@
+PostgreSQL is running. pgAdmin connection details: /Users/jamesdagoat/Downloads/log-report/Xpression_ISProject/Sprint Cycle III/.local/connection.txt
+Pager usage is off.
+SET
+Q1 | Retrieve/search: active music creators accepting commissions
+ account_id |    name    | discipline | open_to_commissions | portfolio_pieces 
+------------+------------+------------+---------------------+------------------
+          5 | Nia Brooks | Music      | t                   |                2
+(1 row)
+
+Q2 | Related data / publish use case: Amara Cole portfolio
+ work_id |  creator   |        title         | media_type | featured |      published_at      
+---------+------------+----------------------+------------+----------+------------------------
+       4 | Amara Cole | After the last train | writing    | f        | 2026-10-27 16:00:00-04
+       1 | Amara Cole | Night bus            | writing    | t        | 2026-10-15 14:00:00-04
+(2 rows)
+
+Q3 | Related data: structured mentor feedback and creator reply
+   title   |  creator   |  mentor   | request_status |                          strengths                          |                              improvements                               |                         recommendation                          |                                   reply_text                                    
+-----------+------------+-----------+----------------+-------------------------------------------------------------+-------------------------------------------------------------------------+-----------------------------------------------------------------+---------------------------------------------------------------------------------
+ Night bus | Amara Cole | Maya Chen | accepted       | The bus-window image gives the poem a clear sense of place. | The middle stanza repeats the same feeling without adding a new detail. | Replace one abstract line with a detail from another passenger. | I replaced the abstract line with the passenger folding a paper map. Thank you.
+(1 row)
+
+Q4 | Invitation use case: creator, invitation, opportunity, and scout
+                opportunity                 |    scout    |   creator   | starts_on  |  ends_on   | invitation_status 
+--------------------------------------------+-------------+-------------+------------+------------+-------------------
+ Neighborhood light illustration commission | Marcus Bell | Luis Ortega | 2026-12-01 | 2026-12-20 | accepted
+ Waterfront winter showcase                 | Elena Park  | Nia Brooks  | 2026-12-05 | 2026-12-05 | sent
+ Night stories listening room               | Elena Park  | Amara Cole  | 2026-12-12 | 2026-12-12 | accepted
+ Night stories listening room               | Elena Park  | Nia Brooks  | 2026-12-12 | 2026-12-12 | declined
+(4 rows)
+
+Q5 | Reported-work use case: report and its moderation decision
+ report_id |       title       |   creator   |                                             reason                                             | reporter_name | case_id |  moderator  |                                  findings                                  |  action_taken  | case_status 
+-----------+-------------------+-------------+------------------------------------------------------------------------------------------------+---------------+---------+-------------+----------------------------------------------------------------------------+----------------+-------------
+         1 | Studio wall study | Luis Ortega | The caption may contain an unrelated advertisement; please review its context.                 | Amara Cole    |       1 | Simone Reed | Checking the original image and caption before making a decision.          | kept_available | in_review
+         2 | Midnight messages | Jordan Lee  | This submission repeats unsolicited promotional messages rather than presenting original work. | Luis Ortega   |       2 | Simone Reed | The submission is repeated promotional spam; hide it from the public feed. | hidden         | closed
+(2 rows)
+
+Q6 | Public discussion: comments, their authors, and the creative work
+   title   |   author    |                              body                               |                       gif_url                        |       created_at       
+-----------+-------------+-----------------------------------------------------------------+------------------------------------------------------+------------------------
+ Night bus | Nia Brooks  | The image of the city in the bus window stayed with me.         |                                                      | 2026-10-16 09:00:00-04
+ Night bus | Luis Ortega | The final line feels like the moment the bus turns toward home. | https://example.org/xpression/night-bus-reaction.gif | 2026-10-17 09:00:00-04
+(2 rows)
+
+Q7 | Administrator report: published work by medium in the sample period
+ media_type | pieces | contributing_creators 
+------------+--------+-----------------------
+ music      |      2 |                     1
+ visual_art |      2 |                     1
+ writing    |      3 |                     2
+(3 rows)
+
+Q8 | Account accountability: restrictions and administrator status history
+    name    | current_status | new_status |  changed_by  |       changed_at       
+------------+----------------+------------+--------------+------------------------
+ Jordan Lee | suspended      | suspended  | Avery Morgan | 2026-11-03 04:15:00-05
+(1 row)
+
+Q9 | Mentor queue: waiting review requests with the actual work and creator
+ request_id |   creator   |  mentor   |       title       |                              note                               |      requested_at      
+------------+-------------+-----------+-------------------+-----------------------------------------------------------------+------------------------
+          3 | Luis Ortega | Maya Chen | Studio wall study | Could you comment on the story suggested by the light and crop? | 2026-11-02 04:00:00-05
+(1 row)
+

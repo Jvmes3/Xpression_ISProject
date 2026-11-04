@@ -1,0 +1,111 @@
+PostgreSQL is running. pgAdmin connection details: /Users/jamesdagoat/Downloads/log-report/Xpression_ISProject/Sprint Cycle III/.local/connection.txt
+Pager usage is off.
+SET
+Practice 1 | Find an account by a partial name (change Nia)
+ account_id |    name    |         email          |  role   | status 
+------------+------------+------------------------+---------+--------
+          5 | Nia Brooks | nia.brooks@example.org | creator | active
+(1 row)
+
+Practice 2 | Creators with at least two portfolio pieces
+    name     | portfolio_pieces 
+-------------+------------------
+ Amara Cole  |                2
+ Luis Ortega |                2
+ Nia Brooks  |                2
+(3 rows)
+
+Practice 3 | Find unanswered invitations, including creators with no invitations
+    name    |        opportunity         | status 
+------------+----------------------------+--------
+ Jordan Lee |                            | 
+ Nia Brooks | Waterfront winter showcase | sent
+(2 rows)
+
+Practice 4 | How many waiting review requests does each mentor have?
+   mentor   | waiting | accepted | declined 
+------------+---------+----------+----------
+ Maya Chen  |       1 |        1 |        0
+ Theo Grant |       0 |        1 |        1
+(2 rows)
+
+Practice 5 | Find works that have never been reported
+ work_id |        title         |   creator   
+---------+----------------------+-------------
+       4 | After the last train | Amara Cole
+       3 | Harbor demo          | Nia Brooks
+       6 | Low tide session     | Nia Brooks
+       1 | Night bus            | Amara Cole
+       5 | Windowlight series   | Luis Ortega
+(5 rows)
+
+Practice 6 | Number of accounts in each role and status
+     role      |  status   | accounts 
+---------------+-----------+----------
+ administrator | active    |        1
+ creator       | active    |        3
+ creator       | suspended |        1
+ mentor        | active    |        2
+ moderator     | active    |        1
+ talent_scout  | active    |        2
+(6 rows)
+
+Practice 7 | Introspect foreign keys using PostgreSQL native catalog data
+     table_name      |                 conname                  |                                                          relationship                                                          
+---------------------+------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------
+ account_restriction | account_restriction_user_report_id_fkey  | FOREIGN KEY (user_report_id) REFERENCES user_report(user_report_id)
+ account_restriction | restriction_moderator_fk                 | FOREIGN KEY (moderator_id, moderator_role) REFERENCES account(account_id, role)
+ analytics_report    | analytics_admin_fk                       | FOREIGN KEY (administrator_id, administrator_role) REFERENCES account(account_id, role)
+ comment             | comment_author_id_fkey                   | FOREIGN KEY (author_id) REFERENCES account(account_id)
+ comment             | comment_work_id_fkey                     | FOREIGN KEY (work_id) REFERENCES creative_work(work_id)
+ comment_report      | comment_report_comment_id_fkey           | FOREIGN KEY (comment_id) REFERENCES comment(comment_id)
+ comment_report      | comment_report_reporter_id_fkey          | FOREIGN KEY (reporter_id) REFERENCES account(account_id)
+ conversation        | conversation_created_by_fkey             | FOREIGN KEY (created_by) REFERENCES account(account_id)
+ conversation_member | conversation_member_account_id_fkey      | FOREIGN KEY (account_id) REFERENCES account(account_id)
+ conversation_member | conversation_member_conversation_id_fkey | FOREIGN KEY (conversation_id) REFERENCES conversation(conversation_id)
+ creative_work       | work_creator_fk                          | FOREIGN KEY (creator_id, creator_role) REFERENCES account(account_id, role)
+ feedback_reply      | feedback_reply_creator_id_fkey           | FOREIGN KEY (creator_id) REFERENCES account(account_id)
+ feedback_reply      | feedback_reply_feedback_id_fkey          | FOREIGN KEY (feedback_id) REFERENCES mentor_feedback(feedback_id)
+ follow              | follow_creator_fk                        | FOREIGN KEY (creator_id, creator_role) REFERENCES account(account_id, role)
+ follow              | follow_follower_id_fkey                  | FOREIGN KEY (follower_id) REFERENCES account(account_id)
+ help_ticket         | help_ticket_account_id_fkey              | FOREIGN KEY (account_id) REFERENCES account(account_id)
+ help_ticket         | help_ticket_assigned_to_fkey             | FOREIGN KEY (assigned_to) REFERENCES account(account_id)
+ invitation          | invitation_creator_fk                    | FOREIGN KEY (creator_id, creator_role) REFERENCES account(account_id, role)
+ invitation          | invitation_opportunity_id_fkey           | FOREIGN KEY (opportunity_id) REFERENCES opportunity(opportunity_id)
+ mentor_feedback     | feedback_request_identity_fk             | FOREIGN KEY (request_id, work_id, mentor_id, request_status) REFERENCES review_request(request_id, work_id, mentor_id, status)
+ mentor_feedback     | mentor_feedback_work_id_fkey             | FOREIGN KEY (work_id) REFERENCES creative_work(work_id)
+ moderation_case     | moderation_case_comment_report_id_fkey   | FOREIGN KEY (comment_report_id) REFERENCES comment_report(comment_report_id)
+ moderation_case     | moderation_case_report_id_fkey           | FOREIGN KEY (report_id) REFERENCES work_report(report_id)
+ moderation_case     | moderation_moderator_fk                  | FOREIGN KEY (moderator_id, moderator_role) REFERENCES account(account_id, role)
+ nomination          | nomination_mentor_fk                     | FOREIGN KEY (mentor_id, mentor_role) REFERENCES account(account_id, role)
+ nomination          | nomination_moderator_fk                  | FOREIGN KEY (moderator_id, moderator_role) REFERENCES account(account_id, role)
+ nomination          | nomination_work_id_fkey                  | FOREIGN KEY (work_id) REFERENCES creative_work(work_id)
+ notification        | notification_account_id_fkey             | FOREIGN KEY (account_id) REFERENCES account(account_id)
+ notification        | notification_work_id_fkey                | FOREIGN KEY (work_id) REFERENCES creative_work(work_id)
+ opportunity         | opportunity_scout_fk                     | FOREIGN KEY (scout_id, scout_role) REFERENCES account(account_id, role)
+ platform_setting    | setting_admin_fk                         | FOREIGN KEY (updated_by, administrator_role) REFERENCES account(account_id, role)
+ private_message     | message_member_fk                        | FOREIGN KEY (conversation_id, sender_id) REFERENCES conversation_member(conversation_id, account_id)
+ review_request      | request_mentor_fk                        | FOREIGN KEY (mentor_id, mentor_role) REFERENCES account(account_id, role)
+ review_request      | request_work_owner_fk                    | FOREIGN KEY (work_id, creator_id) REFERENCES creative_work(work_id, creator_id)
+ role_application    | application_admin_fk                     | FOREIGN KEY (administrator_id, administrator_role) REFERENCES account(account_id, role)
+ role_application    | application_approved_role_fk             | FOREIGN KEY (approved_account_id, requested_role) REFERENCES account(account_id, role)
+ saved_work          | saved_work_account_id_fkey               | FOREIGN KEY (account_id) REFERENCES account(account_id)
+ saved_work          | saved_work_work_id_fkey                  | FOREIGN KEY (work_id) REFERENCES creative_work(work_id)
+ scout_candidate     | candidate_creator_fk                     | FOREIGN KEY (creator_id, creator_role) REFERENCES account(account_id, role)
+ scout_candidate     | candidate_scout_fk                       | FOREIGN KEY (scout_id, scout_role) REFERENCES account(account_id, role)
+ scout_message       | scout_message_conversation_id_fkey       | FOREIGN KEY (conversation_id) REFERENCES conversation(conversation_id)
+ scout_message       | scout_message_creator_fk                 | FOREIGN KEY (creator_id, creator_role) REFERENCES account(account_id, role)
+ scout_message       | scout_message_recipient_member_fk        | FOREIGN KEY (conversation_id, creator_id) REFERENCES conversation_member(conversation_id, account_id)
+ scout_message       | scout_message_scout_fk                   | FOREIGN KEY (scout_id, scout_role) REFERENCES account(account_id, role)
+ scout_message       | scout_message_sender_member_fk           | FOREIGN KEY (conversation_id, scout_id) REFERENCES conversation_member(conversation_id, account_id)
+ status_change       | status_admin_fk                          | FOREIGN KEY (administrator_id, administrator_role) REFERENCES account(account_id, role)
+ status_change       | status_change_account_id_fkey            | FOREIGN KEY (account_id) REFERENCES account(account_id)
+ user_report         | user_report_account_id_fkey              | FOREIGN KEY (account_id) REFERENCES account(account_id)
+ user_report         | user_report_reporter_id_fkey             | FOREIGN KEY (reporter_id) REFERENCES account(account_id)
+ work_category       | work_category_category_id_fkey           | FOREIGN KEY (category_id) REFERENCES category(category_id)
+ work_category       | work_category_work_id_fkey               | FOREIGN KEY (work_id) REFERENCES creative_work(work_id)
+ work_media          | work_media_work_id_fkey                  | FOREIGN KEY (work_id) REFERENCES creative_work(work_id)
+ work_report         | work_report_reporter_id_fkey             | FOREIGN KEY (reporter_id) REFERENCES account(account_id)
+ work_report         | work_report_work_id_fkey                 | FOREIGN KEY (work_id) REFERENCES creative_work(work_id)
+(54 rows)
+

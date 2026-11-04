@@ -1,0 +1,2610 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Xpression · Sprint III deliverables</title><style>
+:root{font-family:Arial,Helvetica,sans-serif;color:#24374a;background:#f5f6f8;line-height:1.55}*{box-sizing:border-box}body{margin:0}header{background:#20384f;color:white;padding:38px max(5vw,24px)}header .meta{font-size:13px;color:#c8d9e8;letter-spacing:.06em}h1{font-size:38px;margin:6px 0}header p{max-width:720px;color:#d7e4ed}nav{display:flex;gap:24px;flex-wrap:wrap}nav a{color:white;text-underline-offset:5px}main{max-width:1320px;margin:auto;padding:28px 32px 64px}h2{font-size:25px;margin:0 0 16px}h3{font-size:19px}section{margin:0 0 35px;background:white;padding:26px;border:1px solid #dce3e9;border-radius:9px}p{max-width:1050px}a{color:#16648b}code{font-family:Menlo,Consolas,monospace;font-size:.9em}pre{background:#182b3c;color:#e0ebf3;border-radius:5px;padding:18px;overflow:auto;line-height:1.7;white-space:pre}table{border-collapse:collapse;width:100%;font-size:14px}th,td{text-align:left;border-bottom:1px solid #dce3e9;padding:11px 14px;vertical-align:top}th{background:#edf2f6}button{font:inherit;border:1px solid #b7c8d5;background:white;color:#20384f;border-radius:5px;padding:8px 14px;cursor:pointer}button.active,button:hover{background:#20384f;color:white}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:15px}.tools{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:12px 0}.diagram{overflow:auto;height:590px;background:#fff;border:1px solid #d8e1e8}.diagram img{display:block;max-width:none}details{background:white;border:1px solid #dce3e9;border-radius:6px;margin:10px 0}summary{padding:15px 18px;cursor:pointer;font-weight:600}.source,article{padding:0 20px 24px;overflow:auto}article h1{font-size:28px}article h2{margin-top:30px;font-size:23px}article table{min-width:650px}article li{margin:5px 0}article pre{max-width:100%}.status{background:#eaf1f6;border-left:4px solid #5382a3;padding:14px 18px}.facts{display:flex;gap:35px;flex-wrap:wrap;margin-top:22px}.facts strong{font-size:27px;display:block}.facts span{font-size:14px;color:#c8d9e8}footer{font-size:13px;color:#617487}input{accent-color:#20384f}@media(max-width:700px){main{padding:18px 12px}section{padding:18px}header{padding:28px 20px}h1{font-size:31px}.diagram{height:430px}}@media print{nav,.tools,.tabs{display:none}details{break-inside:avoid}main{max-width:none;padding:0}header{background:white;color:#20384f}.diagram{height:auto;overflow:visible}.diagram img{width:100%!important}}
+</style></head><body><header><div class="meta">SPRINT CYCLE III · DATABASE IMPLEMENTATION</div><h1>Xpression</h1><p>PostgreSQL database deliverables and the presentation walkthrough. Due November 4, 2026. Presentation November 5, 2026.</p><nav><a href="#deliverables">Deliverables</a><a href="#diagram">ER diagram</a><a href="#demo">Live demo</a><a href="#guides">Walkthrough</a><a href="#sql">SQL source</a></nav><div class="facts"><div><strong>30</strong><span>populated tables</span></div><div><strong>231</strong><span>documented fields</span></div><div><strong>54</strong><span>foreign keys</span></div><div><strong>83</strong><span>passing checks</span></div></div></header><main>
+<section id="deliverables"><h2>Access each deliverable</h2><p>Open the files below during the presentation. The database runs separately through PostgreSQL. This guide works offline.</p><table><thead><tr><th>Deliverable</th><th>Open</th><th>What to show</th></tr></thead><tbody>
+<tr><td>Updated ER diagram</td><td><a href="docs/ERD.svg" target="_blank">Full SVG</a> · <a href="docs/ERD.png" target="_blank">PNG</a> · <a href="docs/ERD.mmd">Mermaid source</a></td><td>All tables, fields and foreign keys; focused diagrams below.</td></tr>
+<tr><td>Updated data dictionary</td><td><a href="outputs/sprint-iii/Data%20Dictionary.xlsx">Open Excel workbook</a> · <a href="docs/DATA_DICTIONARY.md">Text version</a></td><td>Tables, columns, relationships, constraints and triggers.</td></tr>
+<tr><td>Database implementation</td><td><a href="#sql">SQL source below</a></td><td>Schema, realistic sample data, search, related data, add and update.</td></tr>
+<tr><td>Executed results</td><td><a href="evidence/setup.txt">Setup</a> · <a href="evidence/queries.txt">Queries</a> · <a href="evidence/demo.txt">Mutation demos</a> · <a href="evidence/verification.txt">83 checks</a> · <a href="evidence/instructor_queries.txt">Practice queries</a></td><td>Saved output from actual PostgreSQL execution.</td></tr>
+<tr><td>Setup and explanation</td><td><a href="#guides">Read the guides below</a></td><td>Recreation, three use cases, 41 rules, changes, and team obligations.</td></tr></tbody></table><p class="status">Team materials: <a href="https://github.com/Jvmes3/Xpression_ISProject/tree/main/Sprint%20Cycle%20III">Sprint Cycle III on main</a>. Pull the repository to open this guide and its linked files locally. Scrum Master: James Henson. Meeting date: November 2, 2026. Remaining meeting details and individual contribution evidence are pending.</p></section>
+<section id="diagram"><h2>Updated ER diagram</h2><p>Choose a domain for explanation. The full diagram includes every implemented table. PK = primary key, FK = foreign key, * = NOT NULL. Arrows point from the referenced parent to the child. The Mermaid source records relationship cardinalities.</p><div class="tabs" role="group" aria-label="Diagram domain"><button data-file="ERD-Publishing" class="active" aria-pressed="true">Publishing</button><button data-file="ERD-Mentoring" class="" aria-pressed="false">Mentoring</button><button data-file="ERD-Scouting" class="" aria-pressed="false">Scouting</button><button data-file="ERD-Moderation" class="" aria-pressed="false">Moderation</button><button data-file="ERD-Administration" class="" aria-pressed="false">Administration</button><button data-file="ERD" class="" aria-pressed="false">Full schema</button></div><div class="tools"><label for="zoom">Diagram size</label><input id="zoom" type="range" min="20" max="150" value="60"><output id="size">60%</output><button id="fit">Fit width</button><a id="diagram-open" href="docs/ERD-Publishing.svg" target="_blank">Open full-size SVG</a></div><div class="diagram"><img id="erd" src="docs/ERD-Publishing.svg" alt="Publishing database entity relationship diagram"></div></section>
+<section id="demo"><h2>Run the live database demo</h2><p>In Terminal, start in the <strong>Xpression_ISProject</strong> repository root. PostgreSQL 16 and Python 3 are required. Use <code>py</code> instead of <code>python3</code> on Windows.</p><pre><code>python3 "Sprint Cycle III/scripts/db.py" setup
+python3 "Sprint Cycle III/scripts/db.py" queries
+python3 "Sprint Cycle III/scripts/db.py" demo
+python3 "Sprint Cycle III/scripts/db.py" verify</code></pre><p><strong>Presentation order:</strong> explain PostgreSQL → show ERD → show structure and samples in pgAdmin → run search and joins → run Demo A/B/C → demonstrate rules → answer an instructor query.</p><p>Demo A publishes and edits work. Demo B adds an invitation and records acceptance. Demo C opens a report and applies a moderation decision. Each demo rolls back so it can be repeated. Verification passed all 83 checks, including rejected invalid writes.</p><p>For pgAdmin, read <code>.local/connection.txt</code> privately. Connect to <code>127.0.0.1:55433</code>, database <code>xpression</code>, user <code>xpression_demo</code>. Expand <strong>Schemas → xpression → Tables</strong>.</p></section>
+<section id="guides"><h2>Presentation and setup guides</h2><p>Expand the walkthrough for the complete sequence, commands and explanation of each deliverable.</p><details><summary>Presentation walkthrough</summary><article><h1>Sprint III presentation walkthrough</h1>
+<p>Presentation: <strong>November 5, 2026</strong>. Due: <strong>November 4, 2026</strong>.</p>
+<p>Sprint III Scrum Master: <strong>James Henson</strong>. The team confirmed a meeting on <strong>November 2, 2026</strong>; attendees and decisions remain to be documented from actual records.</p>
+<p>Team: <strong>James Henson, Jacob, Clemenceu, and Leeyand</strong>. The user confirmed that the pgAdmin rehearsal connected successfully and the database queries returned results.</p>
+<h2>Prepare the windows</h2>
+<ol>
+<li><p>Open the repository root with <code>main</code> checked out and run <code>git pull --ff-only</code> to get the <a href="https://github.com/Jvmes3/Xpression_ISProject/tree/main/Sprint%20Cycle%20III">shared Sprint III folder</a>.</p>
+</li>
+<li><p>Run <code>python3 -m http.server 8080 --bind 127.0.0.1 --directory &quot;Sprint Cycle III&quot;</code> from that root. On Windows use <code>py</code> instead of <code>python3</code>. Keep the terminal open and visit <strong><a href="http://127.0.0.1:8080">http://127.0.0.1:8080</a></strong> for the <code>index.html</code> deliverable guide. Keep it open in a browser.</p>
+</li>
+<li><p>Open <strong>outputs → sprint-iii → Data Dictionary.xlsx</strong> in Excel.</p>
+</li>
+<li><p>Open Terminal in <code>Xpression_ISProject</code> and run:</p>
+<pre><code class="language-sh">python3 &quot;Sprint Cycle III/scripts/db.py&quot; setup
+python3 &quot;Sprint Cycle III/scripts/db.py&quot; verify
+</code></pre>
+<p>If the database is already installed, setup keeps the existing data. Verification should finish successfully. Keep this terminal open.</p>
+</li>
+<li><p>Optional visual database viewer: open <strong>pgAdmin 4</strong>, register <strong>Xpression Sprint III</strong> using <code>Sprint Cycle III/.local/connection.txt</code>, and expand <strong>Databases → xpression → Schemas → xpression → Tables</strong>. See README for connection steps. Do not display the password file while screen sharing.</p>
+</li>
+</ol>
+<p>On Windows use <code>py</code> in place of <code>python3</code>; PostgreSQL 16 must be installed first. Follow README to set the PostgreSQL tools path.</p>
+<p>Each teammate runs <code>setup</code> on their own computer and uses their own generated <code>.local/connection.txt</code> for pgAdmin. Credentials and the PostgreSQL data folder stay ignored by Git.</p>
+<h2>1. Explain the technology</h2>
+<p>Say: “We use PostgreSQL, the technology selected in Sprint 0. Our data has relationships between accounts, creative works, reviews, opportunities and moderation records. Primary keys, foreign keys, checks, unique constraints and transactions keep those records consistent. This sprint demonstrates PostgreSQL through actual SQL. Prisma is planned for the later application integration.”</p>
+<h2>2. Show the updated ER diagram</h2>
+<p>In the browser guide, open <strong>Full ER diagram</strong>. The SVG supports browser zoom. It includes all <strong>30 tables</strong> and their implemented foreign keys. <code>*</code> marks a NOT NULL column; PK/FK label the keys. Arrows run from referenced parent to referencing child; the editable Mermaid file records the cardinalities.</p>
+<p>Use the smaller diagrams for explanation:</p>
+<ul>
+<li><strong>Publishing:</strong> Account → Creative Work; work categories; media; comments; follows and saved work.</li>
+<li><strong>Scouting:</strong> Scout Account → Opportunity → Invitation ← Creator Account.</li>
+<li><strong>Moderation:</strong> Work → Work Report → Moderation Case → assigned Moderator Account.</li>
+</ul>
+<p>Say: “The 22 Sprint II entities remain. Eight supporting tables complete categories, media, notifications, private conversations, comment reports and saved scout candidates. Every role is one Account record.”</p>
+<p>Open <code>docs/DESIGN_CHANGES.md</code> if asked why a field or table changed.</p>
+<h2>3. Show the data dictionary and actual structure</h2>
+<p>In Excel, open the <strong>Tables</strong> tab, then <strong>Columns</strong>, <strong>Relationships</strong>, <strong>Constraints</strong>, and <strong>Triggers</strong>. The workbook was generated from the running PostgreSQL catalog. It documents <strong>231 fields</strong> with exact types, required values, keys, defaults and generation expressions. Generated constants support role-specific foreign keys and are filled by PostgreSQL.</p>
+<p>In pgAdmin, expand the actual Tables tree. Right-click <strong>creative_work → Properties</strong> to show columns and constraints, or use the terminal:</p>
+<pre><code class="language-sh">python3 &quot;Sprint Cycle III/scripts/db.py&quot; shell
+</code></pre>
+<p>Then run:</p>
+<pre><code class="language-sql">\dt xpression.*
+\d xpression.creative_work
+\d xpression.invitation
+\q
+</code></pre>
+<p>These backslash commands work in SQL Shell (<code>psql</code>), not pgAdmin Query Tool.</p>
+<h2>4. Show meaningful sample data</h2>
+<ol>
+<li>Open <strong>Finder → Applications → PostgreSQL 16 → pgAdmin 4</strong>. Connect to <strong>Xpression Sprint III</strong> using the README connection instructions if this is your first time.</li>
+<li>In the left sidebar, expand <strong>Servers → Xpression Sprint III → Databases</strong>. Right-click the <strong>xpression database</strong>, then select <strong>Query Tool</strong>.</li>
+<li>Click the Query Tool&#39;s <strong>Open File</strong> folder button and open <code>Sprint Cycle III/database/presentation_sample_data.sql</code>.</li>
+<li>Highlight only the first SELECT, from <code>SELECT</code> through its semicolon. Click <strong>Execute/Refresh</strong> (F5). The <strong>Data Output</strong> grid shows 10 meaningful accounts, including names, roles and disciplines. Password hashes are excluded.</li>
+<li>Highlight and run the remaining SELECTs one at a time. They show creative works with creator names, opportunities with scout names, invitations with the creator and opportunity, and review requests with creator/mentor/work names. Running them individually lets you explain each result before moving on.</li>
+</ol>
+<p>The same five queries are included in the browser guide under <strong>SQL source → presentation_sample_data.sql</strong>. They change no data. Do not run the whole file at once if you want to present each result separately.</p>
+<p>You can also inspect individual tables by expanding <strong>Databases → xpression → Schemas → xpression → Tables</strong> and right-clicking <strong>creative_work</strong>, <strong>opportunity</strong>, <strong>invitation</strong>, or <strong>review_request → View/Edit Data → All Rows</strong>.</p>
+<p>For a quick Query Tool or SQL Shell demonstration, run either of these SELECTs separately:</p>
+<pre><code class="language-sql">SELECT name, role, status, discipline, open_to_commissions
+FROM xpression.account ORDER BY account_id;
+
+SELECT title, media_type, creator_id, visibility
+FROM xpression.creative_work ORDER BY work_id;
+</code></pre>
+<p>Examples to point out: <strong>Amara Cole</strong> writes poetry, <strong>Luis Ortega</strong> creates visual art, and <strong>Nia Brooks</strong> makes music. <strong>Maya Chen</strong> and <strong>Theo Grant</strong> are mentors. <strong>Elena Park</strong> and <strong>Marcus Bell</strong> are scouts. <strong>Simone Reed</strong> moderates and <strong>Avery Morgan</strong> administers. The fixtures are fictional and populate every table.</p>
+<h2>5. Run search and related-data queries</h2>
+<p>In Terminal, from the repository root:</p>
+<pre><code class="language-sh">python3 &quot;Sprint Cycle III/scripts/db.py&quot; queries
+</code></pre>
+<p>The output labels each query:</p>
+<table>
+<thead>
+<tr>
+<th>Query</th>
+<th>What to explain</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Q1</td>
+<td>Search active music creators open to commissions; returns Nia Brooks and her available portfolio count.</td>
+</tr>
+<tr>
+<td>Q2</td>
+<td>Join Amara Cole’s Account to her portfolio works. This supports publication and portfolio viewing.</td>
+</tr>
+<tr>
+<td>Q3</td>
+<td>Join accepted review requests, mentor feedback, work, creator, mentor and the creator’s reply.</td>
+</tr>
+<tr>
+<td>Q4</td>
+<td>Join an invitation to its opportunity, scout and invited creator.</td>
+</tr>
+<tr>
+<td>Q5</td>
+<td>Join reported work to its case, creator and moderator.</td>
+</tr>
+<tr>
+<td>Q7</td>
+<td>Group published work by medium for an administrator report.</td>
+</tr>
+<tr>
+<td>Q8</td>
+<td>Show current account status together with the administrator’s audit history.</td>
+</tr>
+</tbody></table>
+<p>For a slower presentation, open <code>database/03_queries.sql</code> in VS Code and run one SELECT at a time in pgAdmin Query Tool. Include <code>SET search_path TO xpression, public;</code> before unqualified table names. Skip lines beginning with <code>\</code> in pgAdmin. Showing the SQL and its returned rows demonstrates the native database operations.</p>
+<h2>6. Demonstrate adding and modifying data</h2>
+<p>Run:</p>
+<pre><code class="language-sh">python3 &quot;Sprint Cycle III/scripts/db.py&quot; demo
+</code></pre>
+<p><strong>Demo A</strong> inserts “Blue hour platform,” updates its title and feature flag, and joins it to Amara Cole. Explain that the same work ID supports the creator’s portfolio.</p>
+<p><strong>Demo B</strong> inserts a winter waterfront opportunity, links Nia through Invitation, and records her acceptance with a response time. Explain the opportunity/creator unique constraint.</p>
+<p><strong>Demo C</strong> inserts a work report, shows the case PostgreSQL opens automatically, then closes the case with a hidden decision. The query shows that the original work’s visibility changes in the same transaction.</p>
+<p>Each demo ends in <code>ROLLBACK</code>. The additions and updates execute in the real database and can be read inside the transaction; rollback restores the original sample rows for another rehearsal. To show a change that persists after the command exits, run a separately reviewed transaction with <code>COMMIT</code> instead.</p>
+<p>Open <code>docs/USE_CASES.md</code> for the full explanation of these <strong>three important use cases</strong>, including entities, relationships, stored data and application responsibilities.</p>
+<h2>7. Demonstrate important rules</h2>
+<p>Run:</p>
+<pre><code class="language-sh">python3 &quot;Sprint Cycle III/scripts/db.py&quot; verify
+</code></pre>
+<p>The verification script catches expected database exceptions and fails if an invalid operation unexpectedly succeeds. Explain at least three rules:</p>
+<ol>
+<li>An account’s normalized email is unique.</li>
+<li>A work must reference a real Creator account; a music work needs a SoundCloud URL.</li>
+<li>The same creator cannot receive the same opportunity invitation twice.</li>
+<li>Feedback must match an accepted request; each feedback permits one owner reply.</li>
+<li>Each work report opens one moderation case; a closed decision applies visibility.</li>
+<li>A status change names an Administrator, updates the account, and preserves append-only history.</li>
+</ol>
+<p>The source workbook contains <strong>41 rules</strong>; <code>docs/BUSINESS_RULES.md</code> maps every one. Explain that authentication, feedback privacy, message access, and permission to execute a workflow must be enforced by the later application. A stored administrator foreign key does not identify the person at the keyboard.</p>
+<h2>8. Respond to an instructor query</h2>
+<p>Open another SQL Shell:</p>
+<pre><code class="language-sh">python3 &quot;Sprint Cycle III/scripts/db.py&quot; shell
+</code></pre>
+<p>Start with:</p>
+<pre><code class="language-sql">SET search_path TO xpression, public;
+</code></pre>
+<p>Translate the request into four choices: the table holding the requested information, any relationships needed, the WHERE filter, and any COUNT/GROUP BY/ORDER BY. Use <code>\d xpression.table_name</code> to inspect unfamiliar columns.</p>
+<p>Practice examples are in <code>database/instructor_queries.sql</code>: partial-name search, creators with two works, unanswered invitations, review counts by mentor, never-reported work and accounts by role/status. For example, find all music work:</p>
+<pre><code class="language-sql">SELECT creator_name, title, published_at
+FROM public_work_feed
+WHERE media_type = &#39;music&#39;
+ORDER BY published_at DESC;
+</code></pre>
+<p>Exit with <code>\q</code>. If experimenting with writes, wrap them in <code>BEGIN;</code> and <code>ROLLBACK;</code>.</p>
+<h2>9. Show the repository materials and team evidence</h2>
+<p>Open the <strong>Sprint Cycle III</strong> folder in VS Code. Show <code>database/</code>, <code>docs/</code>, <code>outputs/sprint-iii/</code>, <code>scripts/</code>, this guide, and the setup README. Open <code>evidence/</code> to show saved execution results if useful.</p>
+<p>Open the <a href="https://github.com/Jvmes3/Xpression_ISProject/tree/main/Sprint%20Cycle%20III">Sprint III folder on main</a> and check the latest commit when showing the shared repository materials. James Henson is the confirmed Sprint III Scrum Master, and November 2, 2026 is a confirmed meeting date. Attendance, agenda, decisions and any other required meeting evidence still need actual records. Team members also need their own meaningful contributions and pull/push evidence. Sharing this folder does not establish those individual contributions. <code>SUBMISSION_CHECKLIST.md</code> records their status.</p>
+<h2>After the presentation</h2>
+<p>Stop the isolated database when you no longer need it:</p>
+<pre><code class="language-sh">python3 &quot;Sprint Cycle III/scripts/db.py&quot; stop
+</code></pre>
+<p>The stored rows remain in <code>.local/pgdata</code>. Run <code>start</code> or <code>setup</code> next time to open them again. No application server needs to run for this presentation.</p>
+</article></details><details><summary>Setup instructions</summary><article><h1>Sprint Cycle III — Database implementation</h1>
+<p>Due <strong>November 4, 2026</strong>. Presentation <strong>November 5, 2026</strong>.</p>
+<p>Sprint III Scrum Master: <strong>James Henson</strong>. Confirmed team meeting: <strong>November 2, 2026</strong>. Attendance, meeting details and decisions still need to be recorded from the team’s actual records.</p>
+<p>Team: <strong>James Henson, Jacob, Clemenceu, and Leeyand</strong>. The user confirmed successful pgAdmin access and execution of the database queries.</p>
+<p>Start with <a href="PRESENTATION.md">PRESENTATION.md</a> for the presentation walkthrough. Open <a href="index.html">index.html</a> in a browser for links to the deliverables.</p>
+<p>This sprint implements the PostgreSQL database selected in Cycle 0. Native SQL defines, populates, queries and validates the database. PostgreSQL fits Xpression because accounts, works, feedback, opportunities and moderation records have related data that must stay consistent. Prisma remains the planned application integration layer for a later sprint. The Sprint I application is a historical UI prototype and is not the database demonstration.</p>
+<h2>Teammate access from main</h2>
+<p>Team folder: <a href="https://github.com/Jvmes3/Xpression_ISProject/tree/main/Sprint%20Cycle%20III">Sprint Cycle III on main</a>. From the repository root, with <code>main</code> checked out, pull the shared files and serve the guide:</p>
+<pre><code class="language-sh">git pull --ff-only
+python3 -m http.server 8080 --bind 127.0.0.1 --directory &quot;Sprint Cycle III&quot;
+</code></pre>
+<p>On Windows, use <code>py -m http.server 8080 --bind 127.0.0.1 --directory &quot;Sprint Cycle III&quot;</code>. Leave that terminal open and visit <strong><a href="http://127.0.0.1:8080">http://127.0.0.1:8080</a></strong>. This opens <code>index.html</code> and its deliverable links. GitHub displays the source files; this local server displays the guide as a webpage.</p>
+<p>Each teammate runs the database <code>setup</code> command below on their own computer. It generates their own ignored <code>.local/connection.txt</code> and database credentials for pgAdmin. Do not copy another teammate’s password or PostgreSQL data folder.</p>
+<h2>First run on this Mac</h2>
+<p>Open Terminal in the repository root and run:</p>
+<pre><code class="language-sh">python3 &quot;Sprint Cycle III/scripts/db.py&quot; setup
+python3 &quot;Sprint Cycle III/scripts/db.py&quot; verify
+python3 &quot;Sprint Cycle III/scripts/db.py&quot; queries
+python3 &quot;Sprint Cycle III/scripts/db.py&quot; demo
+</code></pre>
+<p><code>setup</code> creates a separate PostgreSQL cluster in <code>Sprint Cycle III/.local/pgdata</code>, listening only on <code>127.0.0.1:55433</code>, and loads the schema and sample data. It does not use or change an existing PostgreSQL installation&#39;s database. If the sprint schema already exists, setup keeps its current data. The add/update demo rolls back its changes and can be repeated. PostgreSQL identity sequences may advance during a rolled-back demo; gaps are normal.</p>
+<p>Requirements: Python 3 and PostgreSQL <strong>16</strong> server/client tools (<code>psql</code>, <code>initdb</code>, <code>pg_ctl</code>, <code>createdb</code>). The script detects <code>/Library/PostgreSQL/16/bin</code> on this Mac. If needed, set <code>XPRESSION_PG_BIN</code> to your PostgreSQL <code>bin</code> folder. No npm packages are required for the SQL demonstration.</p>
+<p>Windows PowerShell, from the repository root:</p>
+<pre><code class="language-powershell">$env:XPRESSION_PG_BIN = &#39;C:\Program Files\PostgreSQL\16\bin&#39;
+py &quot;Sprint Cycle III/scripts/db.py&quot; setup
+py &quot;Sprint Cycle III/scripts/db.py&quot; verify
+py &quot;Sprint Cycle III/scripts/db.py&quot; queries
+py &quot;Sprint Cycle III/scripts/db.py&quot; demo
+</code></pre>
+<h2>Connect with pgAdmin</h2>
+<ol>
+<li>Run <code>python3 &quot;Sprint Cycle III/scripts/db.py&quot; start</code>.</li>
+<li>In Finder, open <strong>Applications → PostgreSQL 16 → pgAdmin 4</strong>. In pgAdmin&#39;s left sidebar, right-click <strong>Servers → Register → Server</strong>. On the <strong>General</strong> tab, enter the name <strong>Xpression Sprint III</strong>.</li>
+<li>Set host <strong>127.0.0.1</strong>, port <strong>55433</strong>, maintenance database <strong>xpression</strong>, and username <strong>xpression_demo</strong>.</li>
+<li>Read the generated password in <code>.local/connection.txt</code> and enter it. This file stays local and is excluded from Git.</li>
+<li>Expand <strong>Databases → xpression → Schemas → xpression → Tables</strong>.</li>
+<li>For presentation sample data, right-click the <strong>xpression database → Query Tool</strong>. Open <code>database/presentation_sample_data.sql</code> with the Query Tool&#39;s folder/Open File button. Highlight one complete SELECT at a time, including its semicolon, and click <strong>Execute/Refresh</strong> (F5). Results appear under <strong>Data Output</strong>. The five queries show accounts, creative work, opportunities, invitations and review requests with readable names and without password hashes.</li>
+<li>To inspect an individual table, right-click it → <strong>View/Edit Data → All Rows</strong>. Use the prepared account SELECT for presenting names and roles without credential columns.</li>
+</ol>
+<p>SQL files include <code>psql</code> commands such as <code>\echo</code>. Run the full files through the supplied script or SQL Shell. In pgAdmin Query Tool, select just the SQL statements, omitting lines that start with <code>\</code>.</p>
+<h2>Native recreation on another PostgreSQL server</h2>
+<p>Create an <strong>empty</strong> database named <code>xpression</code> using pgAdmin or <code>createdb</code>, then run from this folder:</p>
+<pre><code class="language-sh">psql -X -v ON_ERROR_STOP=1 -d xpression -1 -f database/01_schema.sql -f database/02_seed.sql
+psql -X -v ON_ERROR_STOP=1 -d xpression -f database/05_verify.sql
+psql -X -v ON_ERROR_STOP=1 -d xpression -f database/03_queries.sql
+psql -X -v ON_ERROR_STOP=1 -d xpression -f database/04_demo_mutations.sql
+</code></pre>
+<p>Supply <code>-h</code>, <code>-p</code>, and <code>-U</code> for that server as appropriate. These scripts create the <code>xpression</code> schema and do not drop existing data. Recreate in a new empty database to obtain a pristine baseline. Do not rerun schema/seed against an already populated schema.</p>
+<h2>Everyday commands</h2>
+<pre><code class="language-sh">python3 &quot;Sprint Cycle III/scripts/db.py&quot; status
+python3 &quot;Sprint Cycle III/scripts/db.py&quot; shell
+python3 &quot;Sprint Cycle III/scripts/db.py&quot; file &quot;Sprint Cycle III/database/instructor_queries.sql&quot;
+python3 &quot;Sprint Cycle III/scripts/db.py&quot; stop
+</code></pre>
+<p>Inside SQL Shell: <code>SET search_path TO xpression, public;</code>, <code>\dt xpression.*</code>, <code>\d xpression.creative_work</code>, and <code>\q</code> to exit. Use <code>BEGIN;</code> and <code>ROLLBACK;</code> around exploratory writes to preserve the demo data.</p>
+<h2>Deliverables</h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Location</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Updated ER diagram</td>
+<td><a href="docs/ERD.svg">docs/ERD.svg</a>, <a href="docs/ERD.png">docs/ERD.png</a>, editable <a href="docs/ERD.mmd">docs/ERD.mmd</a></td>
+</tr>
+<tr>
+<td>Updated data dictionary</td>
+<td><a href="outputs/sprint-iii/Data%20Dictionary.xlsx">outputs/sprint-iii/Data Dictionary.xlsx</a>, <a href="docs/DATA_DICTIONARY.md">docs/DATA_DICTIONARY.md</a></td>
+</tr>
+<tr>
+<td>Database implementation</td>
+<td><a href="database/01_schema.sql">database/01_schema.sql</a></td>
+</tr>
+<tr>
+<td>Meaningful sample data</td>
+<td><a href="database/02_seed.sql">database/02_seed.sql</a></td>
+</tr>
+<tr>
+<td>Search and relationships</td>
+<td><a href="database/03_queries.sql">database/03_queries.sql</a></td>
+</tr>
+<tr>
+<td>Add and modify demo</td>
+<td><a href="database/04_demo_mutations.sql">database/04_demo_mutations.sql</a></td>
+</tr>
+<tr>
+<td>Rules and verification</td>
+<td><a href="database/05_verify.sql">database/05_verify.sql</a>, <a href="docs/BUSINESS_RULES.md">docs/BUSINESS_RULES.md</a></td>
+</tr>
+<tr>
+<td>Additional instructor queries</td>
+<td><a href="database/instructor_queries.sql">database/instructor_queries.sql</a></td>
+</tr>
+<tr>
+<td>Three use cases</td>
+<td><a href="docs/USE_CASES.md">docs/USE_CASES.md</a></td>
+</tr>
+<tr>
+<td>Design changes</td>
+<td><a href="docs/DESIGN_CHANGES.md">docs/DESIGN_CHANGES.md</a></td>
+</tr>
+<tr>
+<td>Executed results</td>
+<td><a href="evidence/">evidence/</a></td>
+</tr>
+<tr>
+<td>Team and submission status</td>
+<td><a href="Meeting%20Notes.md">Meeting Notes.md</a>, <a href="SUBMISSION_CHECKLIST.md">SUBMISSION_CHECKLIST.md</a></td>
+</tr>
+</tbody></table>
+<p>Sharing the Sprint III folder on <code>main</code> is authorized. Complete the November 2 meeting’s attendance and decisions, add any other actual meeting evidence, and obtain each member&#39;s real contribution and pull/push evidence before claiming those team requirements are complete.</p>
+<p>Implementation references: <a href="https://www.postgresql.org/docs/16/ddl-constraints.html">PostgreSQL 16 constraints</a>, <a href="https://www.postgresql.org/docs/16/app-initdb.html">initdb</a>, <a href="https://www.postgresql.org/docs/16/app-pg-ctl.html">pg_ctl</a>. The original design is preserved under <code>Sprint Cycle II</code>; the supplied workbooks are byte-identical to those repository copies.</p>
+</article></details><details><summary>Three use cases</summary><article><h1>Three database-supported use cases</h1>
+<p>These are the three presentation use cases selected in the October 19 Sprint Cycle II meeting notes. They demonstrate database behavior without requiring the Next.js application to implement the workflows.</p>
+<p>Run <a href="database/03_queries.sql">the search and relationship queries</a> and <a href="database/04_demo_mutations.sql">the add/update demonstrations</a> through the README commands. Each mutation example uses <code>BEGIN</code> and <code>ROLLBACK</code>: the inserted/updated rows are real within the transaction, and the original sample data is restored afterward. SQL values use lowercase snake_case, such as <code>creator</code>, <code>visual_art</code> and <code>kept_available</code>.</p>
+<h2>1. A creator publishes a piece</h2>
+<p><strong>Goal:</strong> A creator publishes writing, visual art or music so other users can discover it and scouts can review the creator’s portfolio.</p>
+<table>
+<thead>
+<tr>
+<th>Part</th>
+<th>Stored data and relationship</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Creator</td>
+<td>One <code>account</code> row has the Creator role. The person is stored once.</td>
+</tr>
+<tr>
+<td>Work</td>
+<td>A <code>creative_work</code> row stores the creator foreign key, title, media type, description, optional SoundCloud URL, feature/archive flags, publication time and moderation visibility.</td>
+</tr>
+<tr>
+<td>Organization</td>
+<td>Categories and the work-category association relate tags or genres to the work without repeating work rows.</td>
+</tr>
+<tr>
+<td>Portfolio</td>
+<td>A query retrieves works by <code>creator_id</code>. A portfolio is derived from those rows; it is not a second copy of published content.</td>
+</tr>
+<tr>
+<td>Discovery</td>
+<td>A query filters published work by media type and visibility and orders it by publication time.</td>
+</tr>
+</tbody></table>
+<p>The database checks the creator relationship, required content and allowed media values. A music work requires a SoundCloud URL. A work cannot reference a nonexistent account. Editing, featuring or archiving updates the same work identifier, which preserves existing comments, review requests and reports.</p>
+<p><strong>Presentation sequence:</strong> Show a Creator account, show its current portfolio, add a meaningful new work, and retrieve the portfolio again. Explain that only the creative work row was added. Demonstrate a media filter to show how discovery uses the stored media type.</p>
+<p><strong>Exact demonstrations:</strong> Query <strong>Q2</strong> shows Amara Cole’s portfolio. <strong>Demo A</strong> publishes “Blue hour platform,” revises its title and feature flag, and retrieves the related creator. The <code>public_work_feed</code> view supplies a useful live media/visibility filter for an instructor question.</p>
+<p><strong>Application responsibility:</strong> Authenticate the user and verify that the signed-in creator is the owner before permitting publication or editing. A foreign key confirms a relationship; it does not establish who is using the browser.</p>
+<h2>2. A talent scout invites a creator to an opportunity</h2>
+<p><strong>Goal:</strong> A scout finds a suitable creator and offers a commission, exhibition or performance.</p>
+<table>
+<thead>
+<tr>
+<th>Part</th>
+<th>Stored data and relationship</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Search</td>
+<td>Read Creator accounts using <code>discipline</code> and <code>open_to_commissions</code>, together with their creative works. Search creates no records.</td>
+</tr>
+<tr>
+<td>Scout</td>
+<td>An Account row with the Talent Scout role owns the opportunity.</td>
+</tr>
+<tr>
+<td>Opportunity</td>
+<td>One row stores the scout, title, start/end dates and description. A scout may create many opportunities.</td>
+</tr>
+<tr>
+<td>Invitation</td>
+<td>An associative row links one opportunity to one creator and stores invitation status and time. An opportunity may invite many creators and a creator may receive many opportunities.</td>
+</tr>
+<tr>
+<td>Response</td>
+<td>The invitation’s <code>sent</code>, <code>accepted</code> or <code>declined</code> status records the creator’s response; the same row is updated.</td>
+</tr>
+<tr>
+<td>Contact</td>
+<td>Scout messages retain the conversation or initial contact separately from the invitation relationship.</td>
+</tr>
+</tbody></table>
+<p>Foreign keys keep the opportunity and creator references valid. The database prevents duplicate invitations for the same creator and opportunity and rejects invalid status values or reversed opportunity dates. An invitation is the sole relationship between a particular creator and opportunity.</p>
+<p><strong>Presentation sequence:</strong> Search commission-ready creators, open the results’ portfolio data, show an opportunity owned by a scout, and join the invitation to the opportunity and creator. Explain the unique opportunity/creator pair. Updating a response shows why status is data on the invitation.</p>
+<p><strong>Exact demonstrations:</strong> Query <strong>Q1</strong> finds active music creators accepting commissions. Query <strong>Q4</strong> joins opportunities, invitations, scouts and creators. <strong>Demo B</strong> adds a winter waterfront acoustic opportunity and an invitation, then updates the invitation to accepted with its response time.</p>
+<p><strong>Application responsibility:</strong> Check the current user’s identity, ownership of the opportunity and permission to send or answer an invitation. Resolve the project’s remaining contact/consent policy before implementing unrestricted messaging.</p>
+<h2>3. A moderator decides reported creative work</h2>
+<p><strong>Goal:</strong> A community report becomes a moderation case, and the decision is recorded against the original work.</p>
+<table>
+<thead>
+<tr>
+<th>Part</th>
+<th>Stored data and relationship</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Reported work</td>
+<td>The Creative Work row remains the content identity. Moderation changes its visibility instead of creating another portfolio record.</td>
+</tr>
+<tr>
+<td>Work report</td>
+<td>A report references the work and stores the reason, reporter attribution and report time. One work can have many reports.</td>
+</tr>
+<tr>
+<td>Moderation case</td>
+<td>A trigger automatically creates one <code>moderation_case</code> when a <code>work_report</code> is inserted. It stores the moderator, findings, action, status and recorded time.</td>
+</tr>
+<tr>
+<td>Decision</td>
+<td>The action is kept available, hidden or removed. Case status is open, in review, escalated or closed.</td>
+</tr>
+<tr>
+<td>Escalation</td>
+<td>Serious copyright, fraud or safety concerns can remain linked to the case for administrator review.</td>
+</tr>
+</tbody></table>
+<p>The report and case foreign keys preserve the path from decision to report to original creative work. Uniqueness prevents a report from acquiring multiple cases. Database rules restrict action/status values and preserve the decision’s moderator relationship. Administrative bans use the separate account status history rather than a work moderation action.</p>
+<p><strong>Presentation sequence:</strong> Join a case, report, work, creator and assigned moderator. Modify a case’s findings/action/status, then retrieve the case and the work’s visibility to show the effect. Explain that a work can receive multiple reports, while each report has only one case.</p>
+<p><strong>Exact demonstrations:</strong> Query <strong>Q5</strong> joins reports, cases, creators, works and moderators. <strong>Demo C</strong> inserts a new report, retrieves the automatically opened case, then records a closed/hidden decision. The closing trigger changes the work’s visibility in the same transaction. An unassigned case may be <code>open</code>; later states require a Moderator account.</p>
+<p><strong>Application responsibility:</strong> Authenticate the moderator, show only permitted case actions and enforce access to confidential reports. A moderator may warn, restrict or refer a user for a ban. Only an administrator may ban an account.</p>
+<h2>Relationships to point out during questions</h2>
+<ul>
+<li>One Account to many Creative Works.</li>
+<li>One Opportunity to many Invitations; one Creator to many Invitations.</li>
+<li>One Work to many Work Reports; one Work Report to one Moderation Case.</li>
+<li>Role labels on earlier diagrams are views of Account records, not separate account tables.</li>
+<li>A database rule proves stored data is consistent. Application authorization proves the acting user is allowed to request the operation.</li>
+</ul>
+</article></details><details><summary>41 business rules</summary><article><h1>Business rule enforcement</h1>
+<p>This register preserves the numbering of all <strong>41</strong> rules in the supplied Sprint II Business Rules workbook. The updated dictionary and schema define the exact implemented structures. “Database” identifies data integrity enforced by PostgreSQL; “Application” identifies a policy that the later application must enforce with the authenticated user.</p>
+<p>Database role checks validate the referenced account’s stored role. They do not authenticate the person running SQL. The presentation database owner can inspect and administer the entire database. Production deployment must use restricted application database credentials and application authorization.</p>
+<p>SQL uses lowercase snake_case versions of the workbook’s display labels: for example <code>creator</code>, <code>talent_scout</code>, <code>visual_art</code>, <code>in_review</code>, <code>kept_available</code> and <code>refer_for_ban</code>.</p>
+<table>
+<thead>
+<tr>
+<th>No.</th>
+<th>Supplied rule</th>
+<th>Enforcement and explanation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>An account email is unique.</td>
+<td>Database: unique normalized account email. Application: normalize input before display/sign-in and verify ownership of an email address.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>An account has one of the five roles.</td>
+<td>Database: one required role column with allowed values Creator, Mentor, Talent Scout, Moderator or Administrator.</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Role rectangles describe the same Account identity.</td>
+<td>Database design: one Account table; role-specific relationships reference its primary key. There are no duplicate Creator/Mentor/Scout person tables.</td>
+</tr>
+<tr>
+<td>4</td>
+<td>A creative work belongs to one creator.</td>
+<td>Database: required creator foreign key and Creator-role/ownership validation.</td>
+</tr>
+<tr>
+<td>5</td>
+<td>A creator can publish many works.</td>
+<td>Database design: many work rows may share one creator foreign key; that key is not unique in Creative Work.</td>
+</tr>
+<tr>
+<td>6</td>
+<td>A music piece must have a SoundCloud URL.</td>
+<td>Database: media-dependent required URL check. Writing and visual art do not require that URL. Application: validate and safely embed external content.</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Media is Writing, Visual art or Music.</td>
+<td>Database: required media value restricted to the three supported values.</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Feature, archive, edit or remove updates the work, not a new portfolio record.</td>
+<td>Database design: feature/archive/visibility and content fields live on Creative Work; portfolios are queries over creator-owned works. Application: update the existing work identifier.</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Creators read feedback only about their own work.</td>
+<td>Application: authorize feedback retrieval using the authenticated creator and the work’s owner. Schema relationships support that filtered query. Database foreign keys alone do not enforce read permissions.</td>
+</tr>
+<tr>
+<td>10</td>
+<td>A request belongs to one creator, mentor and work.</td>
+<td>Database: required foreign keys, role checks and validation that the requesting creator owns the work.</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Creators and mentors may have many requests.</td>
+<td>Database design: request creator/mentor foreign keys are not individually unique.</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Request status is waiting, accepted or declined.</td>
+<td>Database: allowed-value status check.</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Feedback is stored only for an accepted request.</td>
+<td>Database: a generated <code>accepted</code> request-status value participates in the composite feedback/request foreign key, preserving both acceptance and matching identity. <code>feedback_requires_accepted_request</code> and <code>answered_request_remains_accepted</code> also provide explicit error checks. Application: expose feedback submission only to the assigned mentor.</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Feedback includes strengths, improvements and a recommendation.</td>
+<td>Database: required, nonblank structured feedback fields.</td>
+</tr>
+<tr>
+<td>15</td>
+<td>Feedback belongs to one work and mentor.</td>
+<td>Database: foreign keys and matching validation against the referenced request’s work and mentor.</td>
+</tr>
+<tr>
+<td>16</td>
+<td>Feedback has at most one creator reply.</td>
+<td>Database: unique feedback foreign key and <code>reply_requires_work_owner</code> ensure one reply with the correct recorded creator. Application: verify the authenticated user matches that creator.</td>
+</tr>
+<tr>
+<td>17</td>
+<td>A nomination belongs to one mentor and work.</td>
+<td>Database: required foreign keys and Mentor-role validation.</td>
+</tr>
+<tr>
+<td>18</td>
+<td>Nomination status is pending, approved or declined.</td>
+<td>Database: allowed-value status check and decision-field consistency. Application: authorize the moderator’s approval action.</td>
+</tr>
+<tr>
+<td>19</td>
+<td>Scout search reads discipline, commission availability and works; it inserts no row.</td>
+<td>Query/application behavior: use SELECT/join/filter over Account and Creative Work. Saving a candidate is a separate explicit operation.</td>
+</tr>
+<tr>
+<td>20</td>
+<td>A scout message belongs to one scout and creator.</td>
+<td>Database: required endpoint foreign keys and role checks. Application: authorize the sender and permitted conversation participants.</td>
+</tr>
+<tr>
+<td>21</td>
+<td>An opportunity belongs to one scout.</td>
+<td>Database: required scout foreign key with Talent Scout-role validation.</td>
+</tr>
+<tr>
+<td>22</td>
+<td>Invitation alone links opportunity and creator; the same pair occurs once.</td>
+<td>Database: required opportunity/creator foreign keys and unique opportunity/creator pair.</td>
+</tr>
+<tr>
+<td>23</td>
+<td>Invitation status is sent, accepted or declined.</td>
+<td>Database: allowed-value status check. Application: the invited creator controls the response.</td>
+</tr>
+<tr>
+<td>24</td>
+<td>A work report belongs to one work; one work may have many reports.</td>
+<td>Database: required work foreign key; it is not unique in Work Report.</td>
+</tr>
+<tr>
+<td>25</td>
+<td>One work report opens one moderation case.</td>
+<td>Database: <code>work_report_opens_case</code> creates the case after report insertion. A unique report foreign key prevents duplicates, and deferred constraint triggers prevent a report from losing its case.</td>
+</tr>
+<tr>
+<td>26</td>
+<td>A case records findings, action and open/in review/escalated/closed status.</td>
+<td>Database: nonblank findings, allowed status/action checks, moderator assignment after the open state, and a required reason for escalation. New cases use <code>Awaiting review</code> until findings are entered. Application: ensure findings substantively justify the decision.</td>
+</tr>
+<tr>
+<td>27</td>
+<td>Work action is kept available, hidden or removed.</td>
+<td>Database: allowed action values; <code>closed_case_applies_visibility</code> changes the associated work or comment visibility when a case closes.</td>
+</tr>
+<tr>
+<td>28</td>
+<td>A user report belongs to one account.</td>
+<td>Database: required reported-account foreign key.</td>
+</tr>
+<tr>
+<td>29</td>
+<td>A moderator may warn, restrict or refer for ban.</td>
+<td>Database: Moderator-role relationship and allowed restriction action values. Application: authenticate the moderator and enforce policy/duration.</td>
+</tr>
+<tr>
+<td>30</td>
+<td>Moderators do not ban; bans are administrator changes.</td>
+<td>Database: ban state uses the administrator status-change workflow. Application/database grants: prevent a moderator from invoking administrator operations or directly updating account status.</td>
+</tr>
+<tr>
+<td>31</td>
+<td>Administrators activate, suspend, ban or deactivate accounts.</td>
+<td>Database: allowed account status values and Administrator-role validation for recorded status changes. Application: authenticate and authorize the administrator.</td>
+</tr>
+<tr>
+<td>32</td>
+<td>Each action updates current account status and stores one Status Change.</td>
+<td>Database: <code>status_change_updates_account</code> locks and updates the target account during audit insertion, capturing its old status. <code>account_status_requires_audit</code> rejects direct status updates; <code>status_history_append_only</code> rejects audit updates/deletion. Application: authorize the acting administrator.</td>
+</tr>
+<tr>
+<td>33</td>
+<td>Applications request Mentor or Talent Scout, not Creator.</td>
+<td>Database: requested-role check allows those specialized roles only. Creator registration remains separate.</td>
+</tr>
+<tr>
+<td>34</td>
+<td>Application status is pending, accepted or rejected.</td>
+<td>Database: allowed-value status check and required/nullable decision metadata according to status.</td>
+</tr>
+<tr>
+<td>35</td>
+<td>An accepted application allows Mentor/Scout account use.</td>
+<td>Database: deferred constraint triggers require every Mentor/Scout account to have an accepted application matching its account ID, canonical email and role at transaction commit. Application: authenticate the approved user and check account status before access.</td>
+</tr>
+<tr>
+<td>36</td>
+<td>Analytics retain report type and selected start/end dates.</td>
+<td>Database: required report type, date range and generator relationship; chronological date check. Queries compute results from stored application data.</td>
+</tr>
+<tr>
+<td>37</td>
+<td>A comment belongs to one work.</td>
+<td>Database: required work foreign key and author relationship; optional GIF URL remains part of the comment.</td>
+</tr>
+<tr>
+<td>38</td>
+<td>A follow links one account to one creator; each pair occurs once.</td>
+<td>Database: endpoint foreign keys, Creator-role validation, and unique follower/creator pair.</td>
+</tr>
+<tr>
+<td>39</td>
+<td>Saved work links account and work; each pair occurs once.</td>
+<td>Database: required account/work foreign keys and unique account/work pair.</td>
+</tr>
+<tr>
+<td>40</td>
+<td>A help ticket belongs to one account.</td>
+<td>Database: required account foreign key. Application: ticket visibility and replies limited to the owner and authorized support staff.</td>
+</tr>
+<tr>
+<td>41</td>
+<td>Platform setting names are unique.</td>
+<td>Database: required unique setting name. Application: only administrators may change settings.</td>
+</tr>
+</tbody></table>
+<h2>Presentation rules to demonstrate</h2>
+<p>At minimum, explain and demonstrate unique email, valid Creator/work ownership, required SoundCloud URLs for music, duplicate invitation prevention and the report/case relationship. The native verification script also exercises required values, allowed statuses and other implemented constraints. Use failed inserts inside transactions or exception-handling blocks so a rejected example does not damage sample data.</p>
+<p>The executed PostgreSQL verification is saved in <a href="evidence/verification.txt">evidence/verification.txt</a>: <strong>83 checks passed</strong>. This includes populated sample data in all 30 tables, accepted operations and rejected invalid operations. Verification writes are rolled back so the meaningful sample data remains available for presentation.</p>
+<h2>Responsibilities that remain outside the database</h2>
+<ul>
+<li>Authenticate the acting user and enforce browser/API route permissions.</li>
+<li>Restrict feedback, private messages, reports and tickets to permitted participants.</li>
+<li>Confirm ownership before editing work, answering invitations or replying to feedback.</li>
+<li>Validate media uploads, escape output and safely embed external URLs.</li>
+<li>Enforce contact consent, anti-spam limits, notification delivery and other product policy.</li>
+<li>Provision staff accounts and production database roles with appropriate credentials.</li>
+</ul>
+<p>The SQL verification evidence proves implemented data rules under the tested database version. It does not claim a completed application authorization system.</p>
+</article></details><details><summary>Design changes</summary><article><h1>Changes from the Sprint II design</h1>
+<p>The updated diagrams use table notation to show the implemented fields, SQL types, keys and foreign keys. The original Sprint II Chen diagrams remain unchanged in the prior sprint folder. The full SVG/PNG includes every implemented table; focused domain diagrams support presentation, and the Mermaid source records cardinalities.</p>
+<p>The implementation starts from the supplied Sprint II Data Dictionary and Business Rules workbooks and the ER diagrams under <code>Sprint Cycle II/ERD/</code>. Those artifacts describe the requirements; they are not database creation scripts. Historical Sprint I and II artifacts remain unchanged for comparison.</p>
+<h2>Implementation baseline</h2>
+<ul>
+<li>Use PostgreSQL, the database selected in the Cycle 0 technology table.</li>
+<li>Use native SQL for database structures, sample data, retrievals and mutations. Prisma remains a planned application access layer and is not required to demonstrate the database this sprint.</li>
+<li>Represent a person once in Account. Creator, Mentor, Talent Scout, Moderator and Administrator are allowed role values and relationship endpoints referring to Account.</li>
+<li>Preserve the three Sprint II presentation cases: publishing work, inviting a creator and moderating reported work.</li>
+<li>Include structures for later functional requirements now. The assignment explicitly requires the complete system’s database, even where the application UI is unfinished.</li>
+</ul>
+<h2>Corrections and additions</h2>
+<table>
+<thead>
+<tr>
+<th>Sprint II limitation or ambiguity</th>
+<th>Implementation change</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Role diagrams use repeated Creator/Mentor/etc. rectangles.</td>
+<td>One physical Account table with role-specific references and role validation.</td>
+<td>Avoid duplicate people and inconsistent identity data.</td>
+</tr>
+<tr>
+<td>Generic Integer, String and DateTime descriptions do not define concrete database behavior.</td>
+<td>Specify PostgreSQL types, primary/foreign keys, defaults, required values, checks and uniqueness in the SQL schema and updated dictionary.</td>
+<td>Make the design executable and reproducible.</td>
+</tr>
+<tr>
+<td>The consolidated diagram omits entities from the dictionary’s later-requirement section.</td>
+<td>The updated diagram and dictionary describe all implemented tables, including later features.</td>
+<td>Match the implemented complete-system scope.</td>
+</tr>
+<tr>
+<td>Account lacks authentication storage and useful profile information.</td>
+<td>Add <code>password_hash</code>, <code>bio</code> and creation time. Authentication/session identity stays in the future application.</td>
+<td>Support later login and portfolio/profile functionality without storing plaintext passwords.</td>
+</tr>
+<tr>
+<td>Work has no explicit moderation visibility.</td>
+<td>Separate hidden/removed visibility from the existing featured and archived flags.</td>
+<td>Archiving by a creator and hiding content for moderation have different meanings.</td>
+</tr>
+<tr>
+<td>Category has no relationship to works.</td>
+<td>Add a work-category association with a unique work/category pair.</td>
+<td>Support tags, genres, organization and useful searches.</td>
+</tr>
+<tr>
+<td>Foreign keys alone allow the wrong account role or a review request for someone else’s work.</td>
+<td>Validate role-specific endpoints and matching ownership/request relationships.</td>
+<td>Keep stored relationships consistent with the business rules.</td>
+</tr>
+<tr>
+<td>Accepted review requests and structured feedback need cross-row validation.</td>
+<td>Require accepted status and matching request/work/mentor before feedback is stored.</td>
+<td>Implement Business Rules 10–15 consistently.</td>
+</tr>
+<tr>
+<td>Cardinality statements are only prose.</td>
+<td>Enforce single feedback reply, one case per work report, and unique follow/save/invitation pairs using database mechanisms.</td>
+<td>Prevent duplicate relationship records.</td>
+</tr>
+<tr>
+<td>A work report records only a reporter name.</td>
+<td>Preserve attribution and relate registered reporters where possible.</td>
+<td>Retain useful moderation evidence without relying only on display names.</td>
+</tr>
+<tr>
+<td>User reports and work reports do not cover reported comments/GIFs.</td>
+<td>Add a comment-report relationship.</td>
+<td>Support moderation of comments and GIFs required by the role descriptions.</td>
+</tr>
+<tr>
+<td>Account-status history is separate from the current status without specified synchronization.</td>
+<td>Keep the current state and administrator change history consistent within database operations.</td>
+<td>Preserve audit evidence and prevent stale account status.</td>
+</tr>
+<tr>
+<td>Role Application is disconnected from the resulting account.</td>
+<td>Link application/decision data to the relevant account identity.</td>
+<td>Explain why the approved Mentor or Scout is authorized to use that role.</td>
+</tr>
+<tr>
+<td>Messaging, saved candidates, notifications and escalation are incomplete.</td>
+<td>Add supporting structures for these later functional requirements.</td>
+<td>Ensure the database covers the entire application.</td>
+</tr>
+<tr>
+<td>Opportunity/report date relationships are unspecified.</td>
+<td>Add chronological checks and explicit nullable decision fields.</td>
+<td>Reject impossible ranges while allowing pending work.</td>
+</tr>
+<tr>
+<td>Source statuses use prose and inconsistent prototype labels.</td>
+<td>Use documented allowed values and checks rather than unrestricted strings.</td>
+<td>Keep queries and updates predictable.</td>
+</tr>
+</tbody></table>
+<p>The implementation contains <strong>30 tables</strong>: the dictionary’s 22 entities plus <code>work_media</code>, <code>conversation</code>, <code>conversation_member</code>, <code>private_message</code>, <code>scout_candidate</code>, <code>comment_report</code>, <code>work_category</code> and <code>notification</code>. Native views <code>public_work_feed</code>, <code>scout_creator_directory</code> and <code>moderation_queue</code> provide useful read projections. These views do not authenticate users or enforce per-user privacy.</p>
+<h2>Details that change the original dictionary</h2>
+<ul>
+<li>SQL role, media and status labels use lowercase snake_case. For example, “Talent Scout” becomes <code>talent_scout</code>, “Visual art” becomes <code>visual_art</code>, “in review” becomes <code>in_review</code>, and “kept available” becomes <code>kept_available</code>.</li>
+<li>Account identifiers use PostgreSQL identity-backed <code>bigint</code> keys. The dictionary’s generic DateTime becomes <code>timestamptz</code>; opportunity/report periods use <code>date</code>.</li>
+<li>Generated role columns let composite foreign keys enforce that a referenced account is the required Creator, Mentor, Scout, Moderator or Administrator. They are database-maintained integrity fields rather than duplicate people.</li>
+<li><code>creative_work.content_text</code> stores writing itself. <code>work_media</code> stores ordered external asset URLs and alternative text for images or other media. This sprint does not claim an implemented upload/storage service.</li>
+<li><code>creative_work.featured</code> remains the creator’s portfolio selection. An approved <code>nomination</code> supplies the community featured feed; the two meanings remain distinct.</li>
+<li>The feedback/request composite foreign key includes a generated <code>accepted</code> status, the work and the mentor. Accepted status is therefore part of the stored relationship, alongside triggers with readable error messages. <code>feedback_reply.creator_id</code> explicitly identifies the reply author; a trigger verifies that account owns the reviewed work, and uniqueness allows only one reply per feedback.</li>
+<li>Each inserted work or comment report automatically opens its case. A case targets exactly one work report <strong>or</strong> comment report, and deferred checks prevent an existing report from losing its case.</li>
+<li><code>moderation_case.moderator_id</code> is nullable for an unassigned <code>open</code> case, unlike the source dictionary’s always-required field. Any later case state requires a moderator. Findings default to <code>Awaiting review</code>; escalated cases require an explanation. Closing a case applies its action to work/comment visibility.</li>
+<li>Inserting <code>status_change</code> captures the old status, locks and updates the account, and stores the audit row in the same transaction. Direct account-status changes and audit update/deletion are rejected.</li>
+<li>An accepted specialized-role application and its Mentor/Scout account must be created in the same transaction. Deferred checks require the accepted application, canonical email, requested role and approved account to match at commit.</li>
+<li>Invitations store <code>responded_at</code>. An acceptance or decline must include that timestamp; checks preserve chronological consistency.</li>
+<li>Temporary restrictions have an expiry, and support tickets gain assignment, response and resolution metadata. The application must honor these stored values.</li>
+</ul>
+<h2>Conflicting source behavior resolved for this sprint</h2>
+<p>The Sprint I UI prototype uses an applicant login and applies an approval workflow to Creators. The Sprint II Business Rules specifically state that role applications request <strong>Mentor or Talent Scout</strong>, and that Creator accounts are not approved through this application. Sprint III follows that later database rule. Administrator and Moderator provisioning remains an authorized staff workflow rather than public self-selection.</p>
+<p>The Sprint I JSON file is historical UI data. Its arrays, display-name references and in-memory update queue are not the PostgreSQL implementation or evidence of relational constraints. The Sprint III SQL seed supplies coherent sample identities and foreign-key relationships independently of that file.</p>
+<h2>Policies reserved for application implementation</h2>
+<p>The database can validate values, references and role relationships. It cannot infer the identity of a person operating a future browser. The application must authenticate users, check ownership and permissions, restrict private feedback/messages/reports, handle password creation and verification, and enforce contact policy. The source documents leave some messaging permissions open; this sprint does not invent unrestricted communication rights.</p>
+<p>No instructor feedback was supplied with this task. These changes address issues found by comparing the design with the functional descriptions and executable database requirements. They are implementation decisions prepared for the team’s review, not invented instructor or meeting decisions.</p>
+</article></details><details><summary>Submission checklist</summary><article><h1>Sprint Cycle III submission checklist</h1>
+<p>Due: <strong>November 4, 2026</strong>. Presentation: <strong>November 5, 2026</strong>.</p>
+<p>Use the setup and presentation instructions in this sprint’s README to open each deliverable. The statuses below distinguish executed technical evidence from team actions that still need real records. The execution logs were reviewed during preparation on November 3, 2026.</p>
+<table>
+<thead>
+<tr>
+<th>Assignment item</th>
+<th>Deliverable or evidence</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Review and update Sprint II design</td>
+<td><code>docs/DESIGN_CHANGES.md</code>, updated ER diagram and Data Dictionary</td>
+<td>Complete locally; changes and added structures documented</td>
+</tr>
+<tr>
+<td>Use selected database technology</td>
+<td>PostgreSQL native SQL implementation; <code>evidence/setup.txt</code></td>
+<td>Passed: actual PostgreSQL schema and sample data loaded</td>
+</tr>
+<tr>
+<td>Complete-system structures</td>
+<td>Schema, <code>docs/schema-metadata.json</code>, dictionary and ER diagram</td>
+<td>Passed coverage check: all 30 catalog tables appear in both dictionary and diagram source</td>
+</tr>
+<tr>
+<td>Primary/foreign keys, types, required fields and constraints</td>
+<td>Schema SQL, live schema metadata and <code>docs/BUSINESS_RULES.md</code></td>
+<td>Implemented: 30 tables, 231 columns, 180 catalog constraints and 54 foreign-key relationships</td>
+</tr>
+<tr>
+<td>Meaningful sample data in every major table</td>
+<td><code>database/02_seed.sql</code>; <code>evidence/setup.txt</code>; <code>evidence/verification.txt</code></td>
+<td>Passed: all 30 tables have sample rows; includes 10 accounts, 7 works, 6 role applications, 4 invitations and 3 cases</td>
+</tr>
+<tr>
+<td>Required retrieve/search query</td>
+<td><code>database/03_queries.sql</code>; <code>evidence/queries.txt</code></td>
+<td>Passed: Q1 returns Nia Brooks as an active music creator accepting commissions</td>
+</tr>
+<tr>
+<td>Required related-data query</td>
+<td><code>database/03_queries.sql</code>; <code>evidence/queries.txt</code></td>
+<td>Passed: portfolio, feedback/reply, invitation/opportunity and reported-work joins return meaningful results</td>
+</tr>
+<tr>
+<td>Required add operation</td>
+<td><code>database/04_demo_mutations.sql</code>; <code>evidence/demo.txt</code></td>
+<td>Passed: real inserts demonstrated for work, opportunity, invitation and report; rolled back for repeatability</td>
+</tr>
+<tr>
+<td>Required modify operation</td>
+<td><code>database/04_demo_mutations.sql</code>; <code>evidence/demo.txt</code></td>
+<td>Passed: work revision, invitation acceptance and closed moderation decision demonstrated; rolled back afterward</td>
+</tr>
+<tr>
+<td>Instructor-requested query readiness</td>
+<td><code>database/instructor_queries.sql</code> and README shell instructions</td>
+<td>Prepared; every presenter must still practice an unscripted SELECT/filter/join</td>
+</tr>
+<tr>
+<td>Three functional use cases</td>
+<td><code>docs/USE_CASES.md</code> and <code>evidence/demo.txt</code></td>
+<td>Complete: publish work; scout invitation; moderator decides reported work</td>
+</tr>
+<tr>
+<td>At least three important rules</td>
+<td><code>docs/BUSINESS_RULES.md</code>; <code>database/05_verify.sql</code>; <code>evidence/verification.txt</code></td>
+<td>Passed: all 41 rules documented; 83 live checks passed, including meaningful sample rows, rejected invalid operations and successful workflows</td>
+</tr>
+<tr>
+<td>Creation/population/query commands</td>
+<td>Native SQL files and README recreation commands</td>
+<td>Complete locally; setup, search/join and mutation execution logged</td>
+</tr>
+<tr>
+<td>Updated ER diagram</td>
+<td><code>docs/ERD.svg</code>, <code>docs/ERD.png</code>, <code>docs/ERD.mmd</code> and role views</td>
+<td>Created; 30-table source coverage checked against the live schema catalog</td>
+</tr>
+<tr>
+<td>Updated Data Dictionary</td>
+<td><code>outputs/sprint-iii/Data Dictionary.xlsx</code>; <code>docs/DATA_DICTIONARY.md</code></td>
+<td>Created; workbook opens as a valid XLSX package and lists all 30 tables; readable dictionary coverage checked</td>
+</tr>
+<tr>
+<td>Database setup/recreation instructions</td>
+<td>Sprint README; <code>scripts/db.py</code>; <code>evidence/setup.txt</code></td>
+<td>Mac setup executed successfully; Windows/native alternatives documented, not executed on a Windows machine</td>
+</tr>
+<tr>
+<td>Sprint III Scrum Master</td>
+<td><code>Meeting Notes.md</code></td>
+<td>Confirmed by the user: <strong>James Henson</strong></td>
+</tr>
+<tr>
+<td>Team roster</td>
+<td><code>Meeting Notes.md</code></td>
+<td>Confirmed by the user: James Henson, Jacob, Clemenceu and Leeyand</td>
+</tr>
+<tr>
+<td>Presenter pgAdmin rehearsal</td>
+<td>User confirmation in this session</td>
+<td>The user reports successful pgAdmin access and database queries returning results.</td>
+</tr>
+<tr>
+<td>Required meeting documentation</td>
+<td><code>Meeting Notes.md</code> and genuine evidence</td>
+<td>November 2, 2026 meeting date confirmed; time, attendees, agenda, decisions, actions and evidence remain pending. Add any other actual meetings to demonstrate meetings spread throughout the sprint.</td>
+</tr>
+<tr>
+<td>Meaningful contribution by every member</td>
+<td>Actual commits and contribution evidence</td>
+<td><strong>Pending team completion/evidence</strong></td>
+</tr>
+<tr>
+<td>Every member pulls the current repository</td>
+<td>Actual team confirmation/evidence</td>
+<td><strong>Pending team completion/evidence</strong></td>
+</tr>
+<tr>
+<td>Materials stored in GitHub</td>
+<td><a href="https://github.com/Jvmes3/Xpression_ISProject/tree/main/Sprint%20Cycle%20III">Sprint III folder on main</a></td>
+<td>Sharing authorized; inspect the latest remote commit when presenting the repository materials</td>
+</tr>
+<tr>
+<td>Each member pushes a meaningful contribution</td>
+<td>Actual GitHub history</td>
+<td><strong>Pending: cannot be substituted by one prepared local package</strong></td>
+</tr>
+</tbody></table>
+<h2>Before presenting</h2>
+<ol>
+<li>Recreate and verify the database using the README commands.</li>
+<li>Open the ER diagram, updated dictionary, schema and query file before the presentation starts.</li>
+<li>Run retrieve/search, related-data, add and modify operations against the live PostgreSQL database.</li>
+<li>Use <code>docs/USE_CASES.md</code> to explain the three selected workflows and their keys.</li>
+<li>Have each presenter explain at least one constraint and one relationship without reading the SQL aloud.</li>
+<li>Pull the shared <code>main</code> branch with <code>git pull --ff-only</code>, complete real team records, and record each member’s actual contribution and pull/push evidence.</li>
+</ol>
+<p>For the browser guide, run <code>python3 -m http.server 8080 --bind 127.0.0.1 --directory &quot;Sprint Cycle III&quot;</code> from the repository root (<code>py</code> on Windows), then open <strong><a href="http://127.0.0.1:8080">http://127.0.0.1:8080</a></strong>. Each teammate runs database <code>setup</code> separately to generate their own ignored credentials.</p>
+<p>The prepared technical deliverables and the team’s meeting/GitHub obligations have different evidence requirements. Do not claim remote storage, participation, meeting attendance or a passed database run unless that evidence actually exists.</p>
+</article></details><details><summary>Team process</summary><article><h1>Sprint Cycle III preparation and meeting record</h1>
+<p>Sprint: Database implementation<br>Scrum Master: <strong>James Henson</strong><br>Submission due: November 4, 2026<br>Presentation: November 5, 2026</p>
+<h2>Team roster</h2>
+<table>
+<thead>
+<tr>
+<th>Team member</th>
+<th>Confirmed responsibility</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>James Henson</td>
+<td>Sprint III Scrum Master</td>
+</tr>
+<tr>
+<td>Jacob</td>
+<td>Team member</td>
+</tr>
+<tr>
+<td>Clemenceu</td>
+<td>Team member</td>
+</tr>
+<tr>
+<td>Leeyand</td>
+<td>Team member</td>
+</tr>
+</tbody></table>
+<p>The roster uses the names provided by the user. Meeting attendance and individual contributions are recorded separately when confirmed.</p>
+<h2>November 2, 2026 — Team meeting</h2>
+<p>The user confirmed this meeting date and the Sprint III Scrum Master. Other meeting details have not yet been provided.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Confirmed information</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Date</td>
+<td>November 2, 2026</td>
+</tr>
+<tr>
+<td>Time</td>
+<td>Pending team input</td>
+</tr>
+<tr>
+<td>Attendees</td>
+<td>Pending team input</td>
+</tr>
+<tr>
+<td>Location or format</td>
+<td>Pending team input</td>
+</tr>
+<tr>
+<td>Sprint III Scrum Master</td>
+<td>James Henson</td>
+</tr>
+<tr>
+<td>Purpose and agenda</td>
+<td>Pending team input</td>
+</tr>
+<tr>
+<td>Decisions</td>
+<td>Pending team input</td>
+</tr>
+<tr>
+<td>Action items and owners</td>
+<td>Pending team input</td>
+</tr>
+<tr>
+<td>Evidence file or link</td>
+<td>Pending team input</td>
+</tr>
+</tbody></table>
+<h2>November 3, 2026 — Deliverable preparation</h2>
+<p>This entry records deliverable preparation. It is not evidence that a team meeting occurred. No attendance, meeting location, votes, or individual contributions are asserted here.</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Preparation decision or status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Database technology</td>
+<td>PostgreSQL, following the stack selected in <code>Spring Cycle 0/README.md</code>. Native SQL is the Sprint III implementation artifact.</td>
+</tr>
+<tr>
+<td>Inputs</td>
+<td>Sprint III assignment; Sprint II ER diagrams, Data Dictionary, Business Rules and meeting notes; previous sprint functional descriptions.</td>
+</tr>
+<tr>
+<td>Scope</td>
+<td>Implement persistent structures for the complete system, including features scheduled after the current UI sprint. Application integration is not required by this assignment.</td>
+</tr>
+<tr>
+<td>Presentation use cases</td>
+<td>Retain the three selected in the October 19 Sprint II notes: creator publishes work, scout invites a creator, moderator decides reported work.</td>
+</tr>
+<tr>
+<td>Design corrections</td>
+<td>Record implementation changes in <code>docs/DESIGN_CHANGES.md</code>, the updated ER diagram and the updated Data Dictionary.</td>
+</tr>
+<tr>
+<td>Business rules</td>
+<td>Map all 41 supplied rules to database enforcement or future application responsibility in <code>docs/BUSINESS_RULES.md</code>.</td>
+</tr>
+<tr>
+<td>GitHub</td>
+<td>The user authorized sharing the Sprint III folder, including <code>index.html</code>, on <code>main</code>. Sharing target: <a href="https://github.com/Jvmes3/Xpression_ISProject/tree/main/Sprint%20Cycle%20III">Sprint III on main</a>. Individual contribution and pull/push evidence still require actual records.</td>
+</tr>
+<tr>
+<td>Scrum Master</td>
+<td>James Henson, confirmed by the user.</td>
+</tr>
+<tr>
+<td>pgAdmin rehearsal</td>
+<td>The user confirmed that pgAdmin connected successfully and the database queries returned results. This records the user&#39;s rehearsal report.</td>
+</tr>
+</tbody></table>
+<h2>Real team information to complete</h2>
+<p>The assignment requires meetings spread throughout the sprint and meaningful participation by every member. Complete these items from actual records; preparation of these files cannot replace them.</p>
+<ul>
+<li>Complete the November 2 meeting record with the actual time, attendees, location or format, agenda, decisions and action items.</li>
+<li>Add any other meetings that actually occurred, using verified dates and details.</li>
+<li>Attach genuine meeting photographs or other required evidence.</li>
+<li>Record each member’s actual implementation, review or presentation contribution.</li>
+<li>Record each member’s repository pull and meaningful pushed contribution; sharing the prepared folder does not prove every member contributed.</li>
+<li>Have each presenter practice the live queries and explain the database relationships and rules.</li>
+</ul>
+<h2>Meeting entry template</h2>
+<p>Copy this section for each real meeting. Replace placeholders with verified details and remove unused template text before submission.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Verified information</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Date and time</td>
+<td>Pending team input</td>
+</tr>
+<tr>
+<td>Attendees</td>
+<td>Pending team input</td>
+</tr>
+<tr>
+<td>Location or format</td>
+<td>Pending team input</td>
+</tr>
+<tr>
+<td>Sprint III Scrum Master</td>
+<td>James Henson</td>
+</tr>
+<tr>
+<td>Purpose and agenda</td>
+<td>Pending team input</td>
+</tr>
+<tr>
+<td>Decisions</td>
+<td>Pending team input</td>
+</tr>
+<tr>
+<td>Evidence file or link</td>
+<td>Pending team input</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>Owner</th>
+<th>Action</th>
+<th>Due date</th>
+<th>Actual status or evidence</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Pending team input</td>
+<td>Pending team input</td>
+<td>Pending team input</td>
+<td>Pending team input</td>
+</tr>
+</tbody></table>
+</article></details></section>
+<section id="sql"><h2>Native SQL source</h2><p>These are the exact scripts used to create and demonstrate the database. Full files run through <code>psql</code>. In pgAdmin Query Tool, copy SQL statements and omit lines beginning with a backslash.</p><details><summary>01_schema.sql</summary><div class="source"><p><a href="database/01_schema.sql">Open source file</a></p><pre><code>-- Xpression | Sprint Cycle III | PostgreSQL 16
+-- Install into an EMPTY database with psql -v ON_ERROR_STOP=1 -1 -f 01_schema.sql -f 02_seed.sql.
+-- Intentionally refuses to replace an existing xpression schema. No DROP or TRUNCATE.
+-- Transaction boundaries belong to the installer so schema + seed are atomic.
+-- Source: Sprint II Data Dictionary.xlsx (22 entities), Business Rules.xlsx (41 rules).
+-- SQL spellings normalize display labels to lowercase snake_case.
+-- PostgreSQL reference: https://www.postgresql.org/docs/16/sql-createtrigger.html
+-- PostgreSQL reference: https://www.postgresql.org/docs/16/sql-createtable.html
+
+CREATE SCHEMA xpression;
+SET search_path TO xpression, public;
+
+CREATE TABLE account (
+    account_id bigint GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    name text NOT NULL CHECK (btrim(name) &lt;&gt; ''),
+    email text NOT NULL CHECK (email = lower(btrim(email)) AND email ~ '^[^[:space:]@]+@[^[:space:]@]+\.[^[:space:]@]+$'),
+    role text NOT NULL CHECK (role IN ('creator','mentor','talent_scout','moderator','administrator')),
+    status text NOT NULL DEFAULT 'active' CHECK (status IN ('active','suspended','banned','deactivated')),
+    discipline text,
+    open_to_commissions boolean NOT NULL DEFAULT false,
+    password_hash text NOT NULL CHECK (btrim(password_hash) &lt;&gt; ''),
+    bio text,
+    created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT account_email_key UNIQUE (email),
+    CONSTRAINT account_id_role_key UNIQUE (account_id,role),
+    CONSTRAINT account_commissions_creator CHECK (NOT open_to_commissions OR role = 'creator')
+);
+
+CREATE TABLE role_application (
+    application_id bigint GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    administrator_id bigint,
+    administrator_role text GENERATED ALWAYS AS ('administrator'::text) STORED,
+    applicant_name text NOT NULL CHECK (btrim(applicant_name) &lt;&gt; ''),
+    email text NOT NULL CHECK (email = lower(btrim(email)) AND email ~ '^[^[:space:]@]+@[^[:space:]@]+\.[^[:space:]@]+$'),
+    requested_role text NOT NULL CHECK (requested_role IN ('mentor','talent_scout')),
+    statement text NOT NULL CHECK (btrim(statement) &lt;&gt; ''),
+    status text NOT NULL DEFAULT 'pending' CHECK (status IN ('pending','accepted','rejected')),
+    submitted_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    decided_at timestamptz,
+    approved_account_id bigint UNIQUE,
+    CONSTRAINT application_admin_fk FOREIGN KEY (administrator_id,administrator_role) REFERENCES account(account_id,role),
+    CONSTRAINT application_approved_role_fk FOREIGN KEY (approved_account_id,requested_role) REFERENCES account(account_id,role),
+    CONSTRAINT application_decision_check CHECK (
+      (status = 'pending' AND administrator_id IS NULL AND decided_at IS NULL AND approved_account_id IS NULL)
+      OR (status = 'rejected' AND administrator_id IS NOT NULL AND decided_at IS NOT NULL AND approved_account_id IS NULL)
+      OR (status = 'accepted' AND administrator_id IS NOT NULL AND decided_at IS NOT NULL AND approved_account_id IS NOT NULL)),
+    CONSTRAINT application_dates_check CHECK (decided_at IS NULL OR decided_at &gt;= submitted_at)
+);
+
+CREATE TABLE creative_work (
+    work_id bigint GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    creator_id bigint NOT NULL,
+    creator_role text GENERATED ALWAYS AS ('creator'::text) STORED,
+    title text NOT NULL CHECK (btrim(title) &lt;&gt; ''),
+    media_type text NOT NULL CHECK (media_type IN ('writing','visual_art','music')),
+    description text NOT NULL CHECK (btrim(description) &lt;&gt; ''),
+    soundcloud_url text,
+    featured boolean NOT NULL DEFAULT false,
+    archived boolean NOT NULL DEFAULT false,
+    published_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    content_text text,
+    visibility text NOT NULL DEFAULT 'available' CHECK (visibility IN ('available','hidden','removed')),
+    CONSTRAINT work_creator_fk FOREIGN KEY (creator_id,creator_role) REFERENCES account(account_id,role),
+    CONSTRAINT work_owner_key UNIQUE (work_id,creator_id),
+    CONSTRAINT music_soundcloud_check CHECK (media_type &lt;&gt; 'music' OR (soundcloud_url IS NOT NULL AND soundcloud_url ~ '^https://(www\.)?soundcloud\.com/[^[:space:]]+$')),
+    CONSTRAINT soundcloud_url_check CHECK (soundcloud_url IS NULL OR soundcloud_url ~ '^https://(www\.)?soundcloud\.com/[^[:space:]]+$')
+);
+
+CREATE TABLE work_media (
+    media_id bigint GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    work_id bigint NOT NULL REFERENCES creative_work(work_id),
+    asset_url text NOT NULL CHECK (asset_url ~ '^https?://[^[:space:]]+$'),
+    alt_text text NOT NULL CHECK (btrim(alt_text) &lt;&gt; ''),
+    position integer NOT NULL DEFAULT 1 CHECK (position &gt; 0),
+    CONSTRAINT work_media_position_key UNIQUE (work_id,position)
+);
+
+CREATE TABLE review_request (
+    request_id bigint GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    creator_id bigint NOT NULL,
+    mentor_id bigint NOT NULL,
+    mentor_role text GENERATED ALWAYS AS ('mentor'::text) STORED,
+    work_id bigint NOT NULL,
+    note text,
+    status text NOT NULL DEFAULT 'waiting' CHECK (status IN ('waiting','accepted','declined')),
+    requested_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT request_work_owner_fk FOREIGN KEY (work_id,creator_id) REFERENCES creative_work(work_id,creator_id),
+    CONSTRAINT request_mentor_fk FOREIGN KEY (mentor_id,mentor_role) REFERENCES account(account_id,role),
+    CONSTRAINT request_feedback_key UNIQUE (request_id,work_id,mentor_id,status)
+);
+
+CREATE TABLE mentor_feedback (
+    feedback_id bigint GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    work_id bigint NOT NULL REFERENCES creative_work(work_id),
+    mentor_id bigint NOT NULL,
+    request_id bigint NOT NULL UNIQUE,
+    request_status text GENERATED ALWAYS AS ('accepted'::text) STORED,
+    strengths text NOT NULL CHECK (btrim(strengths) &lt;&gt; ''),
+    improvements text NOT NULL CHECK (btrim(improvements) &lt;&gt; ''),
+    recommendation text NOT NULL CHECK (btrim(recommendation) &lt;&gt; ''),
+    written_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT feedback_request_identity_fk FOREIGN KEY (request_id,work_id,mentor_id,request_status) REFERENCES review_request(request_id,work_id,mentor_id,status)
+);
+
+CREATE TABLE feedback_reply (
+    reply_id bigint GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    feedback_id bigint NOT NULL UNIQUE REFERENCES mentor_feedback(feedback_id),
+    creator_id bigint NOT NULL REFERENCES account(account_id),
+    reply_text text NOT NULL CHECK (btrim(reply_text) &lt;&gt; ''),
+    replied_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE nomination (
+    nomination_id bigint GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    mentor_id bigint NOT NULL,
+    mentor_role text GENERATED ALWAYS AS ('mentor'::text) STORED,
+    work_id bigint NOT NULL REFERENCES creative_work(work_id),
+    moderator_id bigint,
+    moderator_role text GENERATED ALWAYS AS ('moderator'::text) STORED,
+    reason text NOT NULL CHECK (btrim(reason) &lt;&gt; ''),
+    status text NOT NULL DEFAULT 'pending' CHECK (status IN ('pending','approved','declined')),
+    nominated_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    decided_at timestamptz,
+    CONSTRAINT nomination_mentor_fk FOREIGN KEY (mentor_id,mentor_role) REFERENCES account(account_id,role),
+    CONSTRAINT nomination_moderator_fk FOREIGN KEY (moderator_id,moderator_role) REFERENCES account(account_id,role),
+    CONSTRAINT nomination_decision_check CHECK (
+      (status = 'pending' AND moderator_id IS NULL AND decided_at IS NULL)
+      OR (status &lt;&gt; 'pending' AND moderator_id IS NOT NULL AND decided_at IS NOT NULL)),
+    CONSTRAINT nomination_dates_check CHECK (decided_at IS NULL OR decided_at &gt;= nominated_at)
+);
+
+CREATE TABLE opportunity (
+    opportunity_id bigint GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    scout_id bigint NOT NULL,
+    scout_role text GENERATED ALWAYS AS ('talent_scout'::text) STORED,
+    title text NOT NULL CHECK (btrim(title) &lt;&gt; ''),
+    starts_on date NOT NULL,
+    ends_on date,
+    description text,
+    CONSTRAINT opportunity_scout_fk FOREIGN KEY (scout_id,scout_role) REFERENCES account(account_id,role),
+    CONSTRAINT opportunity_dates_check CHECK (ends_on IS NULL OR ends_on &gt;= starts_on)
+);
+
+CREATE TABLE invitation (
+    invitation_id bigint GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    opportunity_id bigint NOT NULL REFERENCES opportunity(opportunity_id),
+    creator_id bigint NOT NULL,
+    creator_role text GENERATED ALWAYS AS ('creator'::text) STORED,
+    status text NOT NULL DEFAULT 'sent' CHECK (status IN ('sent','accepted','declined')),
+    invited_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    responded_at timestamptz,
+    CONSTRAINT invitation_creator_fk FOREIGN KEY (creator_id,creator_role) REFERENCES account(account_id,role),
+    CONSTRAINT invitation_pair_key UNIQUE (opportunity_id,creator_id),
+    CONSTRAINT invitation_response_check CHECK (
+      (status = 'sent' AND responded_at IS NULL) OR (status &lt;&gt; 'sent' AND responded_at IS NOT NULL)),
+    CONSTRAINT invitation_dates_check CHECK (responded_at IS NULL OR responded_at &gt;= invited_at)
+);
+
+CREATE TABLE conversation (
+    conversation_id bigint GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    subject text NOT NULL CHECK (btrim(subject) &lt;&gt; ''),
+    created_by bigint NOT NULL REFERENCES account(account_id),
+    created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE conversation_member (
+    conversation_id bigint NOT NULL REFERENCES conversation(conversation_id),
+    account_id bigint NOT NULL REFERENCES account(account_id),
+    joined_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    last_read_at timestamptz,
+    PRIMARY KEY (conversation_id,account_id),
+    CONSTRAINT member_read_date_check CHECK (last_read_at IS NULL OR last_read_at &gt;= joined_at)
+);
+
+CREATE TABLE private_message (
+    message_id bigint GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    conversation_id bigint NOT NULL,
+    sender_id bigint NOT NULL,
+    body text NOT NULL CHECK (btrim(body) &lt;&gt; ''),
+    sent_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT message_member_fk FOREIGN KEY (conversation_id,sender_id) REFERENCES conversation_member(conversation_id,account_id)
+);
+
+CREATE TABLE scout_message (
+    message_id bigint GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    scout_id bigint NOT NULL,
+    scout_role text GENERATED ALWAYS AS ('talent_scout'::text) STORED,
+    creator_id bigint NOT NULL,
+    creator_role text GENERATED ALWAYS AS ('creator'::text) STORED,
+    body text NOT NULL CHECK (btrim(body) &lt;&gt; ''),
+    sent_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    conversation_id bigint REFERENCES conversation(conversation_id),
+    CONSTRAINT scout_message_scout_fk FOREIGN KEY (scout_id,scout_role) REFERENCES account(account_id,role),
+    CONSTRAINT scout_message_creator_fk FOREIGN KEY (creator_id,creator_role) REFERENCES account(account_id,role),
+    CONSTRAINT scout_message_sender_member_fk FOREIGN KEY (conversation_id,scout_id) REFERENCES conversation_member(conversation_id,account_id),
+    CONSTRAINT scout_message_recipient_member_fk FOREIGN KEY (conversation_id,creator_id) REFERENCES conversation_member(conversation_id,account_id)
+);
+
+CREATE TABLE scout_candidate (
+    candidate_id bigint GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    scout_id bigint NOT NULL,
+    scout_role text GENERATED ALWAYS AS ('talent_scout'::text) STORED,
+    creator_id bigint NOT NULL,
+    creator_role text GENERATED ALWAYS AS ('creator'::text) STORED,
+    notes text,
+    saved_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT candidate_scout_fk FOREIGN KEY (scout_id,scout_role) REFERENCES account(account_id,role),
+    CONSTRAINT candidate_creator_fk FOREIGN KEY (creator_id,creator_role) REFERENCES account(account_id,role),
+    CONSTRAINT candidate_pair_key UNIQUE (scout_id,creator_id)
+);
+
+CREATE TABLE comment (
+    comment_id bigint GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    work_id bigint NOT NULL REFERENCES creative_work(work_id),
+    author_id bigint NOT NULL REFERENCES account(account_id),
+    body text NOT NULL CHECK (btrim(body) &lt;&gt; ''),
+    gif_url text CHECK (gif_url IS NULL OR gif_url ~ '^https?://[^[:space:]]+$'),
+    created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    visibility text NOT NULL DEFAULT 'available' CHECK (visibility IN ('available','hidden','removed'))
+);
+
+CREATE TABLE work_report (
+    report_id bigint GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    work_id bigint NOT NULL REFERENCES creative_work(work_id),
+    reason text NOT NULL CHECK (btrim(reason) &lt;&gt; ''),
+    reporter_name text NOT NULL CHECK (btrim(reporter_name) &lt;&gt; ''),
+    reported_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    reporter_id bigint REFERENCES account(account_id),
+    reason_type text NOT NULL DEFAULT 'other' CHECK (reason_type IN ('copyright','fraud','harassment','inappropriate','other'))
+);
+
+CREATE TABLE comment_report (
+    comment_report_id bigint GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    comment_id bigint NOT NULL REFERENCES comment(comment_id),
+    reporter_id bigint REFERENCES account(account_id),
+    reason text NOT NULL CHECK (btrim(reason) &lt;&gt; ''),
+    reported_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE moderation_case (
+    case_id bigint GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    report_id bigint UNIQUE REFERENCES work_report(report_id),
+    comment_report_id bigint UNIQUE REFERENCES comment_report(comment_report_id),
+    moderator_id bigint,
+    moderator_role text GENERATED ALWAYS AS ('moderator'::text) STORED,
+    findings text NOT NULL DEFAULT 'Awaiting review' CHECK (btrim(findings) &lt;&gt; ''),
+    action_taken text NOT NULL DEFAULT 'kept_available' CHECK (action_taken IN ('kept_available','hidden','removed')),
+    status text NOT NULL DEFAULT 'open' CHECK (status IN ('open','in_review','escalated','closed')),
+    recorded_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    escalation_reason text,
+    CONSTRAINT moderation_moderator_fk FOREIGN KEY (moderator_id,moderator_role) REFERENCES account(account_id,role),
+    CONSTRAINT moderation_one_subject_check CHECK (num_nonnulls(report_id,comment_report_id) = 1),
+    CONSTRAINT moderation_assigned_check CHECK (status = 'open' OR moderator_id IS NOT NULL),
+    CONSTRAINT moderation_escalation_check CHECK (status &lt;&gt; 'escalated' OR nullif(btrim(escalation_reason),'') IS NOT NULL)
+);
+
+CREATE TABLE user_report (
+    user_report_id bigint GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    account_id bigint NOT NULL REFERENCES account(account_id),
+    reason text NOT NULL CHECK (btrim(reason) &lt;&gt; ''),
+    reported_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    reporter_id bigint REFERENCES account(account_id)
+);
+
+CREATE TABLE account_restriction (
+    restriction_id bigint GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    user_report_id bigint NOT NULL REFERENCES user_report(user_report_id),
+    moderator_id bigint NOT NULL,
+    moderator_role text GENERATED ALWAYS AS ('moderator'::text) STORED,
+    action_type text NOT NULL CHECK (action_type IN ('warn','restrict','refer_for_ban')),
+    recorded_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    expires_at timestamptz,
+    notes text,
+    CONSTRAINT restriction_moderator_fk FOREIGN KEY (moderator_id,moderator_role) REFERENCES account(account_id,role),
+    CONSTRAINT restriction_expiry_check CHECK (
+      (action_type = 'restrict' AND expires_at IS NOT NULL AND expires_at &gt; recorded_at)
+      OR (action_type &lt;&gt; 'restrict' AND expires_at IS NULL))
+);
+
+CREATE TABLE status_change (
+    change_id bigint GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    administrator_id bigint NOT NULL,
+    administrator_role text GENERATED ALWAYS AS ('administrator'::text) STORED,
+    account_id bigint NOT NULL REFERENCES account(account_id),
+    old_status text NOT NULL DEFAULT 'active' CHECK (old_status IN ('active','suspended','banned','deactivated')),
+    new_status text NOT NULL CHECK (new_status IN ('active','suspended','banned','deactivated')),
+    changed_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    reason text NOT NULL DEFAULT 'Administrative decision' CHECK (btrim(reason) &lt;&gt; ''),
+    CONSTRAINT status_admin_fk FOREIGN KEY (administrator_id,administrator_role) REFERENCES account(account_id,role),
+    CONSTRAINT status_changed_check CHECK (new_status &lt;&gt; old_status)
+);
+
+CREATE TABLE analytics_report (
+    report_id bigint GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    administrator_id bigint NOT NULL,
+    administrator_role text GENERATED ALWAYS AS ('administrator'::text) STORED,
+    report_type text NOT NULL CHECK (report_type IN ('platform_usage','accounts','creative_posts')),
+    date_from date NOT NULL,
+    date_to date NOT NULL,
+    generated_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    result_summary text,
+    CONSTRAINT analytics_admin_fk FOREIGN KEY (administrator_id,administrator_role) REFERENCES account(account_id,role),
+    CONSTRAINT analytics_dates_check CHECK (date_to &gt;= date_from)
+);
+
+CREATE TABLE follow (
+    follow_id bigint GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    follower_id bigint NOT NULL REFERENCES account(account_id),
+    creator_id bigint NOT NULL,
+    creator_role text GENERATED ALWAYS AS ('creator'::text) STORED,
+    followed_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT follow_creator_fk FOREIGN KEY (creator_id,creator_role) REFERENCES account(account_id,role),
+    CONSTRAINT follow_pair_key UNIQUE (follower_id,creator_id),
+    CONSTRAINT follow_not_self_check CHECK (follower_id &lt;&gt; creator_id)
+);
+
+CREATE TABLE saved_work (
+    save_id bigint GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    account_id bigint NOT NULL REFERENCES account(account_id),
+    work_id bigint NOT NULL REFERENCES creative_work(work_id),
+    saved_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT saved_pair_key UNIQUE (account_id,work_id)
+);
+
+CREATE TABLE help_ticket (
+    ticket_id bigint GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    account_id bigint NOT NULL REFERENCES account(account_id),
+    subject text NOT NULL CHECK (btrim(subject) &lt;&gt; ''),
+    body text NOT NULL CHECK (btrim(body) &lt;&gt; ''),
+    status text NOT NULL DEFAULT 'open' CHECK (status IN ('open','resolved','set_aside','escalated')),
+    opened_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    assigned_to bigint REFERENCES account(account_id),
+    response text,
+    resolved_at timestamptz,
+    CONSTRAINT ticket_resolution_check CHECK (status &lt;&gt; 'resolved' OR resolved_at IS NOT NULL),
+    CONSTRAINT ticket_dates_check CHECK (resolved_at IS NULL OR resolved_at &gt;= opened_at)
+);
+
+CREATE TABLE category (
+    category_id bigint GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    name text NOT NULL CHECK (btrim(name) &lt;&gt; ''),
+    kind text NOT NULL CHECK (kind IN ('media','genre','tag')),
+    CONSTRAINT category_kind_name_key UNIQUE (kind,name)
+);
+
+CREATE TABLE work_category (
+    work_id bigint NOT NULL REFERENCES creative_work(work_id),
+    category_id bigint NOT NULL REFERENCES category(category_id),
+    PRIMARY KEY (work_id,category_id)
+);
+
+CREATE TABLE platform_setting (
+    setting_id bigint GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    name text NOT NULL UNIQUE CHECK (btrim(name) &lt;&gt; ''),
+    value text NOT NULL CHECK (btrim(value) &lt;&gt; ''),
+    updated_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_by bigint,
+    administrator_role text GENERATED ALWAYS AS ('administrator'::text) STORED,
+    CONSTRAINT setting_admin_fk FOREIGN KEY (updated_by,administrator_role) REFERENCES account(account_id,role)
+);
+
+CREATE TABLE notification (
+    notification_id bigint GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    account_id bigint NOT NULL REFERENCES account(account_id),
+    kind text NOT NULL CHECK (kind IN ('feedback','invitation','message','moderation','application','system')),
+    body text NOT NULL CHECK (btrim(body) &lt;&gt; ''),
+    work_id bigint REFERENCES creative_work(work_id),
+    read_at timestamptz,
+    created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT notification_dates_check CHECK (read_at IS NULL OR read_at &gt;= created_at)
+);
+
+-- Cross-row integrity. These are integrity rules; they do not identify the signed-in user.
+CREATE FUNCTION assert_specialized_approval(target_id bigint) RETURNS void
+LANGUAGE plpgsql SET search_path = xpression, pg_temp AS $$
+DECLARE a account%ROWTYPE;
+BEGIN
+    SELECT * INTO a FROM account WHERE account_id = target_id;
+    IF FOUND AND a.role IN ('mentor','talent_scout') AND NOT EXISTS (
+      SELECT 1 FROM role_application ra WHERE ra.approved_account_id = a.account_id
+        AND ra.status = 'accepted' AND ra.requested_role = a.role AND ra.email = a.email) THEN
+        RAISE EXCEPTION 'Specialized account % requires an accepted matching role application', target_id
+          USING ERRCODE = '23514', CONSTRAINT = 'specialized_account_approval';
+    END IF;
+END;
+$$;
+
+CREATE FUNCTION check_specialized_approval() RETURNS trigger
+LANGUAGE plpgsql SET search_path = xpression, pg_temp AS $$
+BEGIN
+    IF TG_TABLE_NAME = 'account' THEN
+        PERFORM assert_specialized_approval(NEW.account_id);
+    ELSE
+        IF TG_OP &lt;&gt; 'INSERT' AND OLD.approved_account_id IS NOT NULL THEN
+            PERFORM assert_specialized_approval(OLD.approved_account_id);
+        END IF;
+        IF TG_OP &lt;&gt; 'DELETE' AND NEW.approved_account_id IS NOT NULL THEN
+            PERFORM assert_specialized_approval(NEW.approved_account_id);
+        END IF;
+    END IF;
+    RETURN NULL;
+END;
+$$;
+
+CREATE CONSTRAINT TRIGGER account_specialized_approval
+AFTER INSERT OR UPDATE ON account DEFERRABLE INITIALLY DEFERRED
+FOR EACH ROW EXECUTE FUNCTION check_specialized_approval();
+CREATE CONSTRAINT TRIGGER application_specialized_approval
+AFTER INSERT OR UPDATE OR DELETE ON role_application DEFERRABLE INITIALLY DEFERRED
+FOR EACH ROW EXECUTE FUNCTION check_specialized_approval();
+
+CREATE FUNCTION check_feedback_request_accepted() RETURNS trigger
+LANGUAGE plpgsql SET search_path = xpression, pg_temp AS $$
+DECLARE request_status text;
+BEGIN
+    SELECT status INTO request_status FROM review_request WHERE request_id = NEW.request_id FOR SHARE;
+    IF request_status IS DISTINCT FROM 'accepted' THEN
+        RAISE EXCEPTION 'Feedback requires an accepted review request' USING ERRCODE = '23514';
+    END IF;
+    RETURN NEW;
+END;
+$$;
+CREATE TRIGGER feedback_requires_accepted_request BEFORE INSERT OR UPDATE ON mentor_feedback
+FOR EACH ROW EXECUTE FUNCTION check_feedback_request_accepted();
+
+CREATE FUNCTION protect_answered_request() RETURNS trigger
+LANGUAGE plpgsql SET search_path = xpression, pg_temp AS $$
+BEGIN
+    IF NEW.status &lt;&gt; 'accepted' AND EXISTS (SELECT 1 FROM mentor_feedback WHERE request_id = OLD.request_id) THEN
+        RAISE EXCEPTION 'A request with feedback must remain accepted' USING ERRCODE = '23514';
+    END IF;
+    RETURN NEW;
+END;
+$$;
+CREATE TRIGGER answered_request_remains_accepted BEFORE UPDATE OF status ON review_request
+FOR EACH ROW EXECUTE FUNCTION protect_answered_request();
+
+CREATE FUNCTION check_feedback_reply_owner() RETURNS trigger
+LANGUAGE plpgsql SET search_path = xpression, pg_temp AS $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM mentor_feedback mf JOIN creative_work cw USING (work_id)
+      WHERE mf.feedback_id = NEW.feedback_id AND cw.creator_id = NEW.creator_id) THEN
+        RAISE EXCEPTION 'Only the reviewed work creator can be recorded as its reply author' USING ERRCODE = '23514';
+    END IF;
+    RETURN NEW;
+END;
+$$;
+CREATE TRIGGER reply_requires_work_owner BEFORE INSERT OR UPDATE ON feedback_reply
+FOR EACH ROW EXECUTE FUNCTION check_feedback_reply_owner();
+
+CREATE FUNCTION open_report_case() RETURNS trigger
+LANGUAGE plpgsql SET search_path = xpression, pg_temp AS $$
+BEGIN
+    IF TG_TABLE_NAME = 'work_report' THEN
+        INSERT INTO moderation_case(report_id,recorded_at) VALUES (NEW.report_id,NEW.reported_at);
+    ELSE
+        INSERT INTO moderation_case(comment_report_id,recorded_at) VALUES (NEW.comment_report_id,NEW.reported_at);
+    END IF;
+    RETURN NEW;
+END;
+$$;
+CREATE TRIGGER work_report_opens_case AFTER INSERT ON work_report
+FOR EACH ROW EXECUTE FUNCTION open_report_case();
+CREATE TRIGGER comment_report_opens_case AFTER INSERT ON comment_report
+FOR EACH ROW EXECUTE FUNCTION open_report_case();
+
+CREATE FUNCTION require_report_case() RETURNS trigger
+LANGUAGE plpgsql SET search_path = xpression, pg_temp AS $$
+BEGIN
+    IF TG_TABLE_NAME = 'work_report' THEN
+        IF EXISTS (SELECT 1 FROM work_report WHERE report_id = NEW.report_id) AND
+          NOT EXISTS (SELECT 1 FROM moderation_case WHERE report_id = NEW.report_id) THEN
+            RAISE EXCEPTION 'Every work report requires exactly one moderation case' USING ERRCODE = '23514';
+        END IF;
+    ELSIF TG_TABLE_NAME = 'comment_report' THEN
+        IF EXISTS (SELECT 1 FROM comment_report WHERE comment_report_id = NEW.comment_report_id) AND
+          NOT EXISTS (SELECT 1 FROM moderation_case WHERE comment_report_id = NEW.comment_report_id) THEN
+            RAISE EXCEPTION 'Every comment report requires exactly one moderation case' USING ERRCODE = '23514';
+        END IF;
+    ELSE
+        IF OLD.report_id IS NOT NULL AND EXISTS (SELECT 1 FROM work_report WHERE report_id = OLD.report_id) AND
+          NOT EXISTS (SELECT 1 FROM moderation_case WHERE report_id = OLD.report_id) THEN
+            RAISE EXCEPTION 'A work report cannot lose its moderation case' USING ERRCODE = '23514';
+        END IF;
+        IF OLD.comment_report_id IS NOT NULL AND EXISTS (SELECT 1 FROM comment_report WHERE comment_report_id = OLD.comment_report_id) AND
+          NOT EXISTS (SELECT 1 FROM moderation_case WHERE comment_report_id = OLD.comment_report_id) THEN
+            RAISE EXCEPTION 'A comment report cannot lose its moderation case' USING ERRCODE = '23514';
+        END IF;
+    END IF;
+    RETURN NULL;
+END;
+$$;
+CREATE CONSTRAINT TRIGGER work_report_requires_case AFTER INSERT OR UPDATE ON work_report
+DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION require_report_case();
+CREATE CONSTRAINT TRIGGER comment_report_requires_case AFTER INSERT OR UPDATE ON comment_report
+DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION require_report_case();
+CREATE CONSTRAINT TRIGGER moderation_case_cannot_orphan_report AFTER UPDATE OR DELETE ON moderation_case
+DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION require_report_case();
+
+CREATE FUNCTION apply_moderation_decision() RETURNS trigger
+LANGUAGE plpgsql SET search_path = xpression, pg_temp AS $$
+DECLARE new_visibility text;
+BEGIN
+    IF NEW.status = 'closed' THEN
+        new_visibility := CASE WHEN NEW.action_taken = 'kept_available' THEN 'available' ELSE NEW.action_taken END;
+        IF NEW.report_id IS NOT NULL THEN
+            UPDATE creative_work SET visibility = new_visibility
+              WHERE work_id = (SELECT work_id FROM work_report WHERE report_id = NEW.report_id);
+        ELSE
+            UPDATE comment SET visibility = new_visibility
+              WHERE comment_id = (SELECT comment_id FROM comment_report WHERE comment_report_id = NEW.comment_report_id);
+        END IF;
+    END IF;
+    RETURN NEW;
+END;
+$$;
+CREATE TRIGGER closed_case_applies_visibility AFTER INSERT OR UPDATE ON moderation_case
+FOR EACH ROW EXECUTE FUNCTION apply_moderation_decision();
+
+CREATE FUNCTION protect_account_status() RETURNS trigger
+LANGUAGE plpgsql SET search_path = xpression, pg_temp AS $$
+BEGIN
+    IF TG_OP = 'INSERT' THEN
+        IF NEW.status &lt;&gt; 'active' THEN
+            RAISE EXCEPTION 'New accounts start active; insert a status_change for later actions' USING ERRCODE = '23514';
+        END IF;
+    ELSIF NEW.status IS DISTINCT FROM OLD.status AND pg_trigger_depth() &lt; 2 THEN
+        RAISE EXCEPTION 'Change status by inserting status_change; direct status updates are not allowed' USING ERRCODE = '23514';
+    END IF;
+    RETURN NEW;
+END;
+$$;
+CREATE TRIGGER account_status_requires_audit BEFORE INSERT OR UPDATE OF status ON account
+FOR EACH ROW EXECUTE FUNCTION protect_account_status();
+
+CREATE FUNCTION apply_status_change() RETURNS trigger
+LANGUAGE plpgsql SET search_path = xpression, pg_temp AS $$
+DECLARE previous_status text;
+BEGIN
+    SELECT status INTO previous_status FROM account WHERE account_id = NEW.account_id FOR UPDATE;
+    IF NOT FOUND THEN RAISE EXCEPTION 'Target account does not exist' USING ERRCODE = '23503'; END IF;
+    IF NEW.new_status = previous_status THEN
+        RAISE EXCEPTION 'New status must differ from the existing status' USING ERRCODE = '23514';
+    END IF;
+    NEW.old_status := previous_status;
+    UPDATE account SET status = NEW.new_status WHERE account_id = NEW.account_id;
+    RETURN NEW;
+END;
+$$;
+CREATE TRIGGER status_change_updates_account BEFORE INSERT ON status_change
+FOR EACH ROW EXECUTE FUNCTION apply_status_change();
+
+CREATE FUNCTION reject_audit_mutation() RETURNS trigger
+LANGUAGE plpgsql SET search_path = xpression, pg_temp AS $$
+BEGIN
+    RAISE EXCEPTION 'Status change history is append-only' USING ERRCODE = '23514';
+END;
+$$;
+CREATE TRIGGER status_history_append_only BEFORE UPDATE OR DELETE ON status_change
+FOR EACH ROW EXECUTE FUNCTION reject_audit_mutation();
+
+-- Index referencing columns used in role queues, portfolio, search and recent activity.
+CREATE INDEX account_creator_search_idx ON account(discipline,open_to_commissions) WHERE role = 'creator' AND status = 'active';
+CREATE INDEX application_queue_idx ON role_application(status,submitted_at);
+CREATE INDEX application_admin_idx ON role_application(administrator_id);
+CREATE INDEX work_creator_published_idx ON creative_work(creator_id,published_at DESC);
+CREATE INDEX work_public_feed_idx ON creative_work(published_at DESC) WHERE visibility = 'available' AND NOT archived;
+CREATE INDEX request_mentor_queue_idx ON review_request(mentor_id,status,requested_at);
+CREATE INDEX request_work_owner_idx ON review_request(work_id,creator_id);
+CREATE INDEX feedback_work_idx ON mentor_feedback(work_id,written_at DESC);
+CREATE INDEX feedback_mentor_idx ON mentor_feedback(mentor_id);
+CREATE INDEX reply_creator_idx ON feedback_reply(creator_id);
+CREATE INDEX nomination_queue_idx ON nomination(status,nominated_at);
+CREATE INDEX nomination_work_idx ON nomination(work_id);
+CREATE INDEX nomination_mentor_idx ON nomination(mentor_id);
+CREATE INDEX nomination_moderator_idx ON nomination(moderator_id);
+CREATE INDEX opportunity_scout_idx ON opportunity(scout_id,starts_on);
+CREATE INDEX invitation_creator_idx ON invitation(creator_id,status);
+CREATE INDEX conversation_creator_idx ON conversation(created_by);
+CREATE INDEX membership_account_idx ON conversation_member(account_id);
+CREATE INDEX message_conversation_idx ON private_message(conversation_id,sent_at);
+CREATE INDEX message_sender_membership_idx ON private_message(conversation_id,sender_id);
+CREATE INDEX scout_message_scout_idx ON scout_message(scout_id,sent_at);
+CREATE INDEX scout_message_creator_idx ON scout_message(creator_id,sent_at);
+CREATE INDEX scout_message_conversation_scout_idx ON scout_message(conversation_id,scout_id);
+CREATE INDEX scout_message_conversation_creator_idx ON scout_message(conversation_id,creator_id);
+CREATE INDEX candidate_creator_idx ON scout_candidate(creator_id);
+CREATE INDEX comment_work_idx ON comment(work_id,created_at);
+CREATE INDEX comment_author_idx ON comment(author_id);
+CREATE INDEX work_report_work_idx ON work_report(work_id,reported_at);
+CREATE INDEX work_report_reporter_idx ON work_report(reporter_id);
+CREATE INDEX comment_report_comment_idx ON comment_report(comment_id);
+CREATE INDEX comment_report_reporter_idx ON comment_report(reporter_id);
+CREATE INDEX moderation_queue_idx ON moderation_case(status,recorded_at);
+CREATE INDEX moderation_moderator_idx ON moderation_case(moderator_id);
+CREATE INDEX user_report_account_idx ON user_report(account_id);
+CREATE INDEX user_report_reporter_idx ON user_report(reporter_id);
+CREATE INDEX restriction_report_idx ON account_restriction(user_report_id);
+CREATE INDEX restriction_moderator_idx ON account_restriction(moderator_id);
+CREATE INDEX status_account_history_idx ON status_change(account_id,changed_at DESC);
+CREATE INDEX status_administrator_idx ON status_change(administrator_id);
+CREATE INDEX analytics_admin_idx ON analytics_report(administrator_id);
+CREATE INDEX follow_creator_idx ON follow(creator_id);
+CREATE INDEX saved_work_work_idx ON saved_work(work_id);
+CREATE INDEX ticket_account_idx ON help_ticket(account_id,opened_at);
+CREATE INDEX ticket_assigned_idx ON help_ticket(assigned_to,status);
+CREATE INDEX work_category_category_idx ON work_category(category_id);
+CREATE INDEX setting_administrator_idx ON platform_setting(updated_by);
+CREATE INDEX notification_account_idx ON notification(account_id,created_at DESC);
+CREATE INDEX notification_unread_idx ON notification(account_id,created_at DESC) WHERE read_at IS NULL;
+CREATE INDEX notification_work_idx ON notification(work_id);
+
+-- Safe projection for presentation/public listings. This is not an authorization boundary.
+CREATE VIEW public_work_feed AS
+SELECT cw.work_id,cw.creator_id,a.name AS creator_name,cw.title,cw.media_type,cw.description,
+       cw.soundcloud_url,cw.content_text,cw.published_at,
+       EXISTS (SELECT 1 FROM nomination n WHERE n.work_id = cw.work_id AND n.status = 'approved') AS community_featured
+FROM creative_work cw JOIN account a ON a.account_id = cw.creator_id
+WHERE cw.visibility = 'available' AND NOT cw.archived AND a.status = 'active';
+
+CREATE VIEW scout_creator_directory AS
+SELECT a.account_id AS creator_id,a.name,a.discipline,a.open_to_commissions,a.bio,
+       count(cw.work_id) AS visible_work_count
+FROM account a LEFT JOIN creative_work cw
+  ON cw.creator_id = a.account_id AND cw.visibility = 'available' AND NOT cw.archived
+WHERE a.role = 'creator' AND a.status = 'active'
+GROUP BY a.account_id,a.name,a.discipline,a.open_to_commissions,a.bio;
+
+CREATE VIEW moderation_queue AS
+SELECT mc.case_id,mc.report_id,mc.comment_report_id,mc.moderator_id,mc.status,
+       coalesce(wr.reason,cr.reason) AS report_reason,wr.reason_type,
+       coalesce(wr.reported_at,cr.reported_at) AS reported_at,
+       coalesce(wr.work_id,c.work_id) AS work_id
+FROM moderation_case mc
+LEFT JOIN work_report wr ON wr.report_id = mc.report_id
+LEFT JOIN comment_report cr ON cr.comment_report_id = mc.comment_report_id
+LEFT JOIN comment c ON c.comment_id = cr.comment_id;
+
+COMMENT ON SCHEMA xpression IS 'Sprint Cycle III: PostgreSQL implementation of all 22 Sprint II entities plus 8 justified support/junction entities.';
+COMMENT ON TABLE account IS 'One stored person, exactly one role. Password hashes only; authentication and session identity remain application responsibilities.';
+COMMENT ON COLUMN account.password_hash IS 'Encoded salted password hash produced by the application; never a plaintext password. Database checks nonempty storage, not cryptographic correctness.';
+COMMENT ON COLUMN account.email IS 'Canonical lowercase trimmed email, unique across every role.';
+COMMENT ON COLUMN account.bio IS 'Added for creator profiles and scout discovery.';
+COMMENT ON TABLE role_application IS 'Mentor/scout enrollment approval. Accepted application and matching account are committed atomically; deferred triggers preserve approval.';
+COMMENT ON COLUMN role_application.approved_account_id IS 'Added accepted-application link; role and canonical email must match the approved account.';
+COMMENT ON TABLE creative_work IS 'One row per portfolio work; feature/archive/edit/moderation update this row. Removal uses visibility=removed.';
+COMMENT ON COLUMN creative_work.featured IS 'Creator-selected portfolio feature. Community feature approval is stored separately in nomination.';
+COMMENT ON COLUMN creative_work.content_text IS 'Added to store writing itself rather than only a description; binary media are external URLs in work_media.';
+COMMENT ON COLUMN creative_work.visibility IS 'Added moderation state applied by closing a moderation case: available, hidden or removed.';
+COMMENT ON TABLE work_media IS 'Added ordered external media attachments; URLs are references, not uploaded file storage.';
+COMMENT ON TABLE review_request IS 'Composite ownership FK ensures the requester owns the work. Mentor must be an Account with mentor role.';
+COMMENT ON TABLE mentor_feedback IS 'One structured feedback per accepted request; composite FK keeps work and mentor consistent with that request.';
+COMMENT ON TABLE feedback_reply IS 'At most one reply per feedback; added creator_id and trigger ensure the recorded author owns the reviewed work.';
+COMMENT ON TABLE nomination IS 'Mentor nominates; moderator approves/declines. Approved rows drive the featured community feed.';
+COMMENT ON TABLE opportunity IS 'Talent scout opportunity; invitations are the sole opportunity-to-creator relationship.';
+COMMENT ON TABLE invitation IS 'Unique opportunity/creator pair with response status and added response timestamp.';
+COMMENT ON TABLE scout_message IS 'Original scout-to-creator message entity retained; optional shared conversation supports creator replies without changing its meaning.';
+COMMENT ON TABLE scout_candidate IS 'Added private scout shortlist; exactly one row per scout/creator pair.';
+COMMENT ON TABLE conversation IS 'Added general private conversations shared by all roles.';
+COMMENT ON TABLE conversation_member IS 'Added membership and read tracking. The application restricts conversation reads to authenticated members.';
+COMMENT ON TABLE private_message IS 'Added general conversation messages; composite FK requires the stored sender to be a conversation member.';
+COMMENT ON TABLE comment IS 'Work discussion with optional GIF and added moderation visibility.';
+COMMENT ON TABLE work_report IS 'Every insert atomically opens exactly one moderation case; reason_type supports copyright/fraud escalation.';
+COMMENT ON TABLE comment_report IS 'Added reporting for comments; every insert opens exactly one moderation case.';
+COMMENT ON TABLE moderation_case IS 'One work OR comment report, never both. Nullable moderator permits an unassigned open queue entry; decisions require moderator assignment.';
+COMMENT ON COLUMN moderation_case.report_id IS 'Work-report relationship retained; NULL only for a comment-report case.';
+COMMENT ON COLUMN moderation_case.moderator_id IS 'Sprint II required moderator relaxed only for newly auto-opened unassigned cases; required after the open state.';
+COMMENT ON COLUMN moderation_case.escalation_reason IS 'Added explanation for copyright, fraud or other escalation; required while escalated.';
+COMMENT ON TABLE user_report IS 'A report against one Account; may have several moderator restrictions over time.';
+COMMENT ON TABLE account_restriction IS 'Moderator warning, temporary restriction or ban referral. Does not change account.status or authorize a ban.';
+COMMENT ON COLUMN account_restriction.expires_at IS 'Required future expiry for restrict, NULL for warnings/referrals. Application checks restrictions during actions.';
+COMMENT ON TABLE status_change IS 'Append-only administrator status audit. Inserting a row locks and updates the target Account; direct status changes fail.';
+COMMENT ON COLUMN status_change.old_status IS 'Captured by trigger from locked account; supplied input is ignored.';
+COMMENT ON TABLE analytics_report IS 'Saved report criteria and result summary; dates must be ordered.';
+COMMENT ON TABLE follow IS 'Unique account-to-creator relationship; self-follow is rejected.';
+COMMENT ON TABLE saved_work IS 'Unique account-to-work bookmark relationship.';
+COMMENT ON TABLE help_ticket IS 'Account support request; added assignment, response and resolution date support shared help queues.';
+COMMENT ON TABLE category IS 'Media, genre and tag vocabulary; unique category name within kind.';
+COMMENT ON TABLE work_category IS 'Added many-to-many work/category junction, one association per pair.';
+COMMENT ON TABLE platform_setting IS 'Unique setting name; optional administrator audit metadata. Application validates setting-specific values and honors switches.';
+COMMENT ON TABLE notification IS 'Added per-account notification/read tracking. Application writes workflow notifications in its transaction.';
+COMMENT ON VIEW public_work_feed IS 'Visible, unarchived work by active creators, excluding credential fields; no implicit signed-in-user access control.';
+COMMENT ON VIEW scout_creator_directory IS 'Read-only creator search projection; searching inserts no row.';
+COMMENT ON VIEW moderation_queue IS 'Combined work/comment reports for moderator presentation.';
+
+-- Remaining APPLICATION responsibilities (not claimed as database authorization):
+-- verify salted password hashes, establish sessions, authorize the authenticated actor;
+-- filter feedback to its owning creator and messages/notifications/shortlists to their owner;
+-- permit only the responsible mentor/scout/moderator/administrator to execute that workflow;
+-- honor active account restrictions, GIF/comment switches and open-to-commissions contact policy;
+-- validate media content/file safety and storage ownership; deliver notifications;
+-- perform privacy-safe analytics and escalation routing. Do not expose the DB owner login to users.
+</code></pre></div></details><details><summary>02_seed.sql</summary><div class="source"><p><a href="database/02_seed.sql">Open source file</a></p><pre><code>\set ON_ERROR_STOP on
+SET search_path TO xpression, public;
+
+-- Load after 01_schema.sql in ONE transaction:
+-- psql --single-transaction -f 01_schema.sql -f 02_seed.sql
+-- Fixed IDs make the presentation queries readable. Run only on an empty schema.
+-- All people, addresses, external asset URLs, and opportunities below are fixtures.
+-- The scrypt string is a precomputed demonstration hash, never a real user's password.
+-- This database sprint does not connect these fixtures to the Sprint I file-based login.
+
+INSERT INTO account
+    (account_id, name, email, password_hash, role, status, discipline,
+     open_to_commissions, bio, created_at)
+SELECT id, name, email,
+       'scrypt$xpression-sprint-iii-demo$23a01113e930eeda51f9aa95f986e0b19d018c1ab6a28f5cdf19e3cf8f14be94',
+       role, 'active', discipline, commissions, bio, '2026-10-01 12:00:00+00'::timestamptz
+FROM (VALUES
+    (1, 'Avery Morgan', 'avery.morgan@example.org', 'administrator', NULL, false,
+     'Coordinates account approvals and platform reporting.'),
+    (2, 'Simone Reed', 'simone.reed@example.org', 'moderator', NULL, false,
+     'Reviews community reports and featured-work nominations.'),
+    (3, 'Amara Cole', 'amara.cole@example.org', 'creator', 'Writing', true,
+     'Writes poems and short essays about night travel.'),
+    (4, 'Luis Ortega', 'luis.ortega@example.org', 'creator', 'Visual art', true,
+     'Makes studies of studio walls, light, and leftover paint.'),
+    (5, 'Nia Brooks', 'nia.brooks@example.org', 'creator', 'Music', true,
+     'Records indie soul songs and acoustic waterfront demos.'),
+    (6, 'Jordan Lee', 'jordan.lee@example.org', 'creator', 'Writing', false,
+     'Experiments with short fiction and promotional copy.'),
+    (7, 'Maya Chen', 'maya.chen@example.org', 'mentor', 'Writing', false,
+     'Poetry editor offering structured feedback on imagery and pacing.'),
+    (8, 'Theo Grant', 'theo.grant@example.org', 'mentor', 'Music', false,
+     'Producer helping emerging songwriters develop arrangements.'),
+    (9, 'Elena Park', 'elena.park@example.org', 'talent_scout', 'Music', false,
+     'Books emerging performers for community arts events.'),
+    (10, 'Marcus Bell', 'marcus.bell@example.org', 'talent_scout', 'Visual art', false,
+     'Commissions local illustrators and exhibition work.')
+) AS fixture(id, name, email, role, discipline, commissions, bio);
+
+-- Specialized accounts require accepted applications by the end of this transaction.
+INSERT INTO role_application
+    (application_id, administrator_id, approved_account_id, applicant_name, email,
+     requested_role, statement, status, submitted_at, decided_at)
+VALUES
+    (1, 1, 7, 'Maya Chen', 'maya.chen@example.org', 'mentor',
+     'I have edited a community poetry journal for six years and will provide specific revision advice.',
+     'accepted', '2026-09-25 09:00:00+00', '2026-10-01 10:00:00+00'),
+    (2, 1, 8, 'Theo Grant', 'theo.grant@example.org', 'mentor',
+     'I produce independent recordings and want to mentor songwriters on structure and arrangement.',
+     'accepted', '2026-09-25 10:00:00+00', '2026-10-01 10:10:00+00'),
+    (3, 1, 9, 'Elena Park', 'elena.park@example.org', 'talent_scout',
+     'I coordinate paid local performances and will invite creators through clear project briefs.',
+     'accepted', '2026-09-26 09:00:00+00', '2026-10-01 10:20:00+00'),
+    (4, 1, 10, 'Marcus Bell', 'marcus.bell@example.org', 'talent_scout',
+     'I commission illustrations for neighborhood exhibitions and public arts projects.',
+     'accepted', '2026-09-26 10:00:00+00', '2026-10-01 10:30:00+00'),
+    (5, NULL, NULL, 'Priya Shah', 'priya.shah@example.org', 'mentor',
+     'I teach drawing workshops and would like to review visual-art portfolios.',
+     'pending', '2026-11-02 09:00:00+00', NULL),
+    (6, 1, NULL, 'Owen Ellis', 'owen.ellis@example.org', 'talent_scout',
+     'I would like to contact creators for a proposed festival that is still seeking funding.',
+     'rejected', '2026-10-25 09:00:00+00', '2026-10-28 11:00:00+00');
+
+INSERT INTO creative_work
+    (work_id, creator_id, title, media_type, description, content_text,
+     soundcloud_url, featured, archived, published_at)
+VALUES
+    (1, 3, 'Night bus', 'writing', 'A poem about the people who share the final ride home.',
+     'At the last stop, the windows hold the city like a second sky.',
+     NULL, true, false, '2026-10-15 18:00:00+00'),
+    (2, 4, 'Studio wall study', 'visual_art', 'A study of afternoon light crossing a paint-marked studio wall.',
+     NULL, NULL, false, false, '2026-10-18 15:00:00+00'),
+    (3, 5, 'Harbor demo', 'music', 'An acoustic indie soul demo recorded beside the harbor.',
+     NULL, 'https://soundcloud.com/xpression-demo/harbor-demo',
+     false, false, '2026-10-20 17:00:00+00'),
+    (4, 3, 'After the last train', 'writing', 'A short essay about the walk home when the station closes.',
+     'The timetable ends before the night does; we find our own route home.',
+     NULL, false, false, '2026-10-27 20:00:00+00'),
+    (5, 4, 'Windowlight series', 'visual_art', 'Three illustrations tracing the same window through a changing day.',
+     NULL, NULL, false, false, '2026-10-28 16:00:00+00'),
+    (6, 5, 'Low tide session', 'music', 'A live rehearsal with a shorter introduction and a layered chorus.',
+     NULL, 'https://soundcloud.com/xpression-demo/low-tide-session',
+     false, false, '2026-11-01 18:00:00+00'),
+    (7, 6, 'Midnight messages', 'writing', 'An experimental text post submitted to the community feed.',
+     'Repeated unsolicited promotional messages were included in the original submission.',
+     NULL, false, false, '2026-11-02 21:00:00+00');
+
+INSERT INTO work_media (media_id, work_id, asset_url, alt_text, position) VALUES
+    (1, 2, 'https://example.org/xpression/studio-wall-study.jpg',
+     'Warm afternoon light on a textured studio wall.', 1),
+    (2, 5, 'https://example.org/xpression/windowlight-morning.jpg',
+     'Blue morning light through an illustrated window.', 1),
+    (3, 5, 'https://example.org/xpression/windowlight-evening.jpg',
+     'Orange evening light through the same illustrated window.', 2);
+
+INSERT INTO category (category_id, name, kind) VALUES
+    (1, 'Writing', 'media'), (2, 'Visual art', 'media'), (3, 'Music', 'media'),
+    (4, 'Poetry', 'genre'), (5, 'Indie soul', 'genre'), (6, 'Waterfront', 'tag');
+INSERT INTO work_category (work_id, category_id) VALUES
+    (1, 1), (1, 4), (2, 2), (3, 3), (3, 5), (3, 6),
+    (4, 1), (4, 4), (5, 2), (6, 3), (6, 6), (7, 1);
+
+INSERT INTO review_request
+    (request_id, creator_id, mentor_id, work_id, note, status, requested_at)
+VALUES
+    (1, 3, 7, 1, 'Does the ending connect clearly to the opening image?',
+     'accepted', '2026-10-16 09:00:00+00'),
+    (2, 5, 8, 3, 'Does the chorus arrive too late in this arrangement?',
+     'accepted', '2026-10-21 09:00:00+00'),
+    (3, 4, 7, 2, 'Could you comment on the story suggested by the light and crop?',
+     'waiting', '2026-11-02 09:00:00+00'),
+    (4, 5, 8, 6, 'Would you review this live revision before Friday?',
+     'declined', '2026-11-02 10:00:00+00');
+
+INSERT INTO mentor_feedback
+    (feedback_id, work_id, mentor_id, request_id, strengths, improvements,
+     recommendation, written_at)
+VALUES
+    (1, 1, 7, 1, 'The bus-window image gives the poem a clear sense of place.',
+     'The middle stanza repeats the same feeling without adding a new detail.',
+     'Replace one abstract line with a detail from another passenger.', '2026-10-18 14:00:00+00'),
+    (2, 3, 8, 2, 'The vocal melody and acoustic texture are memorable.',
+     'The extended introduction delays the strongest hook.',
+     'Try an eight-bar introduction and compare both versions with listeners.', '2026-10-23 14:00:00+00');
+
+INSERT INTO feedback_reply (reply_id, feedback_id, creator_id, reply_text, replied_at)
+VALUES
+    (1, 1, 3, 'I replaced the abstract line with the passenger folding a paper map. Thank you.',
+     '2026-10-19 12:00:00+00');
+
+INSERT INTO nomination
+    (nomination_id, mentor_id, work_id, moderator_id, reason, status, nominated_at, decided_at)
+VALUES
+    (1, 8, 3, NULL, 'A strong melody and a focused voice make this a promising emerging-artist feature.',
+     'pending', '2026-10-24 09:00:00+00', NULL),
+    (2, 7, 1, 2, 'The revised imagery creates an accessible and distinctive poem for the featured feed.',
+     'approved', '2026-10-20 09:00:00+00', '2026-10-21 12:00:00+00');
+
+INSERT INTO scout_message (message_id, scout_id, creator_id, body, sent_at) VALUES
+    (1, 9, 5, 'Your Harbor demo would suit our waterfront showcase. Are you available in December?',
+     '2026-10-25 13:00:00+00'),
+    (2, 10, 4, 'The Windowlight series matches the theme of our neighborhood arts commission.',
+     '2026-10-29 13:00:00+00');
+
+INSERT INTO opportunity (opportunity_id, scout_id, title, starts_on, ends_on, description) VALUES
+    (1, 9, 'Waterfront winter showcase', '2026-12-05', '2026-12-05',
+     'A paid twenty-minute acoustic set for the community arts evening.'),
+    (2, 10, 'Neighborhood light illustration commission', '2026-12-01', '2026-12-20',
+     'Create three illustrations for a neighborhood arts exhibition.'),
+    (3, 9, 'Night stories listening room', '2026-12-12', '2026-12-12',
+     'An evening combining spoken-word poetry and acoustic music.');
+
+INSERT INTO invitation (invitation_id, opportunity_id, creator_id, status, invited_at, responded_at) VALUES
+    (1, 1, 5, 'sent', '2026-10-26 13:00:00+00', NULL),
+    (2, 2, 4, 'accepted', '2026-10-30 13:00:00+00', '2026-10-31 10:00:00+00'),
+    (3, 3, 3, 'accepted', '2026-11-01 13:00:00+00', '2026-11-01 16:00:00+00'),
+    (4, 3, 5, 'declined', '2026-11-01 13:05:00+00', '2026-11-02 08:00:00+00');
+
+-- Each report opens exactly one case through the database trigger.
+INSERT INTO work_report (report_id, work_id, reason, reporter_name, reported_at) VALUES
+    (1, 2, 'The caption may contain an unrelated advertisement; please review its context.',
+     'Amara Cole', '2026-11-02 14:00:00+00'),
+    (2, 7, 'This submission repeats unsolicited promotional messages rather than presenting original work.',
+     'Luis Ortega', '2026-11-02 22:00:00+00');
+UPDATE moderation_case
+SET moderator_id = 2, findings = 'Checking the original image and caption before making a decision.',
+    status = 'in_review'
+WHERE report_id = 1;
+UPDATE moderation_case
+SET moderator_id = 2, findings = 'The submission is repeated promotional spam; hide it from the public feed.',
+    action_taken = 'hidden', status = 'closed'
+WHERE report_id = 2;
+
+INSERT INTO user_report (user_report_id, account_id, reason, reported_at) VALUES
+    (1, 6, 'Repeated unsolicited messages continued after creators asked for contact to stop.',
+     '2026-11-02 22:10:00+00');
+INSERT INTO account_restriction
+    (restriction_id, user_report_id, moderator_id, action_type, recorded_at, expires_at, notes)
+VALUES (1, 1, 2, 'restrict', '2026-11-03 09:00:00+00', '2026-11-10 09:00:00+00',
+        'Temporarily restrict unsolicited contact; administrator separately reviewed account suspension.');
+-- The status-change command records the administrator and updates account.status atomically.
+INSERT INTO status_change (change_id, administrator_id, account_id, new_status, changed_at)
+VALUES (1, 1, 6, 'suspended', '2026-11-03 09:15:00+00');
+
+INSERT INTO analytics_report
+    (report_id, administrator_id, report_type, date_from, date_to, generated_at, result_summary)
+VALUES
+    (1, 1, 'creative_posts', '2026-10-01', '2026-11-03', '2026-11-03 10:00:00+00',
+     '7 creative works: 3 writing, 2 visual art, 2 music. One work hidden after moderation.'),
+    (2, 1, 'accounts', '2026-10-01', '2026-11-03', '2026-11-03 10:05:00+00',
+     '10 accounts across 5 roles: 9 active and 1 suspended.');
+
+INSERT INTO comment (comment_id, work_id, author_id, body, gif_url, created_at) VALUES
+    (1, 1, 5, 'The image of the city in the bus window stayed with me.', NULL, '2026-10-16 13:00:00+00'),
+    (2, 1, 4, 'The final line feels like the moment the bus turns toward home.',
+     'https://example.org/xpression/night-bus-reaction.gif', '2026-10-17 13:00:00+00'),
+    (3, 3, 6, 'Buy my unrelated newsletter instead of listening to this track.', NULL, '2026-11-01 15:00:00+00'),
+    (4, 3, 3, 'The acoustic arrangement leaves room for the vocal. I would love to hear it live.',
+     NULL, '2026-10-22 13:00:00+00');
+INSERT INTO comment_report (comment_report_id, comment_id, reporter_id, reason, reported_at)
+VALUES (1, 3, 3, 'The reply is promotional spam unrelated to the song.', '2026-11-01 16:00:00+00');
+
+INSERT INTO follow (follow_id, follower_id, creator_id) VALUES
+    (1, 3, 5), (2, 4, 3), (3, 5, 4), (4, 7, 3);
+INSERT INTO saved_work (save_id, account_id, work_id, saved_at) VALUES
+    (1, 3, 3, '2026-10-22 14:00:00+00'),
+    (2, 9, 3, '2026-10-25 14:00:00+00'),
+    (3, 10, 5, '2026-10-29 14:00:00+00');
+INSERT INTO scout_candidate (candidate_id, scout_id, creator_id, notes, saved_at) VALUES
+    (1, 9, 5, 'Strong fit for small acoustic venues; awaiting showcase response.', '2026-10-25 14:05:00+00'),
+    (2, 10, 4, 'Windowlight palette fits the neighborhood exhibition brief.', '2026-10-29 14:05:00+00');
+
+INSERT INTO help_ticket
+    (ticket_id, account_id, subject, body, status, opened_at, assigned_to, response, resolved_at) VALUES
+    (1, 5, 'SoundCloud preview is missing', 'My permalink opens, but I need help checking the preview configuration.',
+     'open', '2026-11-02 12:00:00+00', 2, NULL, NULL),
+    (2, 4, 'Correct image order', 'The window illustrations should show morning before evening.',
+     'resolved', '2026-10-29 12:00:00+00', 2,
+     'Updated the attachment positions so morning is first and evening is second.', '2026-10-30 10:00:00+00');
+INSERT INTO platform_setting (setting_id, name, value) VALUES
+    (1, 'comments_enabled', 'true'), (2, 'gifs_enabled', 'true'),
+    (3, 'upload_note', 'Publish writing, visual art, or a SoundCloud music permalink.'),
+    (4, 'moderation_rule', 'Feedback must address the work. Harassment, threats, and spam may be hidden.');
+
+INSERT INTO notification
+    (notification_id, account_id, kind, body, work_id, read_at, created_at)
+VALUES
+    (1, 3, 'feedback', 'Maya Chen added structured feedback to Night bus.', 1,
+     '2026-10-19 11:00:00+00', '2026-10-18 14:00:00+00'),
+    (2, 5, 'invitation', 'Elena Park invited you to Waterfront winter showcase.', NULL,
+     NULL, '2026-10-26 13:00:00+00'),
+    (3, 2, 'moderation', 'A new work report needs review: Studio wall study.', 2,
+     NULL, '2026-11-02 14:00:00+00');
+
+INSERT INTO conversation (conversation_id, subject, created_by, created_at) VALUES
+    (1, 'Waterfront showcase scheduling', 9, '2026-10-27 13:00:00+00'),
+    (2, 'Night bus revision follow-up', 7, '2026-10-20 13:00:00+00');
+INSERT INTO conversation_member (conversation_id, account_id, joined_at, last_read_at) VALUES
+    (1, 9, '2026-10-27 13:00:00+00', '2026-10-27 15:00:00+00'),
+    (1, 5, '2026-10-27 13:00:00+00', '2026-10-27 14:00:00+00'),
+    (2, 7, '2026-10-20 13:00:00+00', '2026-10-20 15:00:00+00'),
+    (2, 3, '2026-10-20 13:00:00+00', '2026-10-20 14:00:00+00');
+INSERT INTO private_message (message_id, conversation_id, sender_id, body, sent_at) VALUES
+    (1, 1, 9, 'The paid set is twenty minutes. Would an early evening slot suit your schedule?', '2026-10-27 13:05:00+00'),
+    (2, 1, 5, 'Yes, an early evening slot works. I am confirming transport before accepting.', '2026-10-27 14:00:00+00'),
+    (3, 2, 7, 'The new paper-map image makes the middle stanza much more concrete.', '2026-10-20 13:05:00+00'),
+    (4, 2, 3, 'Thank you. I will read the revision aloud at the next workshop.', '2026-10-20 14:00:00+00');
+
+-- Explicit fixture IDs must leave the identity sequences ready for normal INSERTs.
+DO $$
+DECLARE sequence_row record;
+BEGIN
+    FOR sequence_row IN
+        SELECT table_name, column_name
+        FROM information_schema.columns
+        WHERE table_schema = 'xpression' AND is_identity = 'YES'
+    LOOP
+        EXECUTE format(
+            'SELECT setval(pg_get_serial_sequence(%L, %L), coalesce(max(%I), 1), count(*) &gt; 0) FROM %I.%I',
+            'xpression.' || quote_ident(sequence_row.table_name), sequence_row.column_name,
+            sequence_row.column_name, 'xpression', sequence_row.table_name);
+    END LOOP;
+END $$;
+
+-- Force deferred approval and exact-one-case rules before setup reports success.
+SET CONSTRAINTS ALL IMMEDIATE;
+
+\echo 'Loaded meaningful sample data across every application table.'
+</code></pre></div></details><details><summary>presentation_sample_data.sql</summary><div class="source"><p><a href="database/presentation_sample_data.sql">Open source file</a></p><pre><code>-- 1. Accounts: meaningful names across all five system roles.
+-- Credential fields are excluded from this presentation view.
+SELECT account_id, name, email, role, status, discipline, open_to_commissions
+FROM xpression.account
+ORDER BY account_id;
+
+-- 2. Creative work: each piece belongs to its named creator.
+SELECT w.work_id, w.title, creator.name AS creator, w.media_type,
+       w.description, w.featured, w.archived, w.visibility, w.published_at
+FROM xpression.creative_work AS w
+JOIN xpression.account AS creator ON creator.account_id = w.creator_id
+ORDER BY w.work_id;
+
+-- 3. Opportunities: each event or commission belongs to a talent scout.
+SELECT o.opportunity_id, o.title, scout.name AS talent_scout,
+       o.starts_on, o.ends_on, o.description
+FROM xpression.opportunity AS o
+JOIN xpression.account AS scout ON scout.account_id = o.scout_id
+ORDER BY o.opportunity_id;
+
+-- 4. Invitations: a creator and an opportunity are linked by one invitation.
+SELECT i.invitation_id, creator.name AS creator, o.title AS opportunity,
+       i.status, i.invited_at, i.responded_at
+FROM xpression.invitation AS i
+JOIN xpression.account AS creator ON creator.account_id = i.creator_id
+JOIN xpression.opportunity AS o ON o.opportunity_id = i.opportunity_id
+ORDER BY i.invitation_id;
+
+-- 5. Review requests: see the creator, assigned mentor, and actual work together.
+SELECT r.request_id, creator.name AS creator, mentor.name AS mentor,
+       w.title AS creative_work, r.note, r.status, r.requested_at
+FROM xpression.review_request AS r
+JOIN xpression.account AS creator ON creator.account_id = r.creator_id
+JOIN xpression.account AS mentor ON mentor.account_id = r.mentor_id
+JOIN xpression.creative_work AS w ON w.work_id = r.work_id
+ORDER BY r.request_id;
+</code></pre></div></details><details><summary>03_queries.sql</summary><div class="source"><p><a href="database/03_queries.sql">Open source file</a></p><pre><code>\set ON_ERROR_STOP on
+\pset pager off
+SET search_path TO xpression, public;
+
+-- Run the whole file, or copy one SELECT into psql/pgAdmin for the presentation.
+-- All displayed dates are fixed sample dates, so the demonstration stays repeatable.
+
+\echo 'Q1 | Retrieve/search: active music creators accepting commissions'
+SELECT a.account_id, a.name, a.discipline, a.open_to_commissions,
+       count(w.work_id) AS portfolio_pieces
+FROM account AS a
+JOIN creative_work AS w ON w.creator_id = a.account_id
+WHERE a.role = 'creator'
+  AND a.status = 'active'
+  AND a.open_to_commissions
+  AND a.discipline ILIKE '%music%'
+  AND NOT w.archived
+  AND w.visibility = 'available'
+GROUP BY a.account_id, a.name, a.discipline, a.open_to_commissions
+ORDER BY a.name;
+
+\echo 'Q2 | Related data / publish use case: Amara Cole portfolio'
+SELECT w.work_id, a.name AS creator, w.title, w.media_type,
+       w.featured, w.published_at
+FROM creative_work AS w
+JOIN account AS a ON a.account_id = w.creator_id
+WHERE a.email = 'amara.cole@example.org' AND NOT w.archived
+  AND w.visibility = 'available'
+ORDER BY w.published_at DESC;
+
+\echo 'Q3 | Related data: structured mentor feedback and creator reply'
+-- The signed-in creator ID must come from the future server session, not a browser field.
+-- This scoped SELECT demonstrates rule 9; the database owner can still inspect all rows.
+SELECT w.title, creator.name AS creator, mentor.name AS mentor,
+       rr.status AS request_status, mf.strengths, mf.improvements,
+       mf.recommendation, fr.reply_text
+FROM mentor_feedback AS mf
+JOIN review_request AS rr ON rr.request_id = mf.request_id
+JOIN creative_work AS w ON w.work_id = mf.work_id
+JOIN account AS creator ON creator.account_id = w.creator_id
+JOIN account AS mentor ON mentor.account_id = mf.mentor_id
+LEFT JOIN feedback_reply AS fr ON fr.feedback_id = mf.feedback_id
+WHERE w.creator_id = 3
+ORDER BY mf.written_at DESC;
+
+\echo 'Q4 | Invitation use case: creator, invitation, opportunity, and scout'
+SELECT o.title AS opportunity, scout.name AS scout, creator.name AS creator,
+       o.starts_on, o.ends_on, i.status AS invitation_status
+FROM invitation AS i
+JOIN opportunity AS o ON o.opportunity_id = i.opportunity_id
+JOIN account AS scout ON scout.account_id = o.scout_id
+JOIN account AS creator ON creator.account_id = i.creator_id
+ORDER BY o.starts_on, o.title, creator.name;
+
+\echo 'Q5 | Reported-work use case: report and its moderation decision'
+SELECT wr.report_id, w.title, creator.name AS creator,
+       wr.reason, wr.reporter_name, mc.case_id, moderator.name AS moderator,
+       mc.findings, mc.action_taken, mc.status AS case_status
+FROM work_report AS wr
+JOIN creative_work AS w ON w.work_id = wr.work_id
+JOIN account AS creator ON creator.account_id = w.creator_id
+JOIN moderation_case AS mc ON mc.report_id = wr.report_id
+LEFT JOIN account AS moderator ON moderator.account_id = mc.moderator_id
+ORDER BY wr.reported_at;
+
+\echo 'Q6 | Public discussion: comments, their authors, and the creative work'
+SELECT w.title, a.name AS author, c.body, c.gif_url, c.created_at
+FROM comment AS c
+JOIN creative_work AS w ON w.work_id = c.work_id
+JOIN account AS a ON a.account_id = c.author_id
+WHERE w.work_id = 1
+ORDER BY c.created_at;
+
+\echo 'Q7 | Administrator report: published work by medium in the sample period'
+SELECT media_type, count(*) AS pieces,
+       count(DISTINCT creator_id) AS contributing_creators
+FROM creative_work
+WHERE published_at &gt;= TIMESTAMPTZ '2026-10-01 00:00:00+00'
+  AND published_at &lt; TIMESTAMPTZ '2026-11-04 00:00:00+00'
+GROUP BY media_type
+ORDER BY media_type;
+
+\echo 'Q8 | Account accountability: restrictions and administrator status history'
+SELECT a.name, a.status AS current_status, sc.new_status,
+       admin.name AS changed_by, sc.changed_at
+FROM status_change AS sc
+JOIN account AS a ON a.account_id = sc.account_id
+JOIN account AS admin ON admin.account_id = sc.administrator_id
+ORDER BY sc.changed_at, sc.change_id;
+
+\echo 'Q9 | Mentor queue: waiting review requests with the actual work and creator'
+SELECT rr.request_id, creator.name AS creator, mentor.name AS mentor,
+       w.title, rr.note, rr.requested_at
+FROM review_request AS rr
+JOIN account AS creator ON creator.account_id = rr.creator_id
+JOIN account AS mentor ON mentor.account_id = rr.mentor_id
+JOIN creative_work AS w ON w.work_id = rr.work_id
+WHERE rr.status = 'waiting'
+ORDER BY rr.requested_at;
+</code></pre></div></details><details><summary>04_demo_mutations.sql</summary><div class="source"><p><a href="database/04_demo_mutations.sql">Open source file</a></p><pre><code>\set ON_ERROR_STOP on
+\pset pager off
+SET search_path TO xpression, public;
+
+-- Each presentation segment is one transaction. ROLLBACK restores the original
+-- sample rows so this entire file can be demonstrated repeatedly.
+-- IDs above 900000 are reserved here for temporary demonstration rows.
+
+\echo 'DEMO A | Publish creative work: INSERT a creator portfolio piece'
+BEGIN;
+INSERT INTO creative_work
+    (work_id, creator_id, title, media_type, description, content_text,
+     featured, archived, published_at)
+VALUES
+    (900001, 3, 'Blue hour platform', 'writing',
+     'A new poem about waiting for the first train at dawn.',
+     'The platform holds the blue hour / until the rails begin to sing.',
+     false, false, '2026-11-05 14:00:00+00')
+RETURNING work_id, creator_id, title, media_type, published_at;
+
+\echo 'DEMO A | Modify the existing piece, then retrieve its creator relationship'
+UPDATE creative_work
+SET title = 'Blue hour platform — revised', featured = true
+WHERE work_id = 900001
+RETURNING work_id, title, featured;
+
+SELECT a.name AS creator, w.title, w.media_type, w.featured
+FROM creative_work AS w
+JOIN account AS a ON a.account_id = w.creator_id
+WHERE w.work_id = 900001;
+ROLLBACK;
+
+\echo 'DEMO B | Invite a creator: INSERT opportunity and its invitation link'
+BEGIN;
+INSERT INTO opportunity
+    (opportunity_id, scout_id, title, starts_on, ends_on, description)
+VALUES
+    (900002, 9, 'Winter waterfront acoustic session', '2026-12-12', '2026-12-12',
+     'Paid acoustic performance at the waterfront community studio.')
+RETURNING opportunity_id, title, starts_on;
+
+INSERT INTO invitation (invitation_id, opportunity_id, creator_id, status, invited_at)
+VALUES (900002, 900002, 5, 'sent', '2026-11-05 14:05:00+00')
+RETURNING invitation_id, opportunity_id, creator_id, status;
+
+\echo 'DEMO B | Creator accepts: UPDATE the same invitation row'
+UPDATE invitation
+SET status = 'accepted', responded_at = '2026-11-05 14:06:00+00'
+WHERE invitation_id = 900002;
+SELECT o.title, scout.name AS scout, creator.name AS creator, i.status
+FROM invitation AS i
+JOIN opportunity AS o ON o.opportunity_id = i.opportunity_id
+JOIN account AS scout ON scout.account_id = o.scout_id
+JOIN account AS creator ON creator.account_id = i.creator_id
+WHERE i.invitation_id = 900002;
+ROLLBACK;
+
+\echo 'DEMO C | Review reported work: INSERT automatically opens one moderation case'
+BEGIN;
+INSERT INTO work_report (report_id, work_id, reason, reporter_name, reported_at)
+VALUES
+    (900003, 2, 'Please check whether this caption includes an unrelated advertisement.',
+     'Nia Brooks', '2026-11-05 14:10:00+00')
+RETURNING report_id, work_id, reason;
+
+SELECT case_id, report_id, findings, action_taken, status
+FROM moderation_case WHERE report_id = 900003;
+
+\echo 'DEMO C | Record the moderator decision and observe the work visibility'
+UPDATE moderation_case
+SET moderator_id = 2,
+    findings = 'The current caption is an unrelated advertisement; hide pending revision.',
+    action_taken = 'hidden', status = 'closed'
+WHERE report_id = 900003
+RETURNING case_id, moderator_id, findings, action_taken, status;
+
+SELECT w.title, w.visibility, mc.action_taken, mc.status AS case_status
+FROM creative_work AS w
+JOIN work_report AS r ON r.work_id = w.work_id
+JOIN moderation_case AS mc ON mc.report_id = r.report_id
+WHERE r.report_id = 900003;
+ROLLBACK;
+
+\echo 'All three demonstrations rolled back; original sample data is preserved.'
+</code></pre></div></details><details><summary>05_verify.sql</summary><div class="source"><p><a href="database/05_verify.sql">Open source file</a></p><pre><code>\set ON_ERROR_STOP on
+\pset pager off
+SET search_path TO xpression, public;
+
+-- Real PostgreSQL integration checks, including expected constraint failures.
+-- Every write below is temporary. Any failed assertion stops psql with a nonzero exit.
+BEGIN;
+SET CONSTRAINTS ALL IMMEDIATE;
+CREATE TEMP TABLE verification_result (
+    test_name text PRIMARY KEY,
+    result text NOT NULL,
+    detail text NOT NULL
+) ON COMMIT DROP;
+
+CREATE FUNCTION pg_temp.assert_true(test_name text, passed boolean, detail text DEFAULT '')
+RETURNS void LANGUAGE plpgsql AS $function$
+BEGIN
+    IF passed IS DISTINCT FROM true THEN
+        RAISE EXCEPTION 'FAIL: % | %', test_name, detail;
+    END IF;
+    INSERT INTO verification_result VALUES (test_name, 'PASS', detail);
+END;
+$function$;
+
+CREATE FUNCTION pg_temp.expect_error(test_name text, command text, expected_state text)
+RETURNS void LANGUAGE plpgsql AS $function$
+DECLARE failed boolean := false; actual_state text; constraint_detail text;
+BEGIN
+    -- A PL/pgSQL exception block is a subtransaction. Rejected writes roll back.
+    BEGIN
+        EXECUTE command;
+    EXCEPTION WHEN OTHERS THEN
+        GET STACKED DIAGNOSTICS actual_state = RETURNED_SQLSTATE,
+                                constraint_detail = CONSTRAINT_NAME;
+        IF actual_state &lt;&gt; expected_state THEN
+            RAISE EXCEPTION 'FAIL: % expected SQLSTATE %, received %: %',
+                test_name, expected_state, actual_state, SQLERRM;
+        END IF;
+        failed := true;
+        INSERT INTO verification_result
+        VALUES (test_name, 'PASS', 'Rejected with SQLSTATE ' || actual_state ||
+                CASE WHEN constraint_detail &lt;&gt; '' THEN ' (' || constraint_detail || ')' ELSE '' END);
+    END;
+    IF NOT failed THEN
+        RAISE EXCEPTION 'FAIL: % unexpectedly accepted invalid data', test_name;
+    END IF;
+END;
+$function$;
+
+\echo 'VERIFY | Every major table contains meaningful sample rows'
+DO $block$
+DECLARE t record; row_total bigint; table_total integer := 0;
+BEGIN
+    FOR t IN
+        SELECT table_name FROM information_schema.tables
+        WHERE table_schema = 'xpression' AND table_type = 'BASE TABLE'
+        ORDER BY table_name
+    LOOP
+        EXECUTE format('SELECT count(*) FROM xpression.%I', t.table_name) INTO row_total;
+        PERFORM pg_temp.assert_true('Sample data: ' || t.table_name,
+                                  row_total &gt; 0, row_total || ' rows');
+        table_total := table_total + 1;
+    END LOOP;
+    PERFORM pg_temp.assert_true('Complete application structures', table_total = 30,
+                              table_total || ' implemented tables');
+END;
+$block$;
+
+SELECT pg_temp.assert_true('All five system roles represented',
+    (SELECT count(DISTINCT role) = 5 FROM account));
+SELECT pg_temp.assert_true('All database constraints validated',
+    NOT EXISTS (SELECT 1 FROM pg_constraint
+                WHERE connamespace = 'xpression'::regnamespace AND NOT convalidated));
+SELECT pg_temp.assert_true('Each work report has exactly one case',
+    NOT EXISTS (SELECT wr.report_id FROM work_report AS wr
+                LEFT JOIN moderation_case AS mc ON mc.report_id = wr.report_id
+                GROUP BY wr.report_id HAVING count(mc.case_id) &lt;&gt; 1));
+SELECT pg_temp.assert_true('Each comment report has exactly one case',
+    NOT EXISTS (SELECT cr.comment_report_id FROM comment_report AS cr
+                LEFT JOIN moderation_case AS mc ON mc.comment_report_id = cr.comment_report_id
+                GROUP BY cr.comment_report_id HAVING count(mc.case_id) &lt;&gt; 1));
+SELECT pg_temp.assert_true('Specialized accounts have matching accepted applications',
+    NOT EXISTS (SELECT 1 FROM account AS a
+                WHERE a.role IN ('mentor', 'talent_scout') AND NOT EXISTS
+                (SELECT 1 FROM role_application AS ra
+                 WHERE ra.approved_account_id = a.account_id AND ra.email = a.email
+                   AND ra.requested_role = a.role AND ra.status = 'accepted')));
+
+\echo 'VERIFY | Reject invalid identities, ownership, role links, and missing fields'
+SELECT pg_temp.expect_error('Unique account email', $sql$
+    INSERT INTO account (account_id,name,email,password_hash,role)
+    VALUES (900101,'Duplicate Amara','amara.cole@example.org','demo-hash','creator')
+$sql$, '23505');
+SELECT pg_temp.expect_error('Account name is required', $sql$
+    INSERT INTO account (account_id,name,email,password_hash,role)
+    VALUES (900101,NULL,'missing.name@example.org','demo-hash','creator')
+$sql$, '23502');
+SELECT pg_temp.expect_error('One allowed role per account', $sql$
+    INSERT INTO account (account_id,name,email,password_hash,role)
+    VALUES (900101,'Invalid role','invalid.role@example.org','demo-hash','creator,mentor')
+$sql$, '23514');
+SELECT pg_temp.expect_error('Specialized account approval is required', $sql$
+    INSERT INTO account (account_id,name,email,password_hash,role)
+    VALUES (900101,'Unapproved mentor','unapproved@example.org','demo-hash','mentor')
+$sql$, '23514');
+SELECT pg_temp.expect_error('Specialized approval email must still match', $sql$
+    UPDATE role_application SET email = 'different.person@example.org' WHERE application_id = 1
+$sql$, '23514');
+SELECT pg_temp.expect_error('Work creator must exist', $sql$
+    INSERT INTO creative_work (work_id,creator_id,title,media_type,description)
+    VALUES (900101,999999,'Orphan work','writing','No account owns this piece.')
+$sql$, '23503');
+SELECT pg_temp.expect_error('Work owner must have Creator role', $sql$
+    INSERT INTO creative_work (work_id,creator_id,title,media_type,description)
+    VALUES (900101,7,'Mentor cannot publish as creator','writing','Wrong owner role.')
+$sql$, '23503');
+SELECT pg_temp.expect_error('Music requires SoundCloud URL', $sql$
+    INSERT INTO creative_work (work_id,creator_id,title,media_type,description)
+    VALUES (900101,5,'Missing audio','music','A music piece without its required permalink.')
+$sql$, '23514');
+SELECT pg_temp.expect_error('Media type is restricted', $sql$
+    INSERT INTO creative_work (work_id,creator_id,title,media_type,description)
+    VALUES (900101,3,'Unsupported medium','video','Not one of the three allowed media types.')
+$sql$, '23514');
+SELECT pg_temp.expect_error('Requester must own requested work', $sql$
+    INSERT INTO review_request (request_id,creator_id,mentor_id,work_id)
+    VALUES (900101,3,7,2)
+$sql$, '23503');
+SELECT pg_temp.expect_error('Review mentor must have Mentor role', $sql$
+    INSERT INTO review_request (request_id,creator_id,mentor_id,work_id)
+    VALUES (900101,3,9,1)
+$sql$, '23503');
+
+\echo 'VERIFY | Structured feedback and reply rules'
+SELECT pg_temp.expect_error('Feedback requires an accepted request', $sql$
+    INSERT INTO mentor_feedback
+        (feedback_id,work_id,mentor_id,request_id,strengths,improvements,recommendation)
+    VALUES (900101,2,7,3,'Clear light.','Tight crop.','Try a wider view.')
+$sql$, '23514');
+INSERT INTO review_request (request_id,creator_id,mentor_id,work_id,status)
+VALUES (900200,4,7,2,'accepted');
+SELECT pg_temp.expect_error('Feedback work must match accepted request', $sql$
+    INSERT INTO mentor_feedback
+        (feedback_id,work_id,mentor_id,request_id,strengths,improvements,recommendation)
+    VALUES (900101,3,7,900200,'Clear light.','Tight crop.','Try a wider view.')
+$sql$, '23503');
+SELECT pg_temp.expect_error('Feedback mentor must match accepted request', $sql$
+    INSERT INTO mentor_feedback
+        (feedback_id,work_id,mentor_id,request_id,strengths,improvements,recommendation)
+    VALUES (900101,2,8,900200,'Clear light.','Tight crop.','Try a wider view.')
+$sql$, '23503');
+SELECT pg_temp.expect_error('Structured feedback fields cannot be blank', $sql$
+    INSERT INTO mentor_feedback
+        (feedback_id,work_id,mentor_id,request_id,strengths,improvements,recommendation)
+    VALUES (900101,2,7,900200,'   ','Tight crop.','Try a wider view.')
+$sql$, '23514');
+SELECT pg_temp.expect_error('Answered request must remain accepted', $sql$
+    UPDATE review_request SET status = 'declined' WHERE request_id = 1
+$sql$, '23514');
+SELECT pg_temp.expect_error('Only one creator reply per feedback', $sql$
+    INSERT INTO feedback_reply (reply_id,feedback_id,creator_id,reply_text)
+    VALUES (900101,1,3,'A second reply should be rejected.')
+$sql$, '23505');
+SELECT pg_temp.expect_error('Reply author must own reviewed work', $sql$
+    INSERT INTO feedback_reply (reply_id,feedback_id,creator_id,reply_text)
+    VALUES (900101,2,3,'This feedback belongs to another creator.')
+$sql$, '23514');
+
+\echo 'VERIFY | Invitations, related data, and one-link-per-pair rules'
+SELECT pg_temp.expect_error('One invitation per creator/opportunity pair', $sql$
+    INSERT INTO invitation (invitation_id,opportunity_id,creator_id)
+    VALUES (900101,1,5)
+$sql$, '23505');
+SELECT pg_temp.expect_error('Invitation requires a real opportunity', $sql$
+    INSERT INTO invitation (invitation_id,opportunity_id,creator_id)
+    VALUES (900101,999999,3)
+$sql$, '23503');
+SELECT pg_temp.expect_error('Invitation response requires timestamp', $sql$
+    UPDATE invitation SET status = 'accepted' WHERE invitation_id = 1
+$sql$, '23514');
+SELECT pg_temp.expect_error('Opportunity end cannot precede start', $sql$
+    INSERT INTO opportunity (opportunity_id,scout_id,title,starts_on,ends_on)
+    VALUES (900101,9,'Impossible schedule','2026-12-20','2026-12-01')
+$sql$, '23514');
+SELECT pg_temp.expect_error('Only scouts create opportunities', $sql$
+    INSERT INTO opportunity (opportunity_id,scout_id,title,starts_on)
+    VALUES (900101,3,'Wrong owner role','2026-12-20')
+$sql$, '23503');
+SELECT pg_temp.expect_error('One follow per account/creator pair', $sql$
+    INSERT INTO follow (follow_id,follower_id,creator_id) VALUES (900101,3,5)
+$sql$, '23505');
+SELECT pg_temp.expect_error('Creators cannot follow themselves', $sql$
+    INSERT INTO follow (follow_id,follower_id,creator_id) VALUES (900101,3,3)
+$sql$, '23514');
+SELECT pg_temp.expect_error('One save per account/work pair', $sql$
+    INSERT INTO saved_work (save_id,account_id,work_id) VALUES (900101,9,3)
+$sql$, '23505');
+SELECT pg_temp.expect_error('One shortlist entry per scout/creator pair', $sql$
+    INSERT INTO scout_candidate (candidate_id,scout_id,creator_id) VALUES (900101,9,5)
+$sql$, '23505');
+SELECT pg_temp.expect_error('Private message sender must be conversation member', $sql$
+    INSERT INTO private_message (message_id,conversation_id,sender_id,body)
+    VALUES (900101,1,4,'This account is not a member of this private conversation.')
+$sql$, '23503');
+SELECT pg_temp.expect_error('Attachment position is unique within work', $sql$
+    INSERT INTO work_media (media_id,work_id,asset_url,alt_text,position)
+    VALUES (900101,2,'https://example.org/duplicate.jpg','Duplicate first attachment.',1)
+$sql$, '23505');
+
+\echo 'VERIFY | Moderation, administrator-only role links, and audit rules'
+SELECT pg_temp.expect_error('One moderation case per work report', $sql$
+    INSERT INTO moderation_case (case_id,report_id) VALUES (900101,1)
+$sql$, '23505');
+SELECT pg_temp.expect_error('Moderation case must identify one report', $sql$
+    INSERT INTO moderation_case (case_id) VALUES (900101)
+$sql$, '23514');
+SELECT pg_temp.expect_error('A report cannot lose its moderation case', $sql$
+    DELETE FROM moderation_case WHERE report_id = 1
+$sql$, '23514');
+SELECT pg_temp.expect_error('Closed case must have a moderator', $sql$
+    UPDATE moderation_case SET status = 'closed', moderator_id = NULL WHERE report_id = 1
+$sql$, '23514');
+SELECT pg_temp.expect_error('Moderators cannot record a ban restriction', $sql$
+    INSERT INTO account_restriction (restriction_id,user_report_id,moderator_id,action_type)
+    VALUES (900101,1,2,'ban')
+$sql$, '23514');
+SELECT pg_temp.expect_error('Account status cannot bypass audit', $sql$
+    UPDATE account SET status = 'banned' WHERE account_id = 6
+$sql$, '23514');
+SELECT pg_temp.expect_error('Status command requires Administrator role', $sql$
+    INSERT INTO status_change (change_id,administrator_id,account_id,new_status)
+    VALUES (900101,2,6,'banned')
+$sql$, '23503');
+SELECT pg_temp.expect_error('Status history is append-only', $sql$
+    UPDATE status_change SET reason = 'Attempt to rewrite history' WHERE change_id = 1
+$sql$, '23514');
+SELECT pg_temp.expect_error('Temporary restriction requires expiry', $sql$
+    INSERT INTO account_restriction (restriction_id,user_report_id,moderator_id,action_type)
+    VALUES (900101,1,2,'restrict')
+$sql$, '23514');
+SELECT pg_temp.expect_error('Analytics range must be ordered', $sql$
+    INSERT INTO analytics_report (report_id,administrator_id,report_type,date_from,date_to)
+    VALUES (900101,1,'accounts','2026-11-03','2026-10-01')
+$sql$, '23514');
+SELECT pg_temp.expect_error('Platform setting names are unique', $sql$
+    INSERT INTO platform_setting (setting_id,name,value) VALUES (900101,'comments_enabled','false')
+$sql$, '23505');
+SELECT pg_temp.expect_error('Resolved help ticket requires resolution time', $sql$
+    INSERT INTO help_ticket (ticket_id,account_id,subject,body,status)
+    VALUES (900101,3,'Missing resolution date','A resolved ticket must record when it was resolved.','resolved')
+$sql$, '23514');
+
+\echo 'VERIFY | Positive publish, invitation, moderation, and status-change workflows'
+INSERT INTO creative_work (work_id,creator_id,title,media_type,description,content_text)
+VALUES (900200,3,'Verification poem','writing','A temporary valid portfolio piece.','Temporary poem text.');
+UPDATE creative_work SET title = 'Verification poem revised' WHERE work_id = 900200;
+SELECT pg_temp.assert_true('Publish and modify preserve one owned work',
+    (SELECT count(*) = 1 AND bool_and(creator_id = 3 AND title = 'Verification poem revised')
+     FROM creative_work WHERE work_id = 900200));
+UPDATE invitation SET status = 'accepted', responded_at = '2026-11-03 12:00:00+00'
+WHERE invitation_id = 1;
+SELECT pg_temp.assert_true('Invitation acceptance updates the existing link',
+    (SELECT status = 'accepted' AND responded_at IS NOT NULL FROM invitation WHERE invitation_id = 1));
+INSERT INTO work_report (report_id,work_id,reason,reporter_name)
+VALUES (900200,900200,'Temporary report for integration verification.','Verification reviewer');
+SELECT pg_temp.assert_true('New report automatically opens exactly one case',
+    (SELECT count(*) = 1 FROM moderation_case WHERE report_id = 900200));
+UPDATE moderation_case
+SET moderator_id = 2, findings = 'Verified hide decision.', action_taken = 'hidden', status = 'closed'
+WHERE report_id = 900200;
+SELECT pg_temp.assert_true('Closed moderation decision changes work visibility',
+    (SELECT visibility = 'hidden' FROM creative_work WHERE work_id = 900200));
+SELECT pg_temp.assert_true('Hidden work is absent from public feed',
+    NOT EXISTS (SELECT 1 FROM public_work_feed WHERE work_id = 900200));
+INSERT INTO status_change (change_id,administrator_id,account_id,new_status,reason)
+VALUES (900200,1,6,'active','Temporary verification of atomic status and audit update.');
+SELECT pg_temp.assert_true('Administrator status command changes account and captures prior status',
+    (SELECT a.status = 'active' AND sc.old_status = 'suspended' AND sc.new_status = 'active'
+     FROM account AS a JOIN status_change AS sc ON sc.account_id = a.account_id
+     WHERE a.account_id = 6 AND sc.change_id = 900200));
+SET CONSTRAINTS ALL IMMEDIATE;
+
+SELECT test_name, result, detail FROM verification_result ORDER BY test_name;
+SELECT count(*) AS checks_passed, bool_and(result = 'PASS') AS all_passed
+FROM verification_result;
+ROLLBACK;
+\echo 'Verification complete. Test writes rolled back; sample data is preserved.'
+</code></pre></div></details><details><summary>instructor_queries.sql</summary><div class="source"><p><a href="database/instructor_queries.sql">Open source file</a></p><pre><code>\set ON_ERROR_STOP on
+\pset pager off
+SET search_path TO xpression, public;
+
+-- Change one value, rerun the SELECT, and explain its joins/filters in the presentation.
+-- These are query practice examples, not a prediction of the instructor's questions.
+
+\echo 'Practice 1 | Find an account by a partial name (change Nia)'
+SELECT account_id, name, email, role, status
+FROM account
+WHERE name ILIKE '%Nia%'
+ORDER BY name;
+
+\echo 'Practice 2 | Creators with at least two portfolio pieces'
+SELECT a.name, count(w.work_id) AS portfolio_pieces
+FROM account AS a
+JOIN creative_work AS w ON w.creator_id = a.account_id
+WHERE a.role = 'creator'
+GROUP BY a.account_id, a.name
+HAVING count(w.work_id) &gt;= 2
+ORDER BY portfolio_pieces DESC, a.name;
+
+\echo 'Practice 3 | Find unanswered invitations, including creators with no invitations'
+SELECT a.name, o.title AS opportunity, i.status
+FROM account AS a
+LEFT JOIN invitation AS i ON i.creator_id = a.account_id
+LEFT JOIN opportunity AS o ON o.opportunity_id = i.opportunity_id
+WHERE a.role = 'creator' AND (i.status = 'sent' OR i.invitation_id IS NULL)
+ORDER BY a.name, o.title;
+
+\echo 'Practice 4 | How many waiting review requests does each mentor have?'
+SELECT a.name AS mentor,
+       count(rr.request_id) FILTER (WHERE rr.status = 'waiting') AS waiting,
+       count(rr.request_id) FILTER (WHERE rr.status = 'accepted') AS accepted,
+       count(rr.request_id) FILTER (WHERE rr.status = 'declined') AS declined
+FROM account AS a
+LEFT JOIN review_request AS rr ON rr.mentor_id = a.account_id
+WHERE a.role = 'mentor'
+GROUP BY a.account_id, a.name
+ORDER BY a.name;
+
+\echo 'Practice 5 | Find works that have never been reported'
+SELECT w.work_id, w.title, a.name AS creator
+FROM creative_work AS w
+JOIN account AS a ON a.account_id = w.creator_id
+WHERE NOT EXISTS (SELECT 1 FROM work_report AS r WHERE r.work_id = w.work_id)
+ORDER BY w.title;
+
+\echo 'Practice 6 | Number of accounts in each role and status'
+SELECT role, status, count(*) AS accounts
+FROM account
+GROUP BY role, status
+ORDER BY role, status;
+
+\echo 'Practice 7 | Introspect foreign keys using PostgreSQL native catalog data'
+SELECT conrelid::regclass AS table_name, conname,
+       pg_get_constraintdef(oid) AS relationship
+FROM pg_constraint
+WHERE contype = 'f' AND connamespace = 'xpression'::regnamespace
+ORDER BY conrelid::regclass::text, conname;
+</code></pre></div></details></section><footer>Prepared November 3, 2026. PostgreSQL 16.2. Fictional sample records. Local database credentials and files are excluded from Git.</footer></main><script>
+const erd=document.getElementById('erd'),zoom=document.getElementById('zoom'),size=document.getElementById('size'),viewer=document.querySelector('.diagram');
+function scale(){erd.style.width=(erd.naturalWidth*Number(zoom.value)/100)+'px';size.textContent=zoom.value+'%'}erd.addEventListener('load',scale);zoom.addEventListener('input',scale);document.getElementById('fit').addEventListener('click',()=>{zoom.value=Math.min(150,Math.max(20,Math.round(100*(viewer.clientWidth-18)/erd.naturalWidth)));scale()});document.querySelectorAll('[data-file]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-file]').forEach(x=>{x.classList.remove('active');x.setAttribute('aria-pressed','false')});b.classList.add('active');b.setAttribute('aria-pressed','true');erd.src='docs/'+b.dataset.file+'.svg';erd.alt=b.textContent+' database entity relationship diagram';document.getElementById('diagram-open').href=erd.src;viewer.scrollTo(0,0)}));
+</script></body></html>

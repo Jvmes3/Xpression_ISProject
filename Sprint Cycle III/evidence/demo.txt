@@ -1,0 +1,73 @@
+PostgreSQL is running. pgAdmin connection details: /Users/jamesdagoat/Downloads/log-report/Xpression_ISProject/Sprint Cycle III/.local/connection.txt
+Pager usage is off.
+SET
+DEMO A | Publish creative work: INSERT a creator portfolio piece
+BEGIN
+ work_id | creator_id |       title        | media_type |      published_at      
+---------+------------+--------------------+------------+------------------------
+  900001 |          3 | Blue hour platform | writing    | 2026-11-05 09:00:00-05
+(1 row)
+
+INSERT 0 1
+DEMO A | Modify the existing piece, then retrieve its creator relationship
+ work_id |            title             | featured 
+---------+------------------------------+----------
+  900001 | Blue hour platform — revised | t
+(1 row)
+
+UPDATE 1
+  creator   |            title             | media_type | featured 
+------------+------------------------------+------------+----------
+ Amara Cole | Blue hour platform — revised | writing    | t
+(1 row)
+
+ROLLBACK
+DEMO B | Invite a creator: INSERT opportunity and its invitation link
+BEGIN
+ opportunity_id |               title                | starts_on  
+----------------+------------------------------------+------------
+         900002 | Winter waterfront acoustic session | 2026-12-12
+(1 row)
+
+INSERT 0 1
+ invitation_id | opportunity_id | creator_id | status 
+---------------+----------------+------------+--------
+        900002 |         900002 |          5 | sent
+(1 row)
+
+INSERT 0 1
+DEMO B | Creator accepts: UPDATE the same invitation row
+UPDATE 1
+               title                |   scout    |  creator   |  status  
+------------------------------------+------------+------------+----------
+ Winter waterfront acoustic session | Elena Park | Nia Brooks | accepted
+(1 row)
+
+ROLLBACK
+DEMO C | Review reported work: INSERT automatically opens one moderation case
+BEGIN
+ report_id | work_id |                                 reason                                 
+-----------+---------+------------------------------------------------------------------------
+    900003 |       2 | Please check whether this caption includes an unrelated advertisement.
+(1 row)
+
+INSERT 0 1
+ case_id | report_id |    findings     |  action_taken  | status 
+---------+-----------+-----------------+----------------+--------
+       4 |    900003 | Awaiting review | kept_available | open
+(1 row)
+
+DEMO C | Record the moderator decision and observe the work visibility
+ case_id | moderator_id |                                 findings                                  | action_taken | status 
+---------+--------------+---------------------------------------------------------------------------+--------------+--------
+       4 |            2 | The current caption is an unrelated advertisement; hide pending revision. | hidden       | closed
+(1 row)
+
+UPDATE 1
+       title       | visibility | action_taken | case_status 
+-------------------+------------+--------------+-------------
+ Studio wall study | hidden     | hidden       | closed
+(1 row)
+
+ROLLBACK
+All three demonstrations rolled back; original sample data is preserved.
