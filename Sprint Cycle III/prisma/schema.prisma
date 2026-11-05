@@ -1,0 +1,135 @@
+// TypeScript model of the MySQL tables used for the three Sprint Cycle III use cases.
+// The SQL scripts in ../sql create the database. The Next.js application does not connect yet.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum AccountRole {
+  Creator
+  Mentor
+  TalentScout   @map("Talent Scout")
+  Moderator
+  Administrator
+}
+
+enum AccountStatus {
+  active
+  suspended
+  banned
+  deactivated
+}
+
+enum MediaType {
+  Writing
+  VisualArt @map("Visual art")
+  Music
+}
+
+enum InvitationStatus {
+  sent
+  accepted
+  declined
+}
+
+enum CaseAction {
+  kept_available @map("kept available")
+  hidden
+  removed
+}
+
+enum CaseStatus {
+  open
+  in_review @map("in review")
+  escalated
+  closed
+}
+
+model Account {
+  accountId         Int           @id @default(autoincrement()) @map("account_id")
+  name              String        @db.VarChar(120)
+  email             String        @unique @db.VarChar(255)
+  role              AccountRole
+  status            AccountStatus @default(active)
+  discipline        String?       @db.VarChar(80)
+  openToCommissions Boolean       @default(false) @map("open_to_commissions")
+  works             CreativeWork[]
+  opportunities     Opportunity[]
+  invitations       Invitation[]
+  casesDecided      ModerationCase[]
+
+  @@map("account")
+}
+
+model CreativeWork {
+  workId        Int          @id @default(autoincrement()) @map("work_id")
+  creatorId     Int          @map("creator_id")
+  title         String       @db.VarChar(160)
+  mediaType     MediaType    @map("media_type")
+  description   String       @db.Text
+  soundcloudUrl String?      @map("soundcloud_url") @db.VarChar(500)
+  featured      Boolean      @default(false)
+  archived      Boolean      @default(false)
+  publishedAt   DateTime     @map("published_at")
+  creator       Account      @relation(fields: [creatorId], references: [accountId])
+  reports       WorkReport[]
+
+  @@map("creative_work")
+}
+
+model Opportunity {
+  opportunityId Int          @id @default(autoincrement()) @map("opportunity_id")
+  scoutId       Int          @map("scout_id")
+  title         String       @db.VarChar(160)
+  startsOn      DateTime     @map("starts_on") @db.Date
+  endsOn        DateTime?    @map("ends_on") @db.Date
+  description   String?      @db.Text
+  scout         Account      @relation(fields: [scoutId], references: [accountId])
+  invitations   Invitation[]
+
+  @@map("opportunity")
+}
+
+model Invitation {
+  invitationId  Int              @id @default(autoincrement()) @map("invitation_id")
+  opportunityId Int              @map("opportunity_id")
+  creatorId     Int              @map("creator_id")
+  status        InvitationStatus
+  invitedAt     DateTime         @map("invited_at")
+  opportunity   Opportunity      @relation(fields: [opportunityId], references: [opportunityId])
+  creator       Account          @relation(fields: [creatorId], references: [accountId])
+
+  @@unique([opportunityId, creatorId])
+  @@map("invitation")
+}
+
+model WorkReport {
+  reportId       Int            @id @default(autoincrement()) @map("report_id")
+  workId         Int            @map("work_id")
+  reason         String         @db.Text
+  reporterName   String         @map("reporter_name") @db.VarChar(120)
+  reportedAt     DateTime       @map("reported_at")
+  work           CreativeWork   @relation(fields: [workId], references: [workId])
+  moderationCase ModerationCase?
+
+  @@map("work_report")
+}
+
+model ModerationCase {
+  caseId      Int        @id @default(autoincrement()) @map("case_id")
+  reportId    Int        @unique @map("report_id")
+  moderatorId Int        @map("moderator_id")
+  findings    String     @db.Text
+  actionTaken CaseAction @map("action_taken")
+  status      CaseStatus
+  recordedAt  DateTime   @map("recorded_at")
+  report      WorkReport @relation(fields: [reportId], references: [reportId])
+  moderator   Account    @relation(fields: [moderatorId], references: [accountId])
+
+  @@map("moderation_case")
+}
