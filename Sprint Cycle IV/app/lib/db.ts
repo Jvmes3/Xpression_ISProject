@@ -24,7 +24,7 @@ function urlFromFile(file: string) {
   return "";
 }
 
-function databaseUrl() {
+export function databaseUrl() {
   const fromEnv = process.env.DATABASE_URL?.replace(/^\uFEFF/, "").trim();
   if (fromEnv) return fromEnv;
   let dir = process.cwd();
@@ -40,7 +40,9 @@ function databaseUrl() {
 
 export function db() {
   if (!global.xpressionPool) {
-    global.xpressionPool = mysql.createPool(databaseUrl());
+    const url = databaseUrl();
+    process.env.DATABASE_URL = url;
+    global.xpressionPool = mysql.createPool(url);
   }
   return global.xpressionPool;
 }

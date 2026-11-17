@@ -54,17 +54,18 @@ function destination(role: "applicant" | "moderator" | "administrator", via: "re
   return "/account";
 }
 
-export async function signIn(formData: FormData) {
+export async function signIn(first: { error: string } | FormData | undefined, second?: FormData): Promise<{ error: string }> {
+  const formData = first instanceof FormData ? first : second;
+  if (!formData) return { error: "credentials" };
   const email = String(formData.get("email") || "");
   const password = String(formData.get("password") || "");
   const rawReturn = String(formData.get("returnTo") || "");
   const requested = safeNext(rawReturn);
-  const fail = rawReturn === "account" ? "/account" : requested ? `/sign-in?returnTo=${encodeURIComponent(requested)}` : "/sign-in";
   const problem = credentialError(email, password);
-  if (problem) redirect(`${fail}${fail.includes("?") ? "&" : "?"}error=${problem}`);
+  if (problem) return { error: problem };
   const match = authenticate(email, password);
-  if (!match) redirect(`${fail}${fail.includes("?") ? "&" : "?"}error=credentials`);
-  if (match.account.status !== "active") redirect(`${fail}${fail.includes("?") ? "&" : "?"}error=blocked`);
+  if (!match) return { error: "credentials" };
+  if (match.account.status !== "active") return { error: "blocked" };
   const kind = match.account.role !== "applicant" || match.via === "xpression" ? "role" : "record";
   const token = await setSessionToken(match.account.id, kind);
   await writeSessionCookie(token);
@@ -104,13 +105,13 @@ export async function changeTemporaryPassword(formData: FormData) {
         : "";
   if (role) {
     await saveRoleAccount({
-      name: saved.name || saved.email,
-      email: saved.email,
+      name: saved.name || saved.email || "Account",
+      email: saved.email || "",
       role,
       password,
     });
   }
-  redirect(roleHome(saved.role));
+  redirect(roleHome(saved.role || ""));
 }
 
 export async function beginApplication() {

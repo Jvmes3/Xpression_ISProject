@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { beginApplication, signIn } from "../lib/actions";
+import { SignInForm } from "../components/SignInForm";
+import { beginApplication } from "../lib/actions";
 import { passwordIsTemporary, roleHome } from "../lib/application";
 import { emailRule, passwordRule } from "../lib/credentials.mjs";
 import { currentAccount } from "../lib/session";
@@ -31,20 +32,12 @@ export default async function AccountPage({
           this page shows whether your application is in progress, still being
           reviewed, or approved.
         </p>
-        <form className="form panel" action={signIn}>
-          <input type="hidden" name="returnTo" value="account" />
-          {error && signInErrors[error] ? <p className="note">{signInErrors[error]}</p> : null}
-          <label>
-            Email
-            <input type="email" name="email" placeholder="youremail@gmail.com" required />
-          </label>
-          <label>
-            Password
-            <input type="password" name="password" placeholder="Password" required />
-          </label>
-          <p className="note">{emailRule} {passwordRule}</p>
-          <button className="button" type="submit">Sign in</button>
-        </form>
+        <SignInForm
+          returnTo="account"
+          errors={signInErrors}
+          note={`${emailRule} ${passwordRule}`}
+          initialError={error && signInErrors[error] ? error : ""}
+        />
         <p className="more">
           New applicant? <Link href="/apply">Create an application login</Link>
         </p>
