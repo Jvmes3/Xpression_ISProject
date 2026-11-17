@@ -4,7 +4,7 @@ Scrum Master: Leeyand Blot
 
 These notes are the two meetings for this sprint. Attendees listed for each meeting are the four team members.
 
-## Nov 6, 2026 — Sprint planning
+## Nov 10, 2026 — Sprint planning
 
 | Field | Value |
 | --- | --- |
