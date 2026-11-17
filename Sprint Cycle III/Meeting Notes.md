@@ -16,14 +16,14 @@ These notes are the two meetings for this sprint. Attendees listed for each meet
 
 1. Confirm this sprint is the database, not the website
 2. Choose a Scrum Master
-3. Choose MySQL and where the early website code goes
+3. Choose MySQL
 4. Walk the schema against the data dictionary
 
 ### Decisions
 
 1. **Scrum Master:** James Henson.
 2. **MySQL.** The application language stays TypeScript, Next.js, React, and Node.js, with Prisma as the later connection. The database for this sprint is MySQL, because the design is tables, keys, and relationships. The database name is `xpression`.
-3. **No website work in this sprint.** The sign-in and role screens already built are moved to `Website implementation sprint cycle`. They are not the Cycle III deliverable.
+3. **No website work in this sprint.** Sign-in and the role screens are not the Cycle III deliverable. Authentication is Sprint Cycle IV.
 4. **The Cycle II design stands.** Implementation does not add or remove a field. Constraints and triggers are how the written rules are enforced. Account still has no password. Authentication is Sprint Cycle IV.
 5. **SQL scripts are the implementation.** `01-schema.sql` creates the database. `02-sample-data.sql` loads it. Queries, changes, and rule checks are separate files so they can be run during the demonstration.
 6. **One `account` table.** Creator, Mentor, Talent Scout, Moderator, and Administrator are values of `role`, not five tables.
@@ -73,4 +73,3 @@ These notes are the two meetings for this sprint. Attendees listed for each meet
 | All | Add photos from these meetings to `photos` when the meetings were face to face | Not yet |
 | All | Pull the repository, then each member commits one meaningful part of this sprint | Not yet |
 | All | Rehearse one ad hoc query from `sql/03-queries.sql` before November 5 | Not yet |
-meet
