@@ -22,7 +22,7 @@ These notes are the two meetings for this sprint. Attendees listed for each meet
 ### Decisions
 
 1. **Scrum Master:** Leeyand Blot.
-2. **The application reads MySQL `xpression`.** The local account file in `Website implementation sprint cycle` stays there. Sprint Cycle IV does not sign in through that file.
+2. **The application reads MySQL `xpression`.** Sign-in uses the accounts created in Sprint Cycle IV.
 3. **The visual language stays.** Paper background, serif titles, and the dark header come from the earlier site.
 4. **Passwords are a column on `account`.** `sql/01-auth.sql` adds `password_hash` after the Cycle III scripts. The sample password is `Xpression1!`.
 5. **One working retrieval for each role.** Administrator lists users. Creator browses the community feed. Mentor browses work available for review. Talent Scout searches creators and opens a portfolio. Moderator reads reported creative work.
