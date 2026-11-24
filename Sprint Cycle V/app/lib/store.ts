@@ -10,6 +10,7 @@ import {
   sanitizeDraft,
 } from "./application";
 import { checkPassword, hashPassword, readablePassword } from "./passwords";
+import { samplePassword, samplePeople } from "./sample-accounts";
 
 export type AccountRole = "applicant" | "moderator" | "administrator";
 export type AccountStatus = "active" | "suspended" | "banned" | "deactivated";
@@ -173,16 +174,89 @@ function seedDatabase(): Database {
   return { accounts: [], ...seed };
 }
 
+function sampleAccount(person: (typeof samplePeople)[number]): Account {
+  const email = person.email;
+  if (person.staff) {
+    return {
+      id: `sample-${person.key}`,
+      email,
+      passwordHash: samplePassword.passwordHash,
+      salt: samplePassword.salt,
+      role: person.staff,
+      status: "active",
+      application: null,
+      displayName: person.name,
+      background: person.staff,
+      sessionToken: "",
+      sessionKind: "role",
+      createdAt: "2026-09-01T00:00:00.000Z",
+    };
+  }
+  return {
+    id: `sample-${person.key}`,
+    email,
+    passwordHash: "",
+    salt: "",
+    role: "applicant",
+    status: "active",
+    application: {
+      status: "approved",
+      role: person.appRole || "",
+      name: person.name,
+      age: "21",
+      reason: `${person.name} is a sample ${person.appRole} included with Xpression.`,
+      credentials: person.discipline,
+      experience: person.appRole === "Creative Mentor" ? "Structured feedback on writing, visual art, and music." : "",
+      selectedMedia: person.media || [],
+      areas: (person.media || []).map((media) => ({
+        id: `sample-${person.key}-${media}`,
+        media,
+        label: person.discipline || media,
+        detail: "",
+        sample: "",
+      })),
+      organization: person.appRole === "Talent Scout" ? "Independent" : "",
+      opportunities: "",
+      proof: "",
+      xpressionEmail: email,
+      xpressionPassword: "",
+      xpressionSalt: samplePassword.salt,
+      xpressionPasswordHash: samplePassword.passwordHash,
+      mustChangePassword: false,
+    },
+    displayName: person.name,
+    background: person.discipline || person.appRole,
+    sessionToken: "",
+    sessionKind: "role",
+    createdAt: "2026-09-01T00:00:00.000Z",
+  };
+}
+
+function addSampleAccounts(db: Database) {
+  let changed = false;
+  for (const person of samplePeople) {
+    const email = person.email;
+    const exists = db.accounts.some(
+      (account) => account.email === email || account.application?.xpressionEmail === email,
+    );
+    if (exists) continue;
+    db.accounts.push(sampleAccount(person));
+    changed = true;
+  }
+  return changed;
+}
+
 function read(): Database {
   if (!fs.existsSync(filePath)) {
     const created = seedDatabase();
+    addSampleAccounts(created);
     fs.mkdirSync(path.dirname(filePath), { recursive: true });
     fs.writeFileSync(filePath, JSON.stringify(created, null, 2));
     return created;
   }
   const parsed = JSON.parse(fs.readFileSync(filePath, "utf8")) as Database;
   if (!Array.isArray(parsed.accounts)) parsed.accounts = [];
-  let changed = false;
+  let changed = addSampleAccounts(parsed);
   if (!Array.isArray(parsed.reviewRequests)) {
     parsed.reviewRequests = fallbackRequests();
     changed = true;

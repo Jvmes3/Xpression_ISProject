@@ -25,6 +25,7 @@ import {
   openModerationCase,
   updateModerationCase,
 } from "./writes";
+import { ensureSampleAccounts } from "./sample-accounts";
 import { clearSessionCookie, currentAccount, currentToken, writeSessionCookie } from "./session";
 import {
   addCategory,
@@ -82,6 +83,7 @@ export async function signIn(first: { error: string } | FormData | undefined, se
   const requested = safeNext(rawReturn);
   const problem = credentialError(email, password);
   if (problem) return { error: problem };
+  await ensureSampleAccounts();
   const match = authenticate(email, password);
   if (!match) return { error: "credentials" };
   const stored = await accountForSession(match.account);

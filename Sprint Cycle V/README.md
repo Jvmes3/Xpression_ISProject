@@ -95,11 +95,7 @@ These are the people already stored in the sample SQL. Sign in with the email an
 | Moderator | Priya Shah | priya.shah@xpression.example | Xpression1! |
 | Administrator | Ada Lowe | ada.lowe@xpression.example | Xpression1! |
 
-If those emails do not sign in on another computer, run this once from the Sprint Cycle V folder after the database is loaded:
-
-```text
-npm.cmd run seed-demo-accounts
-```
+These eight accounts are part of the application. The first time the site runs, it adds them to sign-in and, when the `xpression` database is available, adds any of these rows that are missing. A new computer can sign in with this table. Accounts someone creates on one computer stay on that computer.
 
 ## 7. Sign in and try the five actions
 

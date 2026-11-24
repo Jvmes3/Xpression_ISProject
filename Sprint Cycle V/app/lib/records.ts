@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import type { RowDataPacket } from "mysql2";
 import { db, likeTerm } from "./db";
 import { feedbackParts } from "./feedback-copy";
+import { ensureSampleAccounts } from "./sample-accounts";
 
 export type WorkCard = {
   id: string;
@@ -217,6 +218,7 @@ export type AccountCard = RowDataPacket & {
 };
 
 export async function listAccounts(q = "") {
+  await ensureSampleAccounts();
   const term = likeTerm(q);
   const [rows] = await db().query<AccountCard[]>(
     `SELECT account_id, name, email, role, status, discipline, open_to_commissions

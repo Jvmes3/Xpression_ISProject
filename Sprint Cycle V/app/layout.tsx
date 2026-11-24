@@ -4,6 +4,7 @@ import { BackArrow } from "./components/BackArrow";
 import { SiteHeader, type HeaderSession } from "./components/SiteHeader";
 import { roleHome } from "./lib/application";
 import { roleLinks } from "./lib/nav";
+import { ensureSampleAccounts } from "./lib/sample-accounts";
 import { currentAccount } from "./lib/session";
 import "./globals.css";
 
@@ -70,6 +71,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  await ensureSampleAccounts();
   const account = await currentAccount();
   const session = account ? headerSession(account) : null;
 
