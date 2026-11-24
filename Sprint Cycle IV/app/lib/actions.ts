@@ -95,7 +95,7 @@ export async function changeTemporaryPassword(formData: FormData) {
   if (password !== confirm) redirect("/account/password?error=match");
   if (password === application.xpressionPassword) redirect("/account/password?error=same");
   const saved = await replaceRolePassword(account.id, password);
-  if (!saved || !("ok" in saved)) redirect("/account/password?error=password");
+  if (!saved || saved.ok !== true) redirect("/account/password?error=password");
   const role = saved.role === "Creative Mentor"
     ? "Mentor"
     : saved.role === "Talent Scout"
