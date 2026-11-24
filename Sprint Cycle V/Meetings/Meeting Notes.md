@@ -46,9 +46,9 @@ These notes are the two meetings for this sprint. Attendees listed for each meet
 
 ### Agenda
 
-1. Sign in as each role and run that role's write
-2. Refuse one incomplete or invalid submission
-3. Read the changed rows back from MySQL
+1. Sign in as each role and run that role's use cases
+2. Demonstrate invalid or incomplete-data case when appropriate
+3. Read the changed rows back from MySQL, use those as default data when appropriate
 4. Open the Cycle IV feed, creator search, and reported-work list again
 
 ### Decisions
@@ -59,10 +59,3 @@ These notes are the two meetings for this sprint. Attendees listed for each meet
 4. **An opportunity needs a title and a start date.** An end date before the start date is refused.
 5. **A moderation decision needs findings.** Hiding or removing a piece takes it off the feed. Keeping it available puts it back.
 6. **The Cycle IV searches still read the same tables.** New pieces show on the feed. Changed account status shows on the administrator list.
-
-### Action items
-
-| Owner | Action | Status |
-| --- | --- | --- |
-| All | Pull `Sprint Cycle V` and run it with the steps in `README.md` | Not yet |
-| Jacob Fitchett | Collect the demonstration video into `Demonstration` | Not yet |
