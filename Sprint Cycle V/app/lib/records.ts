@@ -14,6 +14,7 @@ export type WorkCard = {
   link: string;
   featured: boolean;
   publishedAt: string;
+  tone: string;
 };
 
 type WorkRow = RowDataPacket & {
@@ -26,21 +27,66 @@ type WorkRow = RowDataPacket & {
   featured: number;
   creator_name: string;
   published_at: string;
+  tone?: string | null;
 };
 
-export async function listWorks(media = "", q = "") {
+const knownTones: Record<string, string> = {
+  "night bus": "Personal",
+  "last light on the platform": "Personal",
+  "studio wall study": "Educational",
+  "harbor demo": "Entertaining",
+  "unsent letter": "Personal",
+  "sprint cycle demonstration": "Educational",
+  "video demonstration": "Experimental",
+  "testing1": "Experimental",
+};
+
+let tonesReady: Promise<void> | null = null;
+
+export function ensureWorkTones() {
+  tonesReady ??= prepareWorkTones().catch((error) => {
+    tonesReady = null;
+    throw error;
+  });
+  return tonesReady;
+}
+
+async function prepareWorkTones() {
+  const [rows] = await db().query<RowDataPacket[]>(
+    `SELECT COUNT(*) AS n
+     FROM information_schema.COLUMNS
+     WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'creative_work' AND COLUMN_NAME = 'tone'`,
+  );
+  if (!Number(rows[0]?.n)) {
+    await db().query(`ALTER TABLE creative_work ADD COLUMN tone VARCHAR(40) NULL`);
+  }
+  for (const [title, tone] of Object.entries(knownTones)) {
+    await db().query(
+      `UPDATE creative_work SET tone = ? WHERE LOWER(title) = ? AND (tone IS NULL OR tone = '')`,
+      [tone, title],
+    );
+  }
+  await db().query(
+    `UPDATE creative_work SET tone = 'Personal' WHERE tone IS NULL OR tone = ''`,
+  );
+}
+
+export async function listWorks(media = "", q = "", tone = "") {
+  await ensureWorkTones();
   const term = likeTerm(q);
+  const filter = tone.trim().toLowerCase();
   const [rows] = await db().query<WorkRow[]>(
-    `SELECT w.work_id, w.creator_id, w.title, w.media_type, w.description, w.soundcloud_url, w.featured,
+    `SELECT w.work_id, w.creator_id, w.title, w.media_type, w.description, w.soundcloud_url, w.featured, w.tone,
             DATE_FORMAT(w.published_at, '%Y-%m-%d %H:%i:%s') AS published_at,
             a.name AS creator_name
      FROM creative_work AS w
      JOIN account AS a ON a.account_id = w.creator_id
      WHERE w.archived = 0
        AND (? = '' OR w.media_type = ?)
+       AND (? = '' OR LOWER(w.tone) = ?)
        AND (? = '' OR w.title LIKE ? OR a.name LIKE ? OR w.description LIKE ?)
      ORDER BY w.published_at DESC`,
-    [media, media, q, term, term, term],
+    [media, media, filter, filter, q, term, term, term],
   );
   return rows.map(toCard);
 }
@@ -55,6 +101,9 @@ export type CommentCard = {
   likes: number;
   dislikes: number;
   mentorPost: boolean;
+  strengths: string;
+  improvements: string;
+  recommendation: string;
   authorId: number;
   reportReasons: string[];
 };
@@ -131,6 +180,9 @@ export async function listComments(workId: string, channel: "comments" | "feedba
     `SELECT c.comment_id, c.parent_comment_id, c.author_id, c.body, c.gif_url, c.channel,
             DATE_FORMAT(c.created_at, '%Y-%m-%d %H:%i:%s') AS created_at,
             c.likes, c.dislikes, a.name AS author_name,
+            IFNULL(f.strengths, '') AS strengths,
+            IFNULL(f.improvements, '') AS improvements,
+            IFNULL(f.recommendation, '') AS recommendation,
             IFNULL((
               SELECT GROUP_CONCAT(r.reason ORDER BY r.reported_at SEPARATOR '\u001f')
               FROM comment_report AS r
@@ -138,6 +190,7 @@ export async function listComments(workId: string, channel: "comments" | "feedba
             ), '') AS report_reason
      FROM comment AS c
      JOIN account AS a ON a.account_id = c.author_id
+     LEFT JOIN mentor_feedback AS f ON f.feedback_id = c.feedback_id
      WHERE c.work_id = ?
        AND (
          (? = 'feedbacks' AND c.channel = 'feedbacks')
@@ -156,6 +209,9 @@ export async function listComments(workId: string, channel: "comments" | "feedba
     likes: Number(row.likes || 0),
     dislikes: Number(row.dislikes || 0),
     mentorPost: String(row.channel) === "feedbacks" && row.parent_comment_id == null,
+    strengths: row.strengths ? String(row.strengths) : "",
+    improvements: row.improvements ? String(row.improvements) : "",
+    recommendation: row.recommendation ? String(row.recommendation) : "",
     authorId: Number(row.author_id),
     reportReasons: String(row.report_reason || "").split("\u001f").map((item) => item.trim()).filter(Boolean),
   }));
@@ -180,8 +236,9 @@ export async function listCommentReports() {
 export async function findWork(id: string, options?: { includeArchived?: boolean }) {
   const workId = Number(id);
   if (!Number.isInteger(workId)) return null;
+  await ensureWorkTones();
   const [rows] = await db().query<WorkRow[]>(
-    `SELECT w.work_id, w.creator_id, w.title, w.media_type, w.description, w.soundcloud_url, w.featured,
+    `SELECT w.work_id, w.creator_id, w.title, w.media_type, w.description, w.soundcloud_url, w.featured, w.tone,
             DATE_FORMAT(w.published_at, '%Y-%m-%d %H:%i:%s') AS published_at,
             a.name AS creator_name
      FROM creative_work AS w
@@ -204,6 +261,7 @@ function toCard(row: WorkRow): WorkCard {
     link: row.soundcloud_url || "",
     featured: Boolean(row.featured),
     publishedAt: row.published_at ? String(row.published_at) : "",
+    tone: row.tone ? String(row.tone) : "",
   };
 }
 

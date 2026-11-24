@@ -103,9 +103,9 @@ Administrator: sign in, open Accounts, and activate or deactivate someone else. 
 
 Creator, mentor, and talent scout: Apply, submit, sign in as the administrator, approve the application, then sign in with the role email and temporary password and set a new password.
 
-Creator: open Publish and add a title. Writing needs a description or an attached document. Visual art needs a picture. Music needs a link. The piece appears on the feed. A post that is missing the file or link for its kind is refused.
+Creator: open Publish and add a title. Choose Entertaining, Educational, Personal, or Experimental. Writing needs a description or an attached document. Visual art needs a picture. Music needs a link. The piece appears on the feed, and the feed filter uses that choice. A post that is missing the file, link, or filter for its kind is refused.
 
-Mentor: open Structured feedback, choose a piece, and fill in all three boxes. Leaving one box empty is refused.
+Mentor: open a piece, choose Feedbacks, and fill in strengths, improvements, and a recommendation. Replies stay ordinary comments. Written feedback lists the pieces you have already reviewed. Leaving a box empty is refused.
 
 Talent scout: open Create an opportunity, add a title and a start date, and save. An end date before the start date is refused.
 

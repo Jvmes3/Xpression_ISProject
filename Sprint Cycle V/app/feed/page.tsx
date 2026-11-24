@@ -19,7 +19,7 @@ export default async function FeedPage({
   const selectedMedia = mediaNames.includes(media) ? media : "";
   const selectedFilter = feedFilters.some((item) => item.value === filter) ? filter : "recent";
   const query = q.trim().toLowerCase();
-  const posts = await listWorks(selectedMedia, query);
+  const posts = await listWorks(selectedMedia, query, selectedFilter === "recent" ? "" : selectedFilter);
   const queue = reportQueue(await currentAccount());
   const reported = queue ? await reportReasonByWork() : {};
 
@@ -37,10 +37,10 @@ export default async function FeedPage({
       </p>
       <DiscoverBar q={q} media={selectedMedia} filter={selectedFilter === "recent" ? "" : selectedFilter} back={back} allSelected={!selectedMedia} />
       <div className="task-list">
-        {posts.length === 0 ? <p>No posts match that search.</p> : null}
+        {posts.length === 0 ? <p>{selectedFilter === "recent" ? "No posts match that search." : `No ${filterLabel.toLowerCase()} posts match.`}</p> : null}
         {posts.map((post) => (
           <article key={post.id} className="panel">
-            <p className="flag">{post.media}{post.featured ? " · Featured" : ""}</p>
+            <p className="flag">{post.media}{post.tone ? ` · ${post.tone}` : ""}{post.featured ? " · Featured" : ""}</p>
             <h2>
               <Link href={`/creator/desk/${post.id}`}>{post.title}</Link>
               {queue && reported[post.id]?.length ? <ReportMark reasons={reported[post.id]} href={reportsPage(queue, "work", post.id)} /> : null}

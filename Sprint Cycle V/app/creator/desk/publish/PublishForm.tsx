@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { postFilters } from "../../../components/DiscoverBar";
 import { SampleLinkField } from "../../../components/SampleLinkField";
 import { publishWork } from "../../../lib/actions";
 
@@ -9,6 +10,7 @@ const notes: Record<string, string> = {
   picture: "Visual art needs a picture attached before it can be published.",
   music: "A music piece needs a link before it can be published.",
   writing: "Writing needs a description or an attached document before it can be published.",
+  filter: "Choose Entertaining, Educational, Personal, or Experimental.",
   account: "This sign-in is not a Creator row in the database. Approve a creator application, then sign in with the role email.",
 };
 
@@ -47,6 +49,13 @@ export function PublishForm({ error = "" }: { error?: string }) {
           <option>Writing</option>
           <option>Visual art</option>
           <option>Music</option>
+        </select>
+      </label>
+      <label>
+        Filter
+        <select name="tone" defaultValue="" required>
+          <option value="" disabled>Choose one</option>
+          {postFilters.map((item) => <option key={item.value}>{item.label}</option>)}
         </select>
       </label>
       <label>

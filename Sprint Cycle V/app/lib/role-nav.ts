@@ -9,7 +9,7 @@ export const creatorNav = [
 
 export const mentorNav = [
   { href: "/mentor/discover", label: "Discover work" },
-  { href: "/mentor/feedback", label: "Feedback" },
+  { href: "/mentor/feedback", label: "Written feedback" },
   { href: "/mentor/mentors", label: "Mentors" },
   { href: "/mentor/nominate", label: "Nominate" },
   { href: "/mentor/history", label: "Review history" },

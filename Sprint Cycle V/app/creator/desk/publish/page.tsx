@@ -27,7 +27,7 @@ export default async function PublishPage({
     <main className="page">
       <p className="eyebrow">Creator workspace</p>
       <h1>Publish work</h1>
-      <p className="lede">Writing needs a description or a document. Visual art needs a picture. Music needs a link.</p>
+      <p className="lede">Choose Entertaining, Educational, Personal, or Experimental. Writing needs a description or a document. Visual art needs a picture. Music needs a link.</p>
       <PublishForm error={error} />
       <p className="more">
         <Link href="/creator/desk">Back to the feed</Link>

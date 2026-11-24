@@ -6,6 +6,7 @@ import { canUseRole } from "./access";
 import { passwordIsTemporary, roleHome, type ApplicantRole } from "./application";
 import { credentialError, emailError, passwordError } from "./credentials.mjs";
 import { db } from "./db";
+import { feedbackParts } from "./feedback-copy";
 import { ensureCommentThreadColumns, hasPieceInteraction, saveRoleAccount } from "./records";
 import { saveUpload } from "./uploads";
 import {
@@ -310,7 +311,8 @@ export async function publishWork(formData: FormData) {
   const media = String(formData.get("media") || "").trim();
   const description = String(formData.get("description") || "").trim();
   const link = String(formData.get("link") || "").trim();
-  const problem = publishProblem({ title, media, description, link });
+  const tone = String(formData.get("tone") || "").trim();
+  const problem = publishProblem({ title, media, description, link, tone });
   if (problem) redirect(`/creator/desk/publish?error=${problem}`);
   const creator = await accountForSession(account, "Creator");
   if (!creator) redirect("/creator/desk/publish?error=account");
@@ -320,6 +322,7 @@ export async function publishWork(formData: FormData) {
     media: media as "Writing" | "Visual art" | "Music",
     description,
     link,
+    tone,
   });
   if ("error" in saved) redirect(`/creator/desk/publish?error=${saved.error}`);
   redirect(`/creator/desk/publish/done?id=${saved.id}`);
@@ -482,16 +485,18 @@ export async function activateOrDeactivate(formData: FormData) {
 }
 
 export async function saveMentorFeedback(formData: FormData) {
+  const back = safeNext(String(formData.get("back") || ""));
+  const onPiece = back.startsWith("/creator/desk/") ? `${back}?talk=feedbacks` : "";
   const account = await currentAccount();
-  if (!canUseRole(account, "mentor")) redirect("/sign-in?returnTo=/mentor/feedback");
+  if (!canUseRole(account, "mentor")) redirect(onPiece ? `/sign-in?returnTo=${encodeURIComponent(onPiece)}` : "/sign-in?returnTo=/mentor/feedback");
   const mentor = await accountForSession(account, "Mentor");
-  if (!mentor) redirect("/mentor/feedback?feedback=account");
+  if (!mentor) redirect(onPiece ? `${onPiece}&notice=account` : "/mentor/feedback?feedback=account");
   const workId = Number(formData.get("workId"));
   const strengths = String(formData.get("strengths") || "").trim();
   const improvements = String(formData.get("improvements") || "").trim();
   const recommendation = String(formData.get("recommendation") || "").trim();
   if (!Number.isInteger(workId) || !strengths || !improvements || !recommendation) {
-    redirect("/mentor/feedback?feedback=required");
+    redirect(onPiece ? `${onPiece}&notice=empty` : "/mentor/feedback?feedback=required");
   }
   const saved = await saveStructuredFeedback({
     mentorId: mentor.account_id,
@@ -500,12 +505,26 @@ export async function saveMentorFeedback(formData: FormData) {
     improvements,
     recommendation,
   });
-  if ("error" in saved) redirect(`/mentor/feedback?feedback=${saved.error}`);
+  if ("error" in saved) redirect(onPiece ? `${onPiece}&notice=${saved.error}` : `/mentor/feedback?feedback=${saved.error}`);
+  const parts = feedbackParts(strengths, improvements, recommendation);
+  const body = parts.map((part) => (part.label ? `${part.label}. ${part.text}` : part.text)).join("\n\n");
+  await ensureCommentThreadColumns();
+  const [updated] = await db().query<import("mysql2").ResultSetHeader>(
+    `UPDATE comment SET body = ? WHERE feedback_id = ?`,
+    [body.slice(0, 4000), saved.id],
+  );
+  if (!updated.affectedRows) {
+    await db().query(
+      `INSERT INTO comment
+         (work_id, author_id, parent_comment_id, body, created_at, likes, dislikes, channel, feedback_id)
+       VALUES (?, ?, NULL, ?, NOW(), 0, 0, 'feedbacks', ?)`,
+      [workId, mentor.account_id, body.slice(0, 4000), saved.id],
+    );
+  }
   revalidatePath("/mentor/desk");
   revalidatePath("/mentor/feedback");
   revalidatePath(`/creator/desk/${workId}`);
-  const back = safeNext(String(formData.get("back") || ""));
-  if (back.startsWith("/creator/desk/")) redirect(`${back}?talk=feedbacks&review=saved`);
+  if (onPiece) redirect(`${onPiece}&review=saved`);
   redirect(`/mentor/feedback?feedback=saved&piece=${encodeURIComponent(saved.title)}`);
 }
 
@@ -565,17 +584,23 @@ export async function editMentorFeedbackPost(formData: FormData) {
   if (!canUseRole(account, "mentor")) redirect(`/sign-in?returnTo=${encodeURIComponent(back)}`);
   const mentor = await accountForSession(account, "Mentor");
   if (!mentor) redirect(`${back}&notice=account`);
-  const body = String(formData.get("body") || "").trim();
-  if (!Number.isInteger(workId) || !Number.isInteger(commentId) || !body) redirect(`${back}&notice=empty`);
+  const strengths = String(formData.get("strengths") || "").trim();
+  const improvements = String(formData.get("improvements") || "").trim();
+  const recommendation = String(formData.get("recommendation") || "").trim();
+  if (!Number.isInteger(workId) || !Number.isInteger(commentId) || !strengths || !improvements || !recommendation) {
+    redirect(`${back}&notice=empty`);
+  }
   const row = await mentorFeedbackPost(commentId, workId, mentor.account_id);
   if (!row) redirect(`${back}&notice=owner`);
+  const parts = feedbackParts(strengths, improvements, recommendation);
+  const body = parts.map((part) => (part.label ? `${part.label}. ${part.text}` : part.text)).join("\n\n");
   await db().query(`UPDATE comment SET body = ? WHERE comment_id = ?`, [body.slice(0, 4000), commentId]);
   if (row.feedback_id != null) {
     await db().query(
       `UPDATE mentor_feedback
        SET strengths = ?, improvements = ?, recommendation = ?, written_at = NOW()
        WHERE feedback_id = ? AND mentor_id = ?`,
-      [body.slice(0, 4000), body.slice(0, 4000), body.slice(0, 4000), row.feedback_id, mentor.account_id],
+      [strengths, improvements, recommendation, row.feedback_id, mentor.account_id],
     );
   }
   revalidatePath(`/creator/desk/${workId}`);

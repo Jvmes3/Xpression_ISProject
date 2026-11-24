@@ -52,7 +52,7 @@ export default async function WorkDetailPage({
   return (
     <main className="page">
       <article className="piece">
-        <p className="flag">{post.media}{post.featured ? " · Featured" : ""}</p>
+        <p className="flag">{post.media}{post.tone ? ` · ${post.tone}` : ""}{post.featured ? " · Featured" : ""}</p>
         <div className="portfolio-name-row">
           <h1>
             {post.title}

@@ -1,5 +1,7 @@
 import type { ResultSetHeader, RowDataPacket } from "mysql2";
+import { postFilters } from "../components/DiscoverBar";
 import { db } from "./db";
+import { ensureWorkTones } from "./records";
 import { setAccountStatusByEmail, type Account } from "./store";
 
 export type DbAccount = RowDataPacket & {
@@ -234,8 +236,10 @@ export function publishProblem(input: {
   media: string;
   description: string;
   link: string;
+  tone: string;
 }) {
   if (!input.title || !["Writing", "Visual art", "Music"].includes(input.media)) return "required" as const;
+  if (!postFilters.some((item) => item.label === input.tone)) return "filter" as const;
   if (input.media === "Visual art" && !isPicture(input.link)) return "picture" as const;
   if (input.media === "Music" && !isWebAddress(input.link)) return "music" as const;
   if (input.media === "Writing" && !input.description && !isDocument(input.link)) return "writing" as const;
@@ -248,19 +252,22 @@ export async function publishPiece(input: {
   media: "Writing" | "Visual art" | "Music";
   description: string;
   link: string;
+  tone: string;
 }) {
   const problem = publishProblem(input);
   if (problem) return { error: problem };
+  await ensureWorkTones();
   const [result] = await db().query<ResultSetHeader>(
     `INSERT INTO creative_work
-       (creator_id, title, media_type, description, soundcloud_url, featured, archived, published_at)
-     VALUES (?, ?, ?, ?, ?, 0, 0, NOW())`,
+       (creator_id, title, media_type, description, soundcloud_url, featured, archived, published_at, tone)
+     VALUES (?, ?, ?, ?, ?, 0, 0, NOW(), ?)`,
     [
       input.creatorId,
       input.title,
       input.media,
       input.description,
       input.link || null,
+      input.tone,
     ],
   );
   return { ok: true as const, id: result.insertId };

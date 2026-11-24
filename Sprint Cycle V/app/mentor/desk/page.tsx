@@ -11,7 +11,7 @@ export default async function MentorDeskPage() {
       <RoleHome
         kicker={account?.email || "Creative Mentor"}
         title="Mentor workspace"
-        lede="Discover work, write feedback, and keep a record of reviews. Each of those is its own page."
+        lede="Discover work, read the feedback you have written, and keep a record of reviews. Each of those is its own page."
         cards={[
           {
             title: "Discover work",
@@ -20,9 +20,9 @@ export default async function MentorDeskPage() {
             href: "/mentor/discover",
           },
           {
-            title: "Write feedback",
-            text: "Leave structured feedback when you already know which piece you are reviewing.",
-            action: "Write feedback",
+            title: "Written feedback",
+            text: "Pieces you have already left feedback on.",
+            action: "Show feedback",
             href: "/mentor/feedback",
           },
           {

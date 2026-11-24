@@ -12,12 +12,16 @@ const media = [
   { label: "Music", value: "Music" },
 ];
 
-export const feedFilters = [
-  { value: "recent", label: "Recent" },
+export const postFilters = [
   { value: "entertaining", label: "Entertaining" },
   { value: "educational", label: "Educational" },
   { value: "personal", label: "Personal" },
   { value: "experimental", label: "Experimental" },
+];
+
+export const feedFilters = [
+  { value: "recent", label: "Recent" },
+  ...postFilters,
 ];
 
 export function DiscoverBar({

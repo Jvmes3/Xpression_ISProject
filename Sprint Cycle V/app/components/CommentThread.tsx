@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { commentAsMentorFeedback, editMentorFeedbackPost, unsendMentorFeedbackPost } from "../lib/actions";
+import { editMentorFeedbackPost, saveMentorFeedback, unsendMentorFeedbackPost } from "../lib/actions";
+import { feedbackParts } from "../lib/feedback-copy";
 import { addComment, removeComment, setReaction, toggleGifReaction } from "../lib/comment-actions";
 import { readExpression, type Expression } from "../lib/expressions";
 import type { CommentCard } from "../lib/records";
@@ -92,12 +93,29 @@ function CommentItem({
         <form className="comment-form" action={editMentorFeedbackPost}>
           <input type="hidden" name="workId" value={workId} />
           <input type="hidden" name="commentId" value={comment.id} />
-          <textarea name="body" rows={4} required defaultValue={comment.body} />
+          <label>
+            Strengths
+            <textarea name="strengths" rows={3} required defaultValue={comment.strengths} placeholder="What is working in the piece." />
+          </label>
+          <label>
+            Improvements
+            <textarea name="improvements" rows={3} required defaultValue={comment.improvements} placeholder="What to revise next." />
+          </label>
+          <label>
+            Recommendation
+            <textarea name="recommendation" rows={3} required defaultValue={comment.recommendation} placeholder="A next step for the creator." />
+          </label>
           <div className="compose-actions">
             <button className="button" type="submit">Save</button>
             <button className="button button-quiet" type="button" onClick={() => setEditing(false)}>Cancel</button>
           </div>
         </form>
+      ) : comment.mentorPost && (comment.strengths || comment.improvements || comment.recommendation) ? (
+        <div className="comment-body">
+          {feedbackParts(comment.strengths, comment.improvements, comment.recommendation).map((part) => (
+            <p key={part.label || "note"}>{part.label ? <strong>{part.label}. </strong> : null}{part.text}</p>
+          ))}
+        </div>
       ) : comment.body ? (
         <p className="comment-body">
           {parent ? <span className="mention">@{parent.author} </span> : null}
@@ -314,12 +332,37 @@ function CommentComposer({
     field.focus();
   }
 
+  if (feedback) {
+    return (
+      <form className="comment-form comment-compose" action={saveMentorFeedback}>
+        <input type="hidden" name="workId" value={workId} />
+        <input type="hidden" name="back" value={`/creator/desk/${workId}`} />
+        <span className="composer-label">Add feedback</span>
+        <label>
+          Strengths
+          <textarea name="strengths" rows={3} required placeholder="What is working in the piece." />
+        </label>
+        <label>
+          Improvements
+          <textarea name="improvements" rows={3} required placeholder="What to revise next." />
+        </label>
+        <label>
+          Recommendation
+          <textarea name="recommendation" rows={3} required placeholder="A next step for the creator." />
+        </label>
+        <div className="compose-actions">
+          <button className="button" type="submit">Save feedback</button>
+        </div>
+      </form>
+    );
+  }
+
   return (
-    <form className={parentId == null ? "comment-form comment-compose" : "comment-form"} action={feedback ? commentAsMentorFeedback : addComment}>
+    <form className={parentId == null ? "comment-form comment-compose" : "comment-form"} action={addComment}>
       <input type="hidden" name="workId" value={workId} />
       {parentId != null ? <input type="hidden" name="parentId" value={parentId} /> : null}
       <input type="hidden" name="media" value={gifId ? `xpression-gif:${gifId}` : ""} />
-      {parentId == null ? <span className="composer-label">{feedback ? "Add feedback" : "Add a comment"}</span> : null}
+      {parentId == null ? <span className="composer-label">Add a comment</span> : null}
       {attached ? (
         <div className="gif-draft">
           <OctopusSprite mood={attached.item.mood} size="picker" label={attached.item.name} />
@@ -327,12 +370,9 @@ function CommentComposer({
           {parentId != null ? <p className="meta-line">This GIF sits on the comment you are replying to.</p> : null}
         </div>
       ) : null}
-      <textarea ref={textRef} name="body" rows={3} placeholder={placeholder} required={feedback} />
-      {feedback ? <p className="meta-line">A comment on this tab is saved as mentor feedback.</p> : null}
+      <textarea ref={textRef} name="body" rows={3} placeholder={placeholder} />
       <div className="compose-actions">
-        {feedback ? null : (
-          <ExpressionPicker onGif={setGifId} onEmoji={insertEmoji} />
-        )}
+        <ExpressionPicker onGif={setGifId} onEmoji={insertEmoji} />
         <button className="button" type="submit">{submitLabel}</button>
       </div>
     </form>
@@ -368,7 +408,9 @@ export function CommentThread({
 }) {
   const roots = comments.filter((comment) => comment.parentId == null || !comments.some((item) => item.id === comment.parentId));
   const note = notice === "empty"
-    ? "Write a comment before posting."
+    ? talk === "feedbacks"
+      ? "Fill in strengths, improvements, and a recommendation."
+      : "Write a comment before posting."
     : notice === "account"
       ? talk === "feedbacks"
         ? "This sign-in is not a Mentor account in the database, so it cannot leave feedback."
@@ -391,7 +433,7 @@ export function CommentThread({
   return (
     <section className="thread">
       {showHeading ? <h2>Comments</h2> : null}
-      {saved ? <p className="note">This comment is saved as mentor feedback.</p> : null}
+      {saved ? <p className="note">Your feedback is saved on this piece.</p> : null}
       {note ? <p className="note">{note}</p> : null}
       {canComment && allowRoot ? (
         <CommentComposer workId={workId} talk={talk} placeholder="Write your own comment" submitLabel={talk === "feedbacks" ? "Save feedback" : "Comment"} />

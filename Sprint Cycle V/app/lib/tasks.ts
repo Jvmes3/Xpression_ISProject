@@ -16,7 +16,7 @@ export const roleTasks: RoleTask[] = [
   { role: "creator", slug: "saved", title: "Following and saved", action: "Show saved", href: "/saved" },
   { role: "creator", slug: "messages", title: "Messages and reports", action: "Show messages", href: "/messages" },
   { role: "mentor", slug: "requests", title: "Review requests", action: "Show requests", href: "/mentor/requests" },
-  { role: "mentor", slug: "feedback", title: "Structured feedback", action: "Write feedback", href: "/mentor/feedback" },
+  { role: "mentor", slug: "feedback", title: "Written feedback", action: "Show feedback", href: "/mentor/feedback" },
   { role: "mentor", slug: "discover", title: "Discover work", action: "Search work", href: "/mentor/discover" },
   { role: "mentor", slug: "nominate", title: "Nominate featured work", action: "Nominate", href: "/mentor/nominate" },
   { role: "mentor", slug: "history", title: "Review history", action: "Show history", href: "/mentor/history" },
