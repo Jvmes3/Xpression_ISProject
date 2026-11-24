@@ -198,6 +198,50 @@ export async function applyAccountTask(input: {
   return { ok: true as const, name: target.name, task: input.task, role: input.actorRole };
 }
 
+const picturePattern = /\.(png|jpe?g|gif|webp)(\?.*)?$/i;
+const documentPattern = /\.(pdf|txt)(\?.*)?$/i;
+
+function isWebAddress(value: string) {
+  return /^https?:\/\/\S+$/i.test(value);
+}
+
+function isStoredFile(value: string, pattern: RegExp) {
+  return value.startsWith("/uploads/") && pattern.test(value);
+}
+
+function isPicture(value: string) {
+  if (isStoredFile(value, picturePattern)) return true;
+  if (!isWebAddress(value)) return false;
+  try {
+    return picturePattern.test(new URL(value).pathname);
+  } catch {
+    return false;
+  }
+}
+
+function isDocument(value: string) {
+  if (isStoredFile(value, documentPattern)) return true;
+  if (!isWebAddress(value)) return false;
+  try {
+    return documentPattern.test(new URL(value).pathname);
+  } catch {
+    return false;
+  }
+}
+
+export function publishProblem(input: {
+  title: string;
+  media: string;
+  description: string;
+  link: string;
+}) {
+  if (!input.title || !["Writing", "Visual art", "Music"].includes(input.media)) return "required" as const;
+  if (input.media === "Visual art" && !isPicture(input.link)) return "picture" as const;
+  if (input.media === "Music" && !isWebAddress(input.link)) return "music" as const;
+  if (input.media === "Writing" && !input.description && !isDocument(input.link)) return "writing" as const;
+  return null;
+}
+
 export async function publishPiece(input: {
   creatorId: number;
   title: string;
@@ -205,7 +249,8 @@ export async function publishPiece(input: {
   description: string;
   link: string;
 }) {
-  if (input.media === "Music" && !input.link) return { error: "music" as const };
+  const problem = publishProblem(input);
+  if (problem) return { error: problem };
   const [result] = await db().query<ResultSetHeader>(
     `INSERT INTO creative_work
        (creator_id, title, media_type, description, soundcloud_url, featured, archived, published_at)

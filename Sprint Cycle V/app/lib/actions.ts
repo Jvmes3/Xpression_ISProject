@@ -12,6 +12,7 @@ import {
   accountForSession,
   createOpportunity,
   publishPiece,
+  publishProblem,
   readAccountByEmail,
   readCreatorProfile,
   applyAccountTask,
@@ -309,10 +310,8 @@ export async function publishWork(formData: FormData) {
   const media = String(formData.get("media") || "").trim();
   const description = String(formData.get("description") || "").trim();
   const link = String(formData.get("link") || "").trim();
-  if (!title || !description || !["Writing", "Visual art", "Music"].includes(media)) {
-    redirect("/creator/desk/publish?error=required");
-  }
-  if (media === "Music" && !link) redirect("/creator/desk/publish?error=music");
+  const problem = publishProblem({ title, media, description, link });
+  if (problem) redirect(`/creator/desk/publish?error=${problem}`);
   const creator = await accountForSession(account, "Creator");
   if (!creator) redirect("/creator/desk/publish?error=account");
   const saved = await publishPiece({

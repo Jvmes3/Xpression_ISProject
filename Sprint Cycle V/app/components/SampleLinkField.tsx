@@ -8,12 +8,16 @@ export function SampleLinkField({
   value,
   placeholder,
   onChange,
+  accept = ".pdf,.png,.jpg,.jpeg,.gif,.webp,.txt,application/pdf,image/png,image/jpeg,image/gif,image/webp,text/plain",
+  showAttach = true,
 }: {
   label?: string;
   name?: string;
   value?: string;
   placeholder: string;
   onChange?: (value: string) => void;
+  accept?: string;
+  showAttach?: boolean;
 }) {
   const id = useId();
   const picker = useRef<HTMLInputElement>(null);
@@ -57,19 +61,21 @@ export function SampleLinkField({
             setValue(event.target.value);
           }}
         />
-        <button
-          className="button button-quiet"
-          type="button"
-          disabled={busy}
-          onClick={() => picker.current?.click()}
-        >
-          {busy ? "Attaching" : "Attach"}
-        </button>
+        {showAttach ? (
+          <button
+            className="button button-quiet"
+            type="button"
+            disabled={busy}
+            onClick={() => picker.current?.click()}
+          >
+            {busy ? "Attaching" : "Attach"}
+          </button>
+        ) : null}
         <input
           ref={picker}
           className="sr-only"
           type="file"
-          accept=".pdf,.png,.jpg,.jpeg,.gif,.webp,.txt,application/pdf,image/png,image/jpeg,image/gif,image/webp,text/plain"
+          accept={accept}
           onChange={(event) => {
             const file = event.target.files?.[0];
             event.target.value = "";
