@@ -42,7 +42,7 @@ These notes are the two meetings for this sprint. Attendees listed for each meet
 | --- | --- |
 | Sprint | Cycle V — adding and modifying data |
 | Attendees | Clemenceau Senatus; Leeyand Blot Jr; Jacob Fitchett; James Henson |
-| Purpose | Confirm each write lands in MySQL and that Cycle IV retrievals still open |
+| Purpose | Confirm each role works properly using MySQL data, new data, and that Cycle IV retrievals still open |
 
 ### Agenda
 
