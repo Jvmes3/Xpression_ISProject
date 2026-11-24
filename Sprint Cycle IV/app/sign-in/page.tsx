@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { signIn } from "../lib/actions";
+import { SignInForm } from "../components/SignInForm";
 import { emailRule, passwordRule } from "../lib/credentials.mjs";
 
 export const dynamic = "force-dynamic";
@@ -30,20 +30,12 @@ export default async function SignInPage({
         password. Moderators and administrators sign in with the email and
         password created for them in the terminal.
       </p>
-      <form className="form panel" action={signIn}>
-        {next ? <input type="hidden" name="returnTo" value={next} /> : null}
-        {error && errors[error] ? <p className="note">{errors[error]}</p> : null}
-        <label>
-          Email
-          <input type="email" name="email" placeholder="youremail@gmail.com" required />
-        </label>
-        <label>
-          Password
-          <input type="password" name="password" placeholder="Password" required />
-        </label>
-        <p className="note">{emailRule} {passwordRule}</p>
-        <button className="button" type="submit">Sign in</button>
-      </form>
+      <SignInForm
+        returnTo={next}
+        errors={errors}
+        note={`${emailRule} ${passwordRule}`}
+        initialError={error && errors[error] ? error : ""}
+      />
       <p className="more">
         New applicant? <Link href="/apply">Create an application login</Link>
       </p>
