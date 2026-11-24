@@ -1,0 +1,28 @@
+{
+  "name": "xpression-cycle-v",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Xpression Sprint Cycle V. Sign-in, earlier retrievals, and the five add or update use cases.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "create-moderator": "node scripts/create-account.mjs moderator",
+    "create-administrator": "node scripts/create-account.mjs administrator",
+    "seed-demo-accounts": "node scripts/seed-demo-accounts.mjs"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "mysql2": "^3.14.3",
+    "next": "^15.5.4",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/node": "^20.19.17",
+    "@types/react": "^19.1.13",
+    "@types/react-dom": "^19.1.9",
+    "typescript": "^5.9.2"
+  }
+}
