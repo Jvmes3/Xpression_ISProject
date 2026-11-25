@@ -36,7 +36,7 @@ These notes are the two meetings for this sprint. Attendees listed for each meet
 | James Henson | Mentor feedback and talent scout opportunity | Done in `app/mentor/desk` and `app/scout/desk` |
 | Leeyand Blot Jr | Moderator decision on a reported piece | Done in `app/moderator/desk` |
 
-## Nov 21, 2026 — Write check
+## Nov 24, 2026 — Write check
 
 | Field | Value |
 | --- | --- |
